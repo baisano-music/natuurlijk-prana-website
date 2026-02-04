@@ -1,6 +1,7 @@
 import { buildLegacyTheme, defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { visionTool } from '@sanity/vision'
+import { media } from 'sanity-plugin-media'
 import { schemaTypes } from './schemaTypes'
 
 // Sage-kleurenpalet – pas hier aan voor Studio look & feel
@@ -79,6 +80,7 @@ export default defineConfig({
           ]),
     }),
     visionTool(),
+    media(),
   ],
   schema: {
     types: schemaTypes as import('sanity').SchemaTypeDefinition[],
