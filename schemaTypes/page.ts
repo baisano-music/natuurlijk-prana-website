@@ -78,5 +78,32 @@ export const pageType = {
         { name: 'description', title: 'Meta Beschrijving', type: 'text', rows: 3 },
       ],
     },
+    // Legacy veld - behouden voor oude content
+    {
+      name: 'sections',
+      title: 'Secties (oud formaat)',
+      type: 'array',
+      hidden: true,
+      of: [
+        {
+          type: 'object',
+          name: 'contentSection',
+          title: 'Content sectie',
+          fields: [
+            {
+              name: 'heading',
+              title: 'Koptekst',
+              type: 'string',
+            },
+            {
+              name: 'body',
+              title: 'Tekst',
+              type: 'array',
+              of: [{ type: 'block' }],
+            },
+          ],
+        },
+      ],
+    },
   ],
 }

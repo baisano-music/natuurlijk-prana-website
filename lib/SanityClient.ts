@@ -111,6 +111,7 @@ export const queries = {
           "url": asset->url
         }
       },
+      sections,
       seo
     }`,
 }

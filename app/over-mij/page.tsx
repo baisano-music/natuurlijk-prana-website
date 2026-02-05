@@ -9,12 +9,21 @@ export const metadata = {
   description: 'Leer meer over Natuurlijk Prana en de persoon achter de bloesemremedies.',
 }
 
+interface Section {
+  _key: string
+  heading?: string
+  body?: unknown[]
+}
+
 async function getOverMijPage() {
   return client.fetch(queries.pageBySlug('over-mij'))
 }
 
 export default async function OverMijPage() {
   const page = await getOverMijPage()
+
+  const hasNewContent = page?.content && page.content.length > 0
+  const hasLegacySections = page?.sections && page.sections.length > 0
 
   return (
     <div className="bg-cream min-h-[60vh]">
@@ -48,11 +57,33 @@ export default async function OverMijPage() {
             )}
           </header>
 
-          {page?.content && page.content.length > 0 ? (
+          {/* Nieuw content formaat */}
+          {hasNewContent && (
             <div className="mb-10">
               <RichContent content={page.content} />
             </div>
-          ) : (
+          )}
+
+          {/* Legacy sections formaat */}
+          {!hasNewContent && hasLegacySections && (
+            <div className="mb-10 space-y-8">
+              {page.sections.map((section: Section) => (
+                <div key={section._key}>
+                  {section.heading && (
+                    <h2 className="font-serif text-2xl text-charcoal mb-4">
+                      {section.heading}
+                    </h2>
+                  )}
+                  {section.body && (
+                    <RichContent content={section.body} />
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Geen content */}
+          {!hasNewContent && !hasLegacySections && (
             <div className="prose prose-lg max-w-none text-stone mb-10">
               <p className="text-lg leading-relaxed">
                 Deze pagina wordt binnenkort gevuld met meer informatie.
