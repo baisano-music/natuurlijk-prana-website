@@ -29,15 +29,22 @@ export const queries = {
 
   /** Eén remedie op slug */
   remedieBySlug: (slug: string) =>
-    `*[_type == "remedie" && slug.current == $slug][0]{
+    `*[_type == "remedie" && slug.current == "${slug}"][0]{
       _id, title, "slug": slug.current, kernkwaliteit, werking, mantra,
       image, "imageUrl": image.asset->url,
-      ontstaan, ingredienten, edelstenen
+      ontstaan, ingredienten, edelstenen,
+      content[]{
+        ...,
+        _type == "image" => {
+          ...,
+          "url": asset->url
+        }
+      }
     }`,
 
   /** Eén remedie op _id */
   remedieById: (id: string) =>
-    `*[_type == "remedie" && _id == $id][0]{
+    `*[_type == "remedie" && _id == "${id}"][0]{
       _id, title, kernkwaliteit, werking, mantra,
       image, "imageUrl": image.asset->url,
       ontstaan, ingredienten, edelstenen
@@ -61,7 +68,7 @@ export const queries = {
 
   /** Eén blogpost op slug */
   blogPostBySlug: (slug: string) =>
-    `*[_type == "blog" && slug.current == $slug][0]{
+    `*[_type == "blog" && slug.current == "${slug}"][0]{
       _id, title, type, "slug": slug.current, content, publishedAt, excerpt, categories,
       "mainImageUrl": mainImage.asset->url
     }`,
@@ -74,7 +81,7 @@ export const queries = {
 
   /** Eén dienst op slug */
   dienstBySlug: (slug: string) =>
-    `*[_type == "dienst" && slug.current == $slug][0]{
+    `*[_type == "dienst" && slug.current == "${slug}"][0]{
       _id, title, "slug": slug.current, description, icon, mainImage, content,
       duration, price, seo
     }`,
@@ -94,7 +101,7 @@ export const queries = {
 
   /** Eén pagina op slug */
   pageBySlug: (slug: string) =>
-    `*[_type == "page" && slug.current == $slug][0]{
+    `*[_type == "page" && slug.current == "${slug}"][0]{
       _id, title, slug, sections
     }`,
 }

@@ -46,9 +46,50 @@ export const remedieType = {
     },
     {
       name: 'image',
-      title: 'Afbeelding',
+      title: 'Hoofdafbeelding',
       type: 'image',
       options: { hotspot: true },
+      description: 'Wordt getoond in overzichten en bovenaan de pagina',
+    },
+    {
+      name: 'content',
+      title: 'Uitgebreide inhoud',
+      description: 'Voeg tekst en afbeeldingen toe. Afbeeldingen kunnen links, rechts of over de volle breedte worden geplaatst.',
+      type: 'array',
+      of: [
+        { type: 'block' },
+        {
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            {
+              name: 'alt',
+              title: 'Alt tekst',
+              type: 'string',
+              description: 'Beschrijving voor toegankelijkheid',
+            },
+            {
+              name: 'caption',
+              title: 'Bijschrift',
+              type: 'string',
+            },
+            {
+              name: 'position',
+              title: 'Positie',
+              type: 'string',
+              options: {
+                list: [
+                  { title: 'Links in tekst', value: 'left' },
+                  { title: 'Rechts in tekst', value: 'right' },
+                  { title: 'Volle breedte', value: 'full' },
+                  { title: 'Gecentreerd', value: 'center' },
+                ],
+              },
+              initialValue: 'full',
+            },
+          ],
+        },
+      ],
     },
     {
       name: 'ingredienten',
