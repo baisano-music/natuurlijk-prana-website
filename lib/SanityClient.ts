@@ -102,6 +102,15 @@ export const queries = {
   /** Eén pagina op slug */
   pageBySlug: (slug: string) =>
     `*[_type == "page" && slug.current == "${slug}"][0]{
-      _id, title, slug, sections
+      _id, title, "slug": slug.current, subtitle,
+      mainImage, "mainImageUrl": mainImage.asset->url,
+      content[]{
+        ...,
+        _type == "image" => {
+          ...,
+          "url": asset->url
+        }
+      },
+      seo
     }`,
 }
