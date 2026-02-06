@@ -9,6 +9,7 @@ const navItems = [
   { href: '/', label: 'Home' },
   { href: '/over-mij', label: 'Over mij' },
   { href: '/remedies', label: 'Remedies' },
+  { href: '/ervaringen', label: 'Ervaringen' },
   { href: '/nieuws', label: 'Nieuws' },
   { href: '/contact', label: 'Contact' },
 ]

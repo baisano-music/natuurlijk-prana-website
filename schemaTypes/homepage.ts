@@ -87,6 +87,26 @@ export const homepageType = {
       description: 'Hoeveel remedies worden uitgelicht op de homepage',
     },
 
+    // Ervaringen sectie
+    {
+      name: 'testimonialsTitle',
+      title: 'Ervaringen Sectie Titel',
+      type: 'string',
+      initialValue: 'Wat anderen zeggen',
+    },
+    {
+      name: 'testimonialsSubtitle',
+      title: 'Ervaringen Sectie Ondertitel',
+      type: 'string',
+      initialValue: 'Ervaringen van ouders en kinderen',
+    },
+    {
+      name: 'showTestimonials',
+      title: 'Toon ervaringen op homepage',
+      type: 'boolean',
+      initialValue: true,
+    },
+
     // CTA sectie
     {
       name: 'ctaTitle',

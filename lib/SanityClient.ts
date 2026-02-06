@@ -91,6 +91,11 @@ export const queries = {
     _id, name, initials, quote, context, featured
   }`,
 
+  /** Uitgelichte testimonials (voor homepage) */
+  testimonialsFeatured: `*[_type == "testimonial" && featured == true] | order(_createdAt desc) [0...3] {
+    _id, name, initials, quote, context
+  }`,
+
   /** Site-instellingen (singleton) */
   siteSettings: `*[_type == "siteSettings"][0]{
     title, description, contactInfo, socialMedia, openingHours
@@ -103,6 +108,7 @@ export const queries = {
     heroPrimaryButton, heroSecondaryButton,
     welcomeTitle, welcomeText,
     remediesTitle, remediesSubtitle, remediesCount,
+    testimonialsTitle, testimonialsSubtitle, showTestimonials,
     ctaTitle, ctaText, ctaButton
   }`,
 

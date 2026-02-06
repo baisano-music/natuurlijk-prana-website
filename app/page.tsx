@@ -14,6 +14,9 @@ interface HomepageData {
   remediesTitle?: string
   remediesSubtitle?: string
   remediesCount?: number
+  testimonialsTitle?: string
+  testimonialsSubtitle?: string
+  showTestimonials?: boolean
   ctaTitle?: string
   ctaText?: string
   ctaButton?: { text?: string; link?: string }
@@ -28,6 +31,14 @@ interface Remedie {
   imageUrl: string | null
 }
 
+interface Testimonial {
+  _id: string
+  name?: string
+  initials?: string
+  quote: string
+  context?: string
+}
+
 async function getHomepageData(): Promise<HomepageData | null> {
   return client.fetch(queries.homepage)
 }
@@ -36,10 +47,17 @@ async function getFeaturedRemedies(count: number): Promise<Remedie[]> {
   return client.fetch(queries.remediesFeatured(count))
 }
 
+async function getFeaturedTestimonials(): Promise<Testimonial[]> {
+  return client.fetch(queries.testimonialsFeatured)
+}
+
 export default async function HomePage() {
   const homepage = await getHomepageData()
   const remediesCount = homepage?.remediesCount || 4
-  const remedies = await getFeaturedRemedies(remediesCount)
+  const [remedies, testimonials] = await Promise.all([
+    getFeaturedRemedies(remediesCount),
+    getFeaturedTestimonials(),
+  ])
 
   // Default waarden als er nog geen content in Sanity staat
   const heroTitle = homepage?.heroTitle || 'Natuurlijk Prana'
@@ -51,6 +69,9 @@ export default async function HomePage() {
   const welcomeText = homepage?.welcomeText || 'Op deze site vind je onze collectie bloesemremedies. Elke remedie ondersteunt een bepaalde innerlijke staat en helpt je in balans te komen. De remedies werken laag voor laag, op een manier die bij je past.'
   const remediesTitle = homepage?.remediesTitle || 'Ontdek onze remedies'
   const remediesSubtitle = homepage?.remediesSubtitle || 'Elke remedie heeft een unieke kernkwaliteit en werking.'
+  const testimonialsTitle = homepage?.testimonialsTitle || 'Wat anderen zeggen'
+  const testimonialsSubtitle = homepage?.testimonialsSubtitle || 'Ervaringen van ouders en kinderen'
+  const showTestimonials = homepage?.showTestimonials !== false
   const ctaTitle = homepage?.ctaTitle || 'Benieuwd welke remedie bij jou past?'
   const ctaText = homepage?.ctaText || 'Ik bied een vrijblijvend en kosteloos kennismakingsgesprek aan. Samen kijken we wat je nodig hebt.'
   const ctaButton = homepage?.ctaButton || { text: 'Neem contact op', link: '/contact' }
@@ -178,6 +199,49 @@ export default async function HomePage() {
                 className="inline-flex items-center text-terracotta font-medium hover:text-terracotta-dark transition-colors"
               >
                 Bekijk alle remedies
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Ervaringen */}
+      {showTestimonials && testimonials.length > 0 && (
+        <section className="py-16 md:py-24 px-4 bg-cream">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="font-serif text-2xl md:text-3xl text-charcoal text-center mb-4">
+              {testimonialsTitle}
+            </h2>
+            <p className="text-stone text-center max-w-2xl mx-auto mb-12">
+              {testimonialsSubtitle}
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {testimonials.map((testimonial) => (
+                <div
+                  key={testimonial._id}
+                  className="bg-white rounded-2xl p-8 shadow-sm border border-peach-200"
+                >
+                  <div className="text-terracotta text-4xl font-serif mb-4">&ldquo;</div>
+                  <p className="text-stone leading-relaxed mb-6 italic">
+                    {testimonial.quote}
+                  </p>
+                  <div className="border-t border-peach-200 pt-4">
+                    <p className="font-medium text-charcoal">
+                      {testimonial.name || testimonial.initials || 'Anoniem'}
+                    </p>
+                    {testimonial.context && (
+                      <p className="text-sm text-sage-600">{testimonial.context}</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="text-center mt-12">
+              <Link
+                href="/ervaringen"
+                className="inline-flex items-center text-terracotta font-medium hover:text-terracotta-dark transition-colors"
+              >
+                Lees meer ervaringen →
               </Link>
             </div>
           </div>
