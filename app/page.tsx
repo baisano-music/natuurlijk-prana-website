@@ -55,11 +55,29 @@ export default async function HomePage() {
   const ctaText = homepage?.ctaText || 'Ik bied een vrijblijvend en kosteloos kennismakingsgesprek aan. Samen kijken we wat je nodig hebt.'
   const ctaButton = homepage?.ctaButton || { text: 'Neem contact op', link: '/contact' }
 
+  const heroImageUrl = homepage?.heroImageUrl
+
   return (
     <div>
       {/* Hero */}
-      <section className="relative bg-gradient-warm py-20 md:py-28 px-4">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="relative py-20 md:py-28 px-4 overflow-hidden">
+        {/* Achtergrondafbeelding */}
+        {heroImageUrl ? (
+          <>
+            <Image
+              src={heroImageUrl}
+              alt=""
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-cream/80" />
+          </>
+        ) : (
+          <div className="absolute inset-0 bg-gradient-warm" />
+        )}
+
+        <div className="relative max-w-4xl mx-auto text-center">
           <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-charcoal leading-tight">
             {heroTitle}
           </h1>
@@ -78,7 +96,7 @@ export default async function HomePage() {
             </Link>
             <Link
               href={secondaryButton.link || '/contact'}
-              className="inline-flex items-center justify-center border-2 border-terracotta text-terracotta px-8 py-4 rounded-full font-medium hover:bg-peach-100 hover:border-terracotta-dark transition-colors"
+              className="inline-flex items-center justify-center border-2 border-terracotta text-terracotta px-8 py-4 rounded-full font-medium hover:bg-peach-100/80 hover:border-terracotta-dark transition-colors backdrop-blur-sm"
             >
               {secondaryButton.text || 'Kennismakingsgesprek'}
             </Link>
