@@ -96,6 +96,16 @@ export const queries = {
     title, description, contactInfo, socialMedia, openingHours
   }`,
 
+  /** Homepage (singleton) */
+  homepage: `*[_type == "homepage"][0]{
+    heroTitle, heroSubtitle, heroDescription,
+    heroImage, "heroImageUrl": heroImage.asset->url,
+    heroPrimaryButton, heroSecondaryButton,
+    welcomeTitle, welcomeText,
+    remediesTitle, remediesSubtitle, remediesCount,
+    ctaTitle, ctaText, ctaButton
+  }`,
+
   /** Pagina's */
   pages: `*[_type == "page"]{ _id, title, slug, sections }`,
 

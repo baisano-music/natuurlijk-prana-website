@@ -2,19 +2,58 @@ import { client, queries } from '@/lib/SanityClient'
 import Link from 'next/link'
 import Image from 'next/image'
 
-async function getFeaturedRemedies() {
-  return client.fetch<Array<{
-    _id: string
-    title: string | null
-    slug: string | null
-    kernkwaliteit: string | null
-    werking: string | null
-    imageUrl: string | null
-  }>>(queries.remediesFeatured(4))
+interface HomepageData {
+  heroTitle?: string
+  heroSubtitle?: string
+  heroDescription?: string
+  heroImageUrl?: string
+  heroPrimaryButton?: { text?: string; link?: string }
+  heroSecondaryButton?: { text?: string; link?: string }
+  welcomeTitle?: string
+  welcomeText?: string
+  remediesTitle?: string
+  remediesSubtitle?: string
+  remediesCount?: number
+  ctaTitle?: string
+  ctaText?: string
+  ctaButton?: { text?: string; link?: string }
+}
+
+interface Remedie {
+  _id: string
+  title: string | null
+  slug: string | null
+  kernkwaliteit: string | null
+  werking: string | null
+  imageUrl: string | null
+}
+
+async function getHomepageData(): Promise<HomepageData | null> {
+  return client.fetch(queries.homepage)
+}
+
+async function getFeaturedRemedies(count: number): Promise<Remedie[]> {
+  return client.fetch(queries.remediesFeatured(count))
 }
 
 export default async function HomePage() {
-  const remedies = await getFeaturedRemedies()
+  const homepage = await getHomepageData()
+  const remediesCount = homepage?.remediesCount || 4
+  const remedies = await getFeaturedRemedies(remediesCount)
+
+  // Default waarden als er nog geen content in Sanity staat
+  const heroTitle = homepage?.heroTitle || 'Natuurlijk Prana'
+  const heroSubtitle = homepage?.heroSubtitle || 'Bloesemremedies voor innerlijke balans'
+  const heroDescription = homepage?.heroDescription || 'Voor iedereen die op zoek is naar rust, warmte en ondersteuning — of je nu moeder bent, hoogsensitief of gewoon behoefte hebt aan een zachte steun in de rug.'
+  const primaryButton = homepage?.heroPrimaryButton || { text: 'Bekijk bloesemremedies →', link: '/remedies' }
+  const secondaryButton = homepage?.heroSecondaryButton || { text: 'Kennismakingsgesprek', link: '/contact' }
+  const welcomeTitle = homepage?.welcomeTitle || 'Welkom'
+  const welcomeText = homepage?.welcomeText || 'Op deze site vind je onze collectie bloesemremedies. Elke remedie ondersteunt een bepaalde innerlijke staat en helpt je in balans te komen. De remedies werken laag voor laag, op een manier die bij je past.'
+  const remediesTitle = homepage?.remediesTitle || 'Ontdek onze remedies'
+  const remediesSubtitle = homepage?.remediesSubtitle || 'Elke remedie heeft een unieke kernkwaliteit en werking.'
+  const ctaTitle = homepage?.ctaTitle || 'Benieuwd welke remedie bij jou past?'
+  const ctaText = homepage?.ctaText || 'Ik bied een vrijblijvend en kosteloos kennismakingsgesprek aan. Samen kijken we wat je nodig hebt.'
+  const ctaButton = homepage?.ctaButton || { text: 'Neem contact op', link: '/contact' }
 
   return (
     <div>
@@ -22,28 +61,26 @@ export default async function HomePage() {
       <section className="relative bg-gradient-warm py-20 md:py-28 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-charcoal leading-tight">
-            Natuurlijk Prana
+            {heroTitle}
           </h1>
           <p className="mt-6 text-xl md:text-2xl text-terracotta font-medium">
-            Bloesemremedies voor innerlijke balans
+            {heroSubtitle}
           </p>
           <p className="mt-4 text-stone max-w-2xl mx-auto leading-relaxed">
-            Voor iedereen die op zoek is naar rust, warmte en ondersteuning —
-            of je nu moeder bent, hoogsensitief of gewoon behoefte hebt aan een
-            zachte steun in de rug.
+            {heroDescription}
           </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/remedies"
+              href={primaryButton.link || '/remedies'}
               className="inline-flex items-center justify-center bg-terracotta text-white px-8 py-4 rounded-full font-medium hover:bg-terracotta-dark transition-colors shadow-md hover:shadow-lg"
             >
-              Bekijk bloesemremedies →
+              {primaryButton.text || 'Bekijk bloesemremedies →'}
             </Link>
             <Link
-              href="/contact"
+              href={secondaryButton.link || '/contact'}
               className="inline-flex items-center justify-center border-2 border-terracotta text-terracotta px-8 py-4 rounded-full font-medium hover:bg-peach-100 hover:border-terracotta-dark transition-colors"
             >
-              Kennismakingsgesprek
+              {secondaryButton.text || 'Kennismakingsgesprek'}
             </Link>
           </div>
         </div>
@@ -53,13 +90,10 @@ export default async function HomePage() {
       <section className="py-16 md:py-24 px-4 bg-cream">
         <div className="max-w-3xl mx-auto">
           <h2 className="font-serif text-2xl md:text-3xl text-charcoal mb-6">
-            Welkom
+            {welcomeTitle}
           </h2>
           <p className="text-stone leading-relaxed text-lg">
-            Op deze site vind je onze collectie bloesemremedies. Elke remedie
-            ondersteunt een bepaalde innerlijke staat en helpt je in balans te
-            komen. De remedies werken laag voor laag, op een manier die bij je
-            past.
+            {welcomeText}
           </p>
         </div>
       </section>
@@ -69,10 +103,10 @@ export default async function HomePage() {
         <section className="py-16 md:py-24 px-4 bg-peach-100">
           <div className="max-w-6xl mx-auto">
             <h2 className="font-serif text-2xl md:text-3xl text-charcoal text-center mb-4">
-              Ontdek onze remedies
+              {remediesTitle}
             </h2>
             <p className="text-stone text-center max-w-2xl mx-auto mb-12">
-              Elke remedie heeft een unieke kernkwaliteit en werking.
+              {remediesSubtitle}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {remedies.map((remedie) => {
@@ -136,17 +170,16 @@ export default async function HomePage() {
       <section className="py-20 md:py-28 px-4 bg-peach-200">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="font-serif text-2xl md:text-3xl text-charcoal mb-4">
-            Benieuwd welke remedie bij jou past?
+            {ctaTitle}
           </h2>
           <p className="text-stone leading-relaxed mb-8">
-            Ik bied een vrijblijvend en kosteloos kennismakingsgesprek aan.
-            Samen kijken we wat je nodig hebt.
+            {ctaText}
           </p>
           <Link
-            href="/contact"
+            href={ctaButton.link || '/contact'}
             className="inline-flex items-center justify-center bg-terracotta text-white px-10 py-4 rounded-full font-medium hover:bg-terracotta-dark transition-colors shadow-md hover:shadow-lg"
           >
-            Neem contact op
+            {ctaButton.text || 'Neem contact op'}
           </Link>
         </div>
       </section>

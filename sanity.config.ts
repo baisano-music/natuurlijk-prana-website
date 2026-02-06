@@ -47,6 +47,14 @@ export default defineConfig({
         S.list()
           .title('Content')
           .items([
+            // Homepage (singleton)
+            S.listItem()
+              .title('Homepage')
+              .child(
+                S.document()
+                  .schemaType('homepage')
+                  .documentId('homepage')
+              ),
             // Site-instellingen (singleton)
             S.listItem()
               .title('Site Instellingen')
@@ -85,11 +93,21 @@ export default defineConfig({
   schema: {
     types: schemaTypes as import('sanity').SchemaTypeDefinition[],
     templates: (prev) =>
-      prev.filter((t) => t.id !== 'siteSettings').concat({
-        id: 'siteSettings',
-        title: 'Site Instellingen',
-        schemaType: 'siteSettings',
-        value: { _id: 'siteSettings' },
-      }),
+      prev
+        .filter((t) => t.id !== 'siteSettings' && t.id !== 'homepage')
+        .concat([
+          {
+            id: 'siteSettings',
+            title: 'Site Instellingen',
+            schemaType: 'siteSettings',
+            value: { _id: 'siteSettings' },
+          },
+          {
+            id: 'homepage',
+            title: 'Homepage',
+            schemaType: 'homepage',
+            value: { _id: 'homepage' },
+          },
+        ]),
   },
 })
