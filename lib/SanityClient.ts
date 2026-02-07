@@ -56,6 +56,13 @@ export const queries = {
     "mainImageUrl": mainImage.asset->url
   }`,
 
+  /** Laatste N blogposts (voor homepage) */
+  blogPostsFeatured: (limit: number) =>
+    `*[_type == "blog" && draft != true] | order(publishedAt desc) [0...${limit}] {
+      _id, title, type, "slug": slug.current, publishedAt, excerpt,
+      "mainImageUrl": mainImage.asset->url
+    }`,
+
   /** Blogposts met paginatie */
   blogPostsPaginated: (start: number, end: number) =>
     `*[_type == "blog" && draft != true] | order(publishedAt desc) [${start}...${end}] {
@@ -119,6 +126,7 @@ export const queries = {
     welcomeImage, "welcomeImageUrl": welcomeImage.asset->url,
     remediesLabel, remediesTitle, remediesSubtitle, remediesCount, remediesButton,
     testimonialsLabel, testimonialsTitle, testimonialsSubtitle, showTestimonials, testimonialsLink,
+    newsLabel, newsTitle, newsSubtitle, showNews, newsCount, newsLink,
     ctaTitle, ctaText, ctaButton,
     ctaImage, "ctaImageUrl": ctaImage.asset->url
   }`,

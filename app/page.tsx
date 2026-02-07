@@ -79,6 +79,13 @@ interface HomepageData {
   testimonialsSubtitle?: string
   showTestimonials?: boolean
   testimonialsLink?: { text?: string; link?: string }
+  // Nieuws
+  newsLabel?: string
+  newsTitle?: string
+  newsSubtitle?: string
+  showNews?: boolean
+  newsCount?: number
+  newsLink?: { text?: string; link?: string }
   // CTA
   ctaTitle?: string
   ctaText?: RichTextValue
@@ -103,6 +110,16 @@ interface Testimonial {
   context?: string
 }
 
+interface BlogPost {
+  _id: string
+  title: string | null
+  slug: string | null
+  publishedAt: string | null
+  excerpt: string | null
+  mainImageUrl: string | null
+  type: string | null
+}
+
 async function getHomepageData(): Promise<HomepageData | null> {
   return client.fetch(queries.homepage)
 }
@@ -115,12 +132,28 @@ async function getFeaturedTestimonials(): Promise<Testimonial[]> {
   return client.fetch(queries.testimonialsFeatured)
 }
 
+async function getFeaturedBlogPosts(count: number): Promise<BlogPost[]> {
+  return client.fetch(queries.blogPostsFeatured(count))
+}
+
+// Datum formatter
+function formatDate(dateStr: string | null) {
+  if (!dateStr) return ''
+  return new Date(dateStr).toLocaleDateString('nl-NL', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
+}
+
 export default async function HomePage() {
   const homepage = await getHomepageData()
   const remediesCount = homepage?.remediesCount || 3
-  const [remedies, testimonials] = await Promise.all([
+  const newsCount = homepage?.newsCount || 3
+  const [remedies, testimonials, blogPosts] = await Promise.all([
     getFeaturedRemedies(remediesCount),
     getFeaturedTestimonials(),
+    getFeaturedBlogPosts(newsCount),
   ])
 
   // Default waarden als er nog geen content in Sanity staat
@@ -156,6 +189,13 @@ export default async function HomePage() {
   const testimonialsSubtitle = homepage?.testimonialsSubtitle || 'Ervaringen van ouders en kinderen'
   const showTestimonials = homepage?.showTestimonials !== false
   const testimonialsLink = homepage?.testimonialsLink || { text: 'Lees meer ervaringen', link: '/ervaringen' }
+
+  // Nieuws
+  const newsLabel = homepage?.newsLabel || 'Nieuws'
+  const newsTitle = homepage?.newsTitle || 'Laatste nieuws'
+  const newsSubtitle = homepage?.newsSubtitle || 'Verhalen, inzichten en tips over bloesemremedies'
+  const showNews = homepage?.showNews !== false
+  const newsLink = homepage?.newsLink || { text: 'Bekijk alle artikelen', link: '/nieuws' }
 
   // CTA
   const ctaTitle = homepage?.ctaTitle || 'Benieuwd welke remedie bij jou past?'
@@ -450,6 +490,80 @@ export default async function HomePage() {
                 className="inline-flex items-center text-terracotta font-medium hover:text-terracotta-dark transition-colors group"
               >
                 {testimonialsLink.text || 'Lees meer ervaringen'}
+                <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Laatste nieuws */}
+      {showNews && blogPosts.length > 0 && (
+        <section className="py-20 md:py-28 px-4 bg-white">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <span className="text-terracotta uppercase tracking-widest text-sm font-medium">
+                {newsLabel}
+              </span>
+              <h2 className="font-serif text-3xl md:text-4xl text-charcoal mt-4">
+                {newsTitle}
+              </h2>
+              <p className="text-stone max-w-2xl mx-auto mt-4">
+                {newsSubtitle}
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {blogPosts.map((post) => {
+                const slug = post.slug || post._id
+                return (
+                  <article
+                    key={post._id}
+                    className="group bg-cream rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-peach-100 hover:border-terracotta/30"
+                  >
+                    <Link href={`/nieuws/${slug}`} className="block">
+                      {post.mainImageUrl ? (
+                        <div className="relative aspect-[16/10] overflow-hidden">
+                          <Image
+                            src={post.mainImageUrl}
+                            alt={post.title || ''}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                          />
+                        </div>
+                      ) : (
+                        <div className="aspect-[16/10] bg-gradient-to-br from-sage-100 to-peach-100 flex items-center justify-center">
+                          <span className="text-terracotta text-4xl font-serif">
+                            {post.title?.charAt(0) || '?'}
+                          </span>
+                        </div>
+                      )}
+                      <div className="p-6">
+                        <p className="text-xs text-sage-500 uppercase tracking-wider mb-2">
+                          {formatDate(post.publishedAt)}
+                        </p>
+                        <h3 className="font-serif text-xl font-semibold text-charcoal group-hover:text-terracotta transition-colors line-clamp-2">
+                          {post.title || 'Zonder titel'}
+                        </h3>
+                        {post.excerpt && (
+                          <p className="text-stone text-sm mt-3 line-clamp-2 leading-relaxed">
+                            {post.excerpt}
+                          </p>
+                        )}
+                      </div>
+                    </Link>
+                  </article>
+                )
+              })}
+            </div>
+            <div className="text-center mt-12">
+              <Link
+                href={newsLink.link || '/nieuws'}
+                className="inline-flex items-center text-terracotta font-medium hover:text-terracotta-dark transition-colors group"
+              >
+                {newsLink.text || 'Bekijk alle artikelen'}
                 <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>

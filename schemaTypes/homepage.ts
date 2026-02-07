@@ -227,6 +227,49 @@ export const homepageType = {
       ],
     },
 
+    // Nieuws sectie
+    {
+      name: 'newsLabel',
+      title: 'Nieuws Label',
+      type: 'string',
+      initialValue: 'Nieuws',
+      description: 'Klein label boven de nieuwstitel',
+    },
+    {
+      name: 'newsTitle',
+      title: 'Nieuws Sectie Titel',
+      type: 'string',
+      initialValue: 'Laatste nieuws',
+    },
+    {
+      name: 'newsSubtitle',
+      title: 'Nieuws Sectie Ondertitel',
+      type: 'string',
+      initialValue: 'Verhalen, inzichten en tips over bloesemremedies',
+    },
+    {
+      name: 'showNews',
+      title: 'Toon nieuws op homepage',
+      type: 'boolean',
+      initialValue: true,
+    },
+    {
+      name: 'newsCount',
+      title: 'Aantal nieuwsartikelen tonen',
+      type: 'number',
+      initialValue: 3,
+      description: 'Hoeveel artikelen worden getoond op de homepage',
+    },
+    {
+      name: 'newsLink',
+      title: 'Nieuws Link',
+      type: 'object',
+      fields: [
+        { name: 'text', title: 'Tekst', type: 'string', initialValue: 'Bekijk alle artikelen' },
+        { name: 'link', title: 'Link', type: 'string', initialValue: '/nieuws' },
+      ],
+    },
+
     // CTA sectie
     {
       name: 'ctaTitle',
