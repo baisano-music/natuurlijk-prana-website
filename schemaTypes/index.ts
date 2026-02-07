@@ -2,6 +2,7 @@ import { blogType } from './blog'
 import { dienstType } from './dienst'
 import { homepageType } from './homepage'
 import { pageType } from './page'
+import { pageSettingsType } from './pageSettings'
 import { productCategoryType } from './productCategory'
 import { remedieType } from './remedie'
 import { siteSettingsType } from './siteSettings'
@@ -14,6 +15,7 @@ export const schemaTypes = [
   dienstType,
   homepageType,
   pageType,
+  pageSettingsType,
   testimonialType,
   siteSettingsType,
 ]

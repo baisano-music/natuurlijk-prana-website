@@ -4,12 +4,12 @@ import Link from 'next/link'
 // Geen caching voor verse data
 export const revalidate = 0
 
-// Kleuren voor testimonial kaarten
+// Kleuren voor testimonial kaarten - meer uitgesproken
 const testimonialColors = [
-  'bg-peach-100 border-peach-200',
-  'bg-sage-50 border-sage-200',
-  'bg-cream border-terracotta/20',
-  'bg-white border-peach-200',
+  'bg-terracotta/10 border-terracotta/30',
+  'bg-sage-200 border-sage-400',
+  'bg-peach-200 border-peach-300',
+  'bg-coral/10 border-coral/30',
 ]
 
 export const metadata = {
@@ -52,18 +52,18 @@ export default async function ErvaringenPage() {
             {testimonials.map((testimonial, index) => (
               <article
                 key={testimonial._id}
-                className={`rounded-2xl p-8 shadow-sm border ${testimonialColors[index % testimonialColors.length]}`}
+                className={`rounded-2xl p-8 shadow-md border-2 ${testimonialColors[index % testimonialColors.length]}`}
               >
-                <div className="text-terracotta text-4xl font-serif mb-4">&ldquo;</div>
-                <p className="text-stone leading-relaxed mb-6 italic text-lg">
+                <div className="text-terracotta text-7xl font-serif leading-none mb-2 -mt-2">&ldquo;</div>
+                <p className="text-charcoal leading-relaxed mb-6 text-lg">
                   {testimonial.quote}
                 </p>
-                <footer className="border-t border-stone/20 pt-4">
-                  <p className="font-medium text-charcoal">
+                <footer className="border-t border-charcoal/10 pt-4">
+                  <p className="font-semibold text-charcoal">
                     {testimonial.name || testimonial.initials || 'Anoniem'}
                   </p>
                   {testimonial.context && (
-                    <p className="text-sm text-sage-600">{testimonial.context}</p>
+                    <p className="text-sm text-terracotta-dark font-medium">{testimonial.context}</p>
                   )}
                 </footer>
               </article>
@@ -83,7 +83,7 @@ export default async function ErvaringenPage() {
           </p>
           <Link
             href="/contact"
-            className="inline-block bg-coral text-white px-8 py-3 rounded-full hover:bg-coral-dark transition-colors font-medium shadow-sm hover:shadow-md"
+            className="inline-block bg-coral text-white px-8 py-3 rounded-full hover:bg-terracotta hover:text-white transition-colors font-medium shadow-sm hover:shadow-md"
           >
             Neem contact op
           </Link>

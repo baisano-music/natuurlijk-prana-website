@@ -17,6 +17,13 @@ export const remedieType = {
       options: { source: 'title' },
     },
     {
+      name: 'order',
+      title: 'Volgorde',
+      type: 'number',
+      description: 'Lagere nummers worden eerst getoond. Laat leeg voor alfabetische volgorde.',
+      initialValue: 0,
+    },
+    {
       name: 'kernkwaliteit',
       title: 'Thema / Kernkwaliteit',
       type: 'string',

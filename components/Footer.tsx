@@ -21,6 +21,12 @@ export function Footer({ siteSettings }: { siteSettings?: SiteSettings }) {
   const social = siteSettings?.socialMedia
   const opening = siteSettings?.openingHours
 
+  // Standaard contactgegevens
+  const address = contact?.address || `Schenge 5
+2134 WC Hoofddorp
+Floriande Zuid, eiland 2`
+  const phone = contact?.phone || '06-13587558'
+
   return (
     <footer className="bg-sage-500 text-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-16">
@@ -110,19 +116,23 @@ export function Footer({ siteSettings }: { siteSettings?: SiteSettings }) {
                   </a>
                 </p>
               )}
-              {contact?.phone && (
-                <p>
-                  <a
-                    href={`tel:${contact.phone.replace(/\s/g, '')}`}
-                    className="text-peach-200 hover:text-cream transition-colors"
-                  >
-                    {contact.phone}
-                  </a>
-                </p>
-              )}
-              {contact?.address && (
-                <p className="text-peach-200 whitespace-pre-line">{contact.address}</p>
-              )}
+              <p>
+                <a
+                  href={`tel:${phone.replace(/[-\s]/g, '')}`}
+                  className="text-peach-200 hover:text-cream transition-colors"
+                >
+                  {phone}
+                </a>
+              </p>
+              <p className="text-peach-200 whitespace-pre-line">{address}</p>
+              <p className="text-peach-300 text-xs mt-2">
+                <span className="inline-flex items-center gap-1">
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  Gratis parkeren voor de deur
+                </span>
+              </p>
               {opening && (
                 <div className="pt-2">
                   <p className="font-medium text-peach-100 mb-1">Openingstijden</p>
@@ -165,11 +175,11 @@ export function Footer({ siteSettings }: { siteSettings?: SiteSettings }) {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-white/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-white/70 text-sm">
-          <p>© {new Date().getFullYear()} Natuurlijk Prana. Alle rechten voorbehouden.</p>
+        <div className="mt-12 pt-8 border-t border-white/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
+          <p className="text-white/70">© {new Date().getFullYear()} Natuurlijk Prana. Alle rechten voorbehouden.</p>
           <Link
             href="/privacy-en-disclaimer"
-            className="hover:text-peach-200 transition-colors"
+            className="text-peach-200 hover:text-white transition-colors"
           >
             Privacy & Disclaimer
           </Link>

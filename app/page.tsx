@@ -183,13 +183,13 @@ export default async function HomePage() {
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href={primaryButton.link || '/remedies'}
-              className="inline-flex items-center justify-center bg-coral text-white px-8 py-4 rounded-full font-medium hover:bg-coral-dark transition-all shadow-lg hover:shadow-xl hover:scale-105"
+              className="inline-flex items-center justify-center bg-coral text-white px-8 py-4 rounded-full font-medium hover:bg-terracotta hover:text-white transition-all shadow-lg hover:shadow-xl hover:scale-105"
             >
               {primaryButton.text || 'Bekijk bloesemremedies →'}
             </Link>
             <Link
               href={secondaryButton.link || '/contact'}
-              className="inline-flex items-center justify-center bg-white/20 backdrop-blur-sm border-2 border-white text-white px-8 py-4 rounded-full font-medium hover:bg-white/30 transition-all"
+              className="inline-flex items-center justify-center bg-white/20 backdrop-blur-sm border-2 border-white text-white px-8 py-4 rounded-full font-medium hover:bg-white hover:text-charcoal hover:border-white transition-all"
             >
               {secondaryButton.text || 'Kennismakingsgesprek'}
             </Link>
@@ -222,7 +222,7 @@ export default async function HomePage() {
               </div>
               <Link
                 href={magazineBannerButton.link || '/gratis-magazine'}
-                className="inline-flex items-center bg-white text-terracotta-dark px-6 py-2.5 rounded-full font-medium hover:bg-peach-100 transition-colors shadow-sm whitespace-nowrap"
+                className="inline-flex items-center bg-white text-terracotta-dark px-6 py-2.5 rounded-full font-medium hover:bg-cream hover:text-charcoal transition-colors shadow-sm whitespace-nowrap"
               >
                 {magazineBannerButton.text || 'Download gratis'}
                 <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -234,26 +234,34 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Welkom - Split layout met afbeelding */}
+      {/* Welkom - Split layout met ingekaderde afbeelding */}
       <section className="relative">
-        <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[70vh]">
+        <div className="grid grid-cols-1 lg:grid-cols-2">
           {/* Afbeelding kant */}
-          <div className="relative h-[50vh] lg:h-auto order-2 lg:order-1">
+          <div className="flex items-center justify-center order-2 lg:order-1 bg-sage-100 py-16 lg:py-24 px-8">
             {welcomeImageUrl ? (
-              <Image
-                src={welcomeImageUrl}
-                alt="Bloesemremedies"
-                fill
-                className="object-cover"
-                style={{ objectPosition: 'center top' }}
-              />
+              <div className="relative">
+                {/* Decoratief kader achter de foto */}
+                <div className="absolute -inset-4 bg-white/60 rounded-2xl shadow-lg" />
+                <div className="absolute -inset-2 bg-gradient-to-br from-terracotta/20 to-peach-200/40 rounded-xl" />
+                {/* Foto */}
+                <div className="relative w-64 h-80 md:w-72 md:h-96 lg:w-80 lg:h-[28rem] rounded-xl overflow-hidden shadow-xl ring-4 ring-white">
+                  <Image
+                    src={welcomeImageUrl}
+                    alt="Sandy Hof-Teeuwen"
+                    fill
+                    className="object-cover"
+                    style={{ objectPosition: 'center top' }}
+                  />
+                </div>
+              </div>
             ) : (
-              <div className="absolute inset-0 bg-gradient-to-br from-sage-200 via-sage-100 to-peach-100 flex items-center justify-center">
+              <div className="w-64 h-80 md:w-72 md:h-96 bg-gradient-to-br from-sage-200 via-sage-100 to-peach-100 rounded-xl flex items-center justify-center shadow-lg">
                 <div className="text-center text-sage-600 p-8">
-                  <svg className="w-24 h-24 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                   </svg>
-                  <p className="text-sm italic">Voeg een afbeelding toe in Sanity Studio</p>
+                  <p className="text-sm italic">Voeg een afbeelding toe</p>
                 </div>
               </div>
             )}
@@ -346,7 +354,7 @@ export default async function HomePage() {
             <div className="text-center mt-16">
               <Link
                 href={remediesButton.link || '/remedies'}
-                className="inline-flex items-center justify-center bg-coral text-white px-8 py-4 rounded-full font-medium hover:bg-coral-dark transition-all shadow-md hover:shadow-lg"
+                className="inline-flex items-center justify-center bg-coral text-white px-8 py-4 rounded-full font-medium hover:bg-terracotta hover:text-white transition-all shadow-md hover:shadow-lg"
               >
                 {remediesButton.text || 'Bekijk alle remedies'}
               </Link>
@@ -439,7 +447,7 @@ export default async function HomePage() {
           </p>
           <Link
             href={ctaButton.link || '/contact'}
-            className="inline-flex items-center justify-center bg-coral text-white px-10 py-4 rounded-full font-medium hover:bg-coral-dark transition-all shadow-lg hover:shadow-xl hover:scale-105"
+            className="inline-flex items-center justify-center bg-coral text-white px-10 py-4 rounded-full font-medium hover:bg-white hover:text-terracotta transition-all shadow-lg hover:shadow-xl hover:scale-105"
           >
             {ctaButton.text || 'Neem contact op'}
           </Link>

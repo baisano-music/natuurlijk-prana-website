@@ -15,13 +15,13 @@ export const client = createClient({
 export const queries = {
   /** Eerste N remedies (voor homepage uitgelicht) */
   remediesFeatured: (limit: number) =>
-    `*[_type == "remedie"] | order(title asc) [0...${limit}] {
+    `*[_type == "remedie"] | order(coalesce(order, 999) asc, title asc) [0...${limit}] {
     _id, title, "slug": slug.current, kernkwaliteit, werking,
     "imageUrl": image.asset->url
   }`,
 
   /** Alle gepubliceerde remedies */
-  remedies: `*[_type == "remedie"] | order(title asc) {
+  remedies: `*[_type == "remedie"] | order(coalesce(order, 999) asc, title asc) {
     _id, title, "slug": slug.current, kernkwaliteit, werking, mantra,
     image, "imageUrl": image.asset->url,
     ontstaan, ingredienten, edelstenen
@@ -101,6 +101,12 @@ export const queries = {
     title, description, contactInfo, socialMedia, openingHours
   }`,
 
+  /** Pagina-instellingen per type */
+  pageSettings: (pageType: string) =>
+    `*[_type == "pageSettings" && pageType == "${pageType}"][0]{
+      title, subtitle, introContent, ctaTitle, ctaText, ctaButton
+    }`,
+
   /** Homepage (singleton) */
   homepage: `*[_type == "homepage"][0]{
     heroTitle, heroSubtitle, heroDescription,
@@ -175,14 +181,14 @@ export const queries = {
 
   /** Producten per categorie */
   productsByCategory: (categoryId: string) =>
-    `*[_type == "remedie" && category._ref == "${categoryId}"] | order(title asc) {
+    `*[_type == "remedie" && category._ref == "${categoryId}"] | order(coalesce(order, 999) asc, title asc) {
       _id, title, "slug": slug.current, kernkwaliteit, werking,
       "imageUrl": image.asset->url, shortDescription
     }`,
 
   /** Producten per categorie slug */
   productsByCategorySlug: (slug: string) =>
-    `*[_type == "remedie" && category->slug.current == "${slug}"] | order(title asc) {
+    `*[_type == "remedie" && category->slug.current == "${slug}"] | order(coalesce(order, 999) asc, title asc) {
       _id, title, "slug": slug.current, kernkwaliteit, werking,
       "imageUrl": image.asset->url, shortDescription
     }`,

@@ -3,8 +3,17 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 const PER_PAGE = 12
+
+interface PageSettings {
+  title?: string
+  subtitle?: string
+  ctaTitle?: string
+  ctaText?: string
+  ctaButton?: { text?: string; link?: string }
+}
 
 async function getBlogPosts(page: number) {
   const start = (page - 1) * PER_PAGE
@@ -14,6 +23,10 @@ async function getBlogPosts(page: number) {
     client.fetch(queries.blogPostsCount),
   ])
   return { posts, total }
+}
+
+async function getPageSettings(): Promise<PageSettings | null> {
+  return client.fetch(queries.pageSettings('nieuws'))
 }
 
 function formatDate(dateStr: string | null) {
@@ -31,19 +44,29 @@ export default async function NieuwsPage({
   searchParams: Promise<{ page?: string }>
 }) {
   const params = await searchParams
-  const page = Math.max(1, parseInt(params.page || '1', 10))
-  const { posts, total } = await getBlogPosts(page)
+  const pageNum = Math.max(1, parseInt(params.page || '1', 10))
+  const [{ posts, total }, settings] = await Promise.all([
+    getBlogPosts(pageNum),
+    getPageSettings(),
+  ])
   const totalPages = Math.ceil(total / PER_PAGE)
+
+  // CMS waarden met fallbacks
+  const pageTitle = settings?.title || 'Nieuws en inspiratie'
+  const pageSubtitle = settings?.subtitle || 'Verhalen, inzichten en tips over bloesemremedies en innerlijke balans.'
+  const ctaTitle = settings?.ctaTitle || 'Blijf op de hoogte'
+  const ctaText = settings?.ctaText || 'Volg ons voor nieuwe verhalen en inzichten over bloesemremedies.'
+  const ctaButton = settings?.ctaButton || { text: 'Neem contact op', link: '/contact' }
 
   return (
     <div className="bg-cream min-h-[60vh]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-16">
         <header className="text-center mb-16">
           <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-charcoal mb-4">
-            Nieuws en inspiratie
+            {pageTitle}
           </h1>
           <p className="text-lg text-stone max-w-2xl mx-auto italic">
-            Verhalen, inzichten en tips over bloesemremedies en innerlijke balans.
+            {pageSubtitle}
           </p>
         </header>
 
@@ -109,20 +132,20 @@ export default async function NieuwsPage({
 
             {totalPages > 1 && (
               <nav className="mt-12 flex justify-center gap-2" aria-label="Paginatie nieuws">
-                {page > 1 && (
+                {pageNum > 1 && (
                   <Link
-                    href={page === 2 ? '/nieuws' : `/nieuws?page=${page - 1}`}
+                    href={pageNum === 2 ? '/nieuws' : `/nieuws?page=${pageNum - 1}`}
                     className="px-4 py-2 rounded-lg border border-peach-200 text-sage-600 hover:bg-peach-100 hover:border-terracotta/30 transition-colors"
                   >
                     Vorige
                   </Link>
                 )}
                 <span className="px-4 py-2 text-stone">
-                  Pagina {page} van {totalPages}
+                  Pagina {pageNum} van {totalPages}
                 </span>
-                {page < totalPages && (
+                {pageNum < totalPages && (
                   <Link
-                    href={`/nieuws?page=${page + 1}`}
+                    href={`/nieuws?page=${pageNum + 1}`}
                     className="px-4 py-2 rounded-lg border border-peach-200 text-sage-600 hover:bg-peach-100 hover:border-terracotta/30 transition-colors"
                   >
                     Volgende
@@ -135,16 +158,16 @@ export default async function NieuwsPage({
 
         <section className="mt-20 p-10 md:p-14 bg-white rounded-2xl text-center shadow-sm border border-peach-200">
           <h3 className="font-serif text-2xl md:text-3xl text-charcoal mb-4">
-            Blijf op de hoogte
+            {ctaTitle}
           </h3>
           <p className="text-stone mb-6 max-w-xl mx-auto leading-relaxed">
-            Volg ons voor nieuwe verhalen en inzichten over bloesemremedies.
+            {ctaText}
           </p>
           <Link
-            href="/contact"
-            className="inline-block bg-coral text-white px-8 py-4 rounded-full font-medium hover:bg-coral-dark transition-colors shadow-md hover:shadow-lg"
+            href={ctaButton.link || '/contact'}
+            className="inline-block bg-coral text-white px-8 py-4 rounded-full font-medium hover:bg-terracotta hover:text-white transition-colors shadow-md hover:shadow-lg"
           >
-            Neem contact op
+            {ctaButton.text || 'Neem contact op'}
           </Link>
         </section>
       </div>

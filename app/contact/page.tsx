@@ -19,6 +19,11 @@ type OverMijPage = {
   title?: string | null
 }
 
+type PageSettings = {
+  title?: string
+  subtitle?: string
+}
+
 async function getSiteSettings(): Promise<SiteSettings | null> {
   return client.fetch(queries.siteSettings)
 }
@@ -30,14 +35,23 @@ async function getOverMijImage(): Promise<OverMijPage | null> {
   }`)
 }
 
+async function getPageSettings(): Promise<PageSettings | null> {
+  return client.fetch(queries.pageSettings('contact'))
+}
+
 export default async function ContactPage() {
-  const [settings, overMij] = await Promise.all([
+  const [settings, overMij, pageSettings] = await Promise.all([
     getSiteSettings(),
-    getOverMijImage()
+    getOverMijImage(),
+    getPageSettings(),
   ])
   const contact = settings?.contactInfo
   const opening = settings?.openingHours
   const sandyImage = overMij?.mainImageUrl
+
+  // CMS waarden met fallbacks
+  const pageTitle = pageSettings?.title || 'Contact'
+  const pageSubtitle = pageSettings?.subtitle || 'Benieuwd welke remedie bij jou past? Ik bied een vrijblijvend en kosteloos kennismakingsgesprek aan. Neem gerust contact op.'
 
   return (
     <div className="bg-cream min-h-[60vh]">
@@ -45,11 +59,10 @@ export default async function ContactPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="font-serif text-3xl md:text-4xl text-charcoal mb-4">
-            Contact
+            {pageTitle}
           </h1>
           <p className="text-stone leading-relaxed max-w-2xl mx-auto text-lg">
-            Benieuwd welke remedie bij jou past? Ik bied een vrijblijvend en
-            kosteloos kennismakingsgesprek aan. Neem gerust contact op.
+            {pageSubtitle}
           </p>
         </div>
 
