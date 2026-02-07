@@ -105,6 +105,7 @@ export const queries = {
   homepage: `*[_type == "homepage"][0]{
     heroTitle, heroSubtitle, heroDescription,
     heroImage, "heroImageUrl": heroImage.asset->url,
+    heroVideo, "heroVideoUrl": heroVideo.asset->url,
     heroPrimaryButton, heroSecondaryButton,
     showMagazineBanner, magazineBannerTitle, magazineBannerSubtitle, magazineBannerButton,
     welcomeLabel, welcomeTitle, welcomeText, welcomeLink,

@@ -31,7 +31,16 @@ export const homepageType = {
       title: 'Hero Achtergrondafbeelding',
       type: 'image',
       options: { hotspot: true },
-      description: 'Optionele achtergrondafbeelding voor de hero sectie',
+      description: 'Fallback afbeelding (wordt getoond als er geen video is, of als poster)',
+    },
+    {
+      name: 'heroVideo',
+      title: 'Hero Achtergrondvideo',
+      type: 'file',
+      options: {
+        accept: 'video/mp4,video/webm',
+      },
+      description: 'Optionele achtergrondvideo (MP4 of WebM, max 10MB aanbevolen). Speelt automatisch af, gedempt en in een loop.',
     },
     {
       name: 'heroPrimaryButton',

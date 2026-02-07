@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Image from 'next/image'
+import { MagazineSignupForm } from '@/components/MagazineSignupForm'
 
 export const metadata = {
   title: 'Gratis E-magazine | Natuurlijk Prana',
@@ -99,37 +99,20 @@ export default function GratisMagazinePage() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA Section met formulier */}
       <section className="py-20 md:py-28 px-4">
-        <div className="max-w-2xl mx-auto">
-          <div className="bg-gradient-to-br from-terracotta via-terracotta-dark to-terracotta rounded-3xl p-10 md:p-16 text-center shadow-xl">
-            <div className="w-20 h-20 mx-auto mb-8 bg-white/10 rounded-2xl flex items-center justify-center">
-              <svg className="w-10 h-10 text-peach-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            </div>
-
-            <h2 className="font-serif text-3xl md:text-4xl text-white mb-4">
-              Download nu gratis
+        <div className="max-w-xl mx-auto">
+          <div className="bg-gradient-to-br from-terracotta via-terracotta-dark to-terracotta rounded-3xl p-8 md:p-12 shadow-xl">
+            <h2 className="font-serif text-2xl md:text-3xl text-white mb-2 text-center">
+              Ontvang het PRANA Magazine
             </h2>
-            <p className="text-sage-100 mb-10 text-lg leading-relaxed">
-              Vul je e-mailadres in en ontvang het PRANA e-magazine direct in je mailbox.
-              Geen spam, alleen waardevolle content.
+            <p className="text-white/80 mb-8 text-center">
+              boordevol tips, een interview en meer <span className="font-semibold text-white">GRATIS</span> in je mailbox!
             </p>
 
-            <a
-              href="https://page.co/u2yuqq"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center bg-coral text-white px-10 py-4 rounded-full font-medium hover:bg-coral-dark transition-all shadow-lg hover:shadow-xl hover:scale-105 text-lg"
-            >
-              Ja, ik wil het gratis magazine!
-              <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-            </a>
+            <MagazineSignupForm />
 
-            <p className="text-sage-200 text-sm mt-6">
+            <p className="text-white/60 text-sm mt-6 text-center">
               Je gegevens worden nooit gedeeld met derden
             </p>
           </div>

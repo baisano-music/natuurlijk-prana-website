@@ -17,6 +17,7 @@ interface HomepageData {
   heroSubtitle?: string
   heroDescription?: string
   heroImageUrl?: string
+  heroVideoUrl?: string
   heroPrimaryButton?: { text?: string; link?: string }
   heroSecondaryButton?: { text?: string; link?: string }
   // E-magazine banner
@@ -124,15 +125,32 @@ export default async function HomePage() {
   const ctaButton = homepage?.ctaButton || { text: 'Neem contact op', link: '/contact' }
 
   const heroImageUrl = homepage?.heroImageUrl
+  const heroVideoUrl = homepage?.heroVideoUrl
   const welcomeImageUrl = homepage?.welcomeImageUrl
   const ctaImageUrl = homepage?.ctaImageUrl
 
   return (
     <div>
-      {/* Hero - Fullscreen met parallax effect */}
+      {/* Hero - Fullscreen met video of afbeelding */}
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-        {/* Achtergrondafbeelding met parallax effect */}
-        {heroImageUrl ? (
+        {/* Achtergrond: Video heeft prioriteit, daarna afbeelding, dan gradient */}
+        {heroVideoUrl ? (
+          <>
+            {/* Video achtergrond */}
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster={heroImageUrl || undefined}
+              className="absolute inset-0 w-full h-full object-cover"
+            >
+              <source src={heroVideoUrl} type="video/mp4" />
+            </video>
+            {/* Gradient overlay voor betere leesbaarheid */}
+            <div className="absolute inset-0 bg-gradient-to-b from-charcoal/50 via-charcoal/30 to-charcoal/70" />
+          </>
+        ) : heroImageUrl ? (
           <>
             <div className="absolute inset-0">
               <Image
