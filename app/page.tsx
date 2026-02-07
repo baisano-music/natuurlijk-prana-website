@@ -1,6 +1,7 @@
 import { client, queries } from '@/lib/SanityClient'
 import Link from 'next/link'
 import Image from 'next/image'
+import { PortableText } from '@portabletext/react'
 
 // Geen caching voor verse data
 export const revalidate = 0
@@ -12,10 +13,45 @@ const testimonialColors = [
   'bg-peach-100/90 backdrop-blur-sm',
 ]
 
+// PortableText configuratie voor simpele rich text
+const simplePortableTextComponents = {
+  marks: {
+    strong: ({ children }: { children: React.ReactNode }) => <strong className="font-semibold">{children}</strong>,
+    em: ({ children }: { children: React.ReactNode }) => <em className="italic">{children}</em>,
+    link: ({ value, children }: { value?: { href?: string }; children: React.ReactNode }) => (
+      <a href={value?.href} className="text-terracotta hover:text-terracotta-dark underline transition-colors">
+        {children}
+      </a>
+    ),
+  },
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type RichTextValue = string | any[] | undefined
+
+// Helper om zowel string als PortableText te renderen
+function RichTextOrString({ value, fallback, className }: { value: RichTextValue; fallback: string; className?: string }) {
+  if (!value) {
+    return <p className={className}>{fallback}</p>
+  }
+
+  // Als het een array is, gebruik PortableText
+  if (Array.isArray(value)) {
+    return (
+      <div className={className}>
+        <PortableText value={value} components={simplePortableTextComponents} />
+      </div>
+    )
+  }
+
+  // Anders is het een string
+  return <p className={className}>{value}</p>
+}
+
 interface HomepageData {
   heroTitle?: string
   heroSubtitle?: string
-  heroDescription?: string
+  heroDescription?: RichTextValue
   heroImageUrl?: string
   heroVideoUrl?: string
   heroPrimaryButton?: { text?: string; link?: string }
@@ -28,7 +64,7 @@ interface HomepageData {
   // Welkom
   welcomeLabel?: string
   welcomeTitle?: string
-  welcomeText?: string
+  welcomeText?: RichTextValue
   welcomeImageUrl?: string
   welcomeLink?: { text?: string; link?: string }
   // Remedies
@@ -45,7 +81,7 @@ interface HomepageData {
   testimonialsLink?: { text?: string; link?: string }
   // CTA
   ctaTitle?: string
-  ctaText?: string
+  ctaText?: RichTextValue
   ctaButton?: { text?: string; link?: string }
   ctaImageUrl?: string
 }
@@ -81,7 +117,7 @@ async function getFeaturedTestimonials(): Promise<Testimonial[]> {
 
 export default async function HomePage() {
   const homepage = await getHomepageData()
-  const remediesCount = homepage?.remediesCount || 4
+  const remediesCount = homepage?.remediesCount || 3
   const [remedies, testimonials] = await Promise.all([
     getFeaturedRemedies(remediesCount),
     getFeaturedTestimonials(),
@@ -90,7 +126,8 @@ export default async function HomePage() {
   // Default waarden als er nog geen content in Sanity staat
   const heroTitle = homepage?.heroTitle || 'Natuurlijk Prana'
   const heroSubtitle = homepage?.heroSubtitle || 'Bloesemremedies voor innerlijke balans'
-  const heroDescription = homepage?.heroDescription || 'Voor iedereen die op zoek is naar rust, warmte en ondersteuning — of je nu moeder bent, hoogsensitief of gewoon behoefte hebt aan een zachte steun in de rug.'
+  const heroDescription = homepage?.heroDescription
+  const heroDescriptionFallback = 'Voor iedereen die op zoek is naar rust, warmte en ondersteuning — of je nu moeder bent, hoogsensitief of gewoon behoefte hebt aan een zachte steun in de rug.'
   const primaryButton = homepage?.heroPrimaryButton || { text: 'Bekijk bloesemremedies →', link: '/remedies' }
   const secondaryButton = homepage?.heroSecondaryButton || { text: 'Kennismakingsgesprek', link: '/contact' }
 
@@ -103,7 +140,8 @@ export default async function HomePage() {
   // Welkom
   const welcomeLabel = homepage?.welcomeLabel || 'Welkom'
   const welcomeTitle = homepage?.welcomeTitle || 'Welkom'
-  const welcomeText = homepage?.welcomeText || 'Op deze site vind je onze collectie bloesemremedies. Elke remedie ondersteunt een bepaalde innerlijke staat en helpt je in balans te komen. De remedies werken laag voor laag, op een manier die bij je past.'
+  const welcomeText = homepage?.welcomeText
+  const welcomeTextFallback = 'Op deze site vind je onze collectie bloesemremedies. Elke remedie ondersteunt een bepaalde innerlijke staat en helpt je in balans te komen. De remedies werken laag voor laag, op een manier die bij je past.'
   const welcomeLink = homepage?.welcomeLink || { text: 'Meer over mij', link: '/over-mij' }
 
   // Remedies
@@ -121,7 +159,8 @@ export default async function HomePage() {
 
   // CTA
   const ctaTitle = homepage?.ctaTitle || 'Benieuwd welke remedie bij jou past?'
-  const ctaText = homepage?.ctaText || 'Ik bied een vrijblijvend en kosteloos kennismakingsgesprek aan. Samen kijken we wat je nodig hebt.'
+  const ctaText = homepage?.ctaText
+  const ctaTextFallback = 'Ik bied een vrijblijvend en kosteloos kennismakingsgesprek aan. Samen kijken we wat je nodig hebt.'
   const ctaButton = homepage?.ctaButton || { text: 'Neem contact op', link: '/contact' }
 
   const heroImageUrl = homepage?.heroImageUrl
@@ -177,9 +216,9 @@ export default async function HomePage() {
           <p className="mt-6 text-2xl md:text-3xl text-peach-100 font-medium drop-shadow-md">
             {heroSubtitle}
           </p>
-          <p className="mt-6 text-lg text-white/90 max-w-2xl mx-auto leading-relaxed drop-shadow">
-            {heroDescription}
-          </p>
+          <div className="mt-6 text-lg text-white/90 max-w-2xl mx-auto leading-relaxed drop-shadow [&_p]:mb-0">
+            <RichTextOrString value={heroDescription} fallback={heroDescriptionFallback} />
+          </div>
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href={primaryButton.link || '/remedies'}
@@ -276,9 +315,9 @@ export default async function HomePage() {
               <h2 className="font-serif text-3xl md:text-4xl text-charcoal mt-4 mb-8">
                 {welcomeTitle}
               </h2>
-              <p className="text-stone leading-relaxed text-lg">
-                {welcomeText}
-              </p>
+              <div className="text-stone leading-relaxed text-lg [&_p]:mb-4 [&_p:last-child]:mb-0">
+                <RichTextOrString value={welcomeText} fallback={welcomeTextFallback} />
+              </div>
               <Link
                 href={welcomeLink.link || '/over-mij'}
                 className="inline-flex items-center mt-8 text-terracotta font-medium hover:text-terracotta-dark transition-colors group"
@@ -442,9 +481,9 @@ export default async function HomePage() {
           <h2 className="font-serif text-3xl md:text-4xl text-white mb-6 drop-shadow-lg">
             {ctaTitle}
           </h2>
-          <p className="text-white/90 leading-relaxed mb-10 text-lg drop-shadow">
-            {ctaText}
-          </p>
+          <div className="text-white/90 leading-relaxed mb-10 text-lg drop-shadow [&_p]:mb-0">
+            <RichTextOrString value={ctaText} fallback={ctaTextFallback} />
+          </div>
           <Link
             href={ctaButton.link || '/contact'}
             className="inline-flex items-center justify-center bg-coral text-white px-10 py-4 rounded-full font-medium hover:bg-white hover:text-terracotta transition-all shadow-lg hover:shadow-xl hover:scale-105"

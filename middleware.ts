@@ -1,6 +1,15 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+// Sanity configuratie voor edge runtime
+const SANITY_PROJECT_ID = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '0xp96ddy'
+const SANITY_DATASET = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
+
+// Cache voor CMS redirects (5 minuten)
+let redirectsCache: Map<string, { destination: string; permanent: boolean }> | null = null
+let redirectsCacheTime = 0
+const CACHE_TTL = 5 * 60 * 1000 // 5 minuten
+
 // Blog post slugs die moeten worden doorverwezen naar /nieuws/
 // Deze lijst is gegenereerd vanuit de WordPress import
 const blogSlugs = new Set([
@@ -117,13 +126,76 @@ const blogSlugs = new Set([
   'zondag-28-juni-groene-loper-festival-hoofddorp',
 ])
 
-export function middleware(request: NextRequest) {
+// Fetch redirects van Sanity met caching
+async function getRedirects(): Promise<Map<string, { destination: string; permanent: boolean }>> {
+  const now = Date.now()
+
+  // Return cached data als nog geldig
+  if (redirectsCache && now - redirectsCacheTime < CACHE_TTL) {
+    return redirectsCache
+  }
+
+  try {
+    const query = encodeURIComponent(
+      `*[_type == "redirect" && active == true]{source, destination, permanent}`
+    )
+    const url = `https://${SANITY_PROJECT_ID}.api.sanity.io/v2024-01-01/data/query/${SANITY_DATASET}?query=${query}`
+
+    const response = await fetch(url, {
+      next: { revalidate: 300 }, // Cache 5 minuten op edge
+    })
+
+    if (!response.ok) {
+      console.error('Failed to fetch redirects from Sanity')
+      return redirectsCache || new Map()
+    }
+
+    const data = await response.json()
+    const redirects = new Map<string, { destination: string; permanent: boolean }>()
+
+    if (data.result && Array.isArray(data.result)) {
+      for (const redirect of data.result) {
+        if (redirect.source && redirect.destination) {
+          redirects.set(redirect.source, {
+            destination: redirect.destination,
+            permanent: redirect.permanent !== false,
+          })
+        }
+      }
+    }
+
+    // Update cache
+    redirectsCache = redirects
+    redirectsCacheTime = now
+
+    return redirects
+  } catch (error) {
+    console.error('Error fetching redirects:', error)
+    return redirectsCache || new Map()
+  }
+}
+
+export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
-  // Verwijder leading slash voor vergelijking
-  const slug = pathname.slice(1)
+  // 1. Check CMS redirects (met leading slash)
+  const cmsRedirects = await getRedirects()
+  const cmsRedirect = cmsRedirects.get(pathname)
 
-  // Check of dit een blog post slug is die redirect nodig heeft
+  if (cmsRedirect) {
+    const url = request.nextUrl.clone()
+
+    // Check of destination een volledige URL is of een pad
+    if (cmsRedirect.destination.startsWith('http')) {
+      return NextResponse.redirect(cmsRedirect.destination, cmsRedirect.permanent ? 301 : 302)
+    }
+
+    url.pathname = cmsRedirect.destination
+    return NextResponse.redirect(url, cmsRedirect.permanent ? 301 : 302)
+  }
+
+  // 2. Check hardcoded blog redirects (voor backwards compatibility)
+  const slug = pathname.slice(1) // Verwijder leading slash
   if (blogSlugs.has(slug)) {
     const url = request.nextUrl.clone()
     url.pathname = `/nieuws/${slug}`

@@ -1,4 +1,31 @@
 // schemaTypes/homepage.ts – Homepage instellingen (singleton)
+
+// Simpele rich text block voor inline tekst (bold, italic, links)
+const simpleRichText = {
+  type: 'array',
+  of: [
+    {
+      type: 'block',
+      styles: [{ title: 'Normaal', value: 'normal' }],
+      lists: [],
+      marks: {
+        decorators: [
+          { title: 'Bold', value: 'strong' },
+          { title: 'Cursief', value: 'em' },
+        ],
+        annotations: [
+          {
+            name: 'link',
+            type: 'object',
+            title: 'Link',
+            fields: [{ name: 'href', type: 'url', title: 'URL' }],
+          },
+        ],
+      },
+    },
+  ],
+}
+
 export const homepageType = {
   name: 'homepage',
   title: 'Homepage',
@@ -22,9 +49,8 @@ export const homepageType = {
     {
       name: 'heroDescription',
       title: 'Hero Beschrijving',
-      type: 'text',
-      rows: 3,
-      description: 'Korte introductietekst',
+      description: 'Korte introductietekst (ondersteunt bold, cursief en links)',
+      ...simpleRichText,
     },
     {
       name: 'heroImage',
@@ -108,8 +134,8 @@ export const homepageType = {
     {
       name: 'welcomeText',
       title: 'Welkom Tekst',
-      type: 'text',
-      rows: 4,
+      description: 'Tekst naast de afbeelding (ondersteunt bold, cursief en links)',
+      ...simpleRichText,
     },
     {
       name: 'welcomeImage',
@@ -152,7 +178,7 @@ export const homepageType = {
       name: 'remediesCount',
       title: 'Aantal remedies tonen',
       type: 'number',
-      initialValue: 4,
+      initialValue: 3,
       description: 'Hoeveel remedies worden uitgelicht op de homepage',
     },
     {
@@ -211,8 +237,8 @@ export const homepageType = {
     {
       name: 'ctaText',
       title: 'CTA Tekst',
-      type: 'text',
-      rows: 2,
+      description: 'Tekst onder de CTA titel (ondersteunt bold, cursief en links)',
+      ...simpleRichText,
     },
     {
       name: 'ctaImage',

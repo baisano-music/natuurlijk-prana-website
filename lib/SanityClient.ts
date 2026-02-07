@@ -98,7 +98,8 @@ export const queries = {
 
   /** Site-instellingen (singleton) */
   siteSettings: `*[_type == "siteSettings"][0]{
-    title, description, contactInfo, socialMedia, openingHours
+    title, description, contactInfo, socialMedia, openingHours, parkingInfo,
+    footerNavigation, footerBottomLinks, googleAnalyticsId, googleTagManagerId
   }`,
 
   /** Pagina-instellingen per type */
@@ -227,4 +228,9 @@ export const queries = {
         _id, title, "slug": slug.current
       }
     }`,
+
+  /** Alle actieve redirects */
+  redirects: `*[_type == "redirect" && active == true]{
+    source, destination, permanent
+  }`,
 }
