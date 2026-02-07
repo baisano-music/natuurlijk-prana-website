@@ -245,6 +245,7 @@ export default async function HomePage() {
                 alt="Bloesemremedies"
                 fill
                 className="object-cover"
+                style={{ objectPosition: 'center top' }}
               />
             ) : (
               <div className="absolute inset-0 bg-gradient-to-br from-sage-200 via-sage-100 to-peach-100 flex items-center justify-center">
