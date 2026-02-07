@@ -105,11 +105,20 @@ export const remedieType = {
       of: [{ type: 'string' }],
       options: { layout: 'tags' },
     },
-    // Uitgebreide velden (optioneel)
+    // Categorie referentie
+    {
+      name: 'category',
+      title: 'Categorie',
+      type: 'reference',
+      to: [{ type: 'productCategory' }],
+      description: 'Selecteer de productcategorie waartoe dit product behoort',
+    },
+    // Uitgebreide velden (optioneel - behouden voor backwards compatibility)
     {
       name: 'remedieType',
-      title: 'Type remedie',
+      title: 'Type remedie (oud)',
       type: 'string',
+      hidden: true,
       options: {
         list: [
           { title: 'Bloesemremedies', value: 'bloesem' },
@@ -123,8 +132,9 @@ export const remedieType = {
     },
     {
       name: 'lijn',
-      title: 'Lijn/Merk',
+      title: 'Lijn/Merk (oud)',
       type: 'string',
+      hidden: true,
       options: {
         list: [
           { title: 'Alaskan Essences', value: 'alaskan' },

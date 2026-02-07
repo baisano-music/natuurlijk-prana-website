@@ -165,8 +165,14 @@ export function Footer({ siteSettings }: { siteSettings?: SiteSettings }) {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-sage-700 text-center text-sage-400 text-sm">
-          © {new Date().getFullYear()} Natuurlijk Prana. Alle rechten voorbehouden.
+        <div className="mt-12 pt-8 border-t border-sage-700 flex flex-col sm:flex-row items-center justify-between gap-4 text-sage-400 text-sm">
+          <p>© {new Date().getFullYear()} Natuurlijk Prana. Alle rechten voorbehouden.</p>
+          <Link
+            href="/privacy-en-disclaimer"
+            className="hover:text-peach-200 transition-colors"
+          >
+            Privacy & Disclaimer
+          </Link>
         </div>
       </div>
     </footer>

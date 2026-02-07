@@ -1,6 +1,17 @@
 import { client, queries } from '@/lib/SanityClient'
 import Link from 'next/link'
 
+// Geen caching voor verse data
+export const revalidate = 0
+
+// Kleuren voor testimonial kaarten
+const testimonialColors = [
+  'bg-peach-100 border-peach-200',
+  'bg-sage-50 border-sage-200',
+  'bg-cream border-terracotta/20',
+  'bg-white border-peach-200',
+]
+
 export const metadata = {
   title: 'Ervaringen | Natuurlijk Prana',
   description: 'Lees ervaringen van ouders en kinderen met de bloesemremedies van Natuurlijk Prana.',
@@ -38,16 +49,16 @@ export default async function ErvaringenPage() {
 
         {testimonials.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {testimonials.map((testimonial) => (
+            {testimonials.map((testimonial, index) => (
               <article
                 key={testimonial._id}
-                className="bg-white rounded-2xl p-8 shadow-sm border border-peach-200"
+                className={`rounded-2xl p-8 shadow-sm border ${testimonialColors[index % testimonialColors.length]}`}
               >
                 <div className="text-terracotta text-4xl font-serif mb-4">&ldquo;</div>
                 <p className="text-stone leading-relaxed mb-6 italic text-lg">
                   {testimonial.quote}
                 </p>
-                <footer className="border-t border-peach-200 pt-4">
+                <footer className="border-t border-stone/20 pt-4">
                   <p className="font-medium text-charcoal">
                     {testimonial.name || testimonial.initials || 'Anoniem'}
                   </p>

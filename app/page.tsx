@@ -2,6 +2,16 @@ import { client, queries } from '@/lib/SanityClient'
 import Link from 'next/link'
 import Image from 'next/image'
 
+// Geen caching voor verse data
+export const revalidate = 0
+
+// Kleuren voor testimonial kaarten
+const testimonialColors = [
+  'bg-white/90 backdrop-blur-sm',
+  'bg-sage-50/90 backdrop-blur-sm',
+  'bg-peach-100/90 backdrop-blur-sm',
+]
+
 interface HomepageData {
   heroTitle?: string
   heroSubtitle?: string
@@ -11,6 +21,7 @@ interface HomepageData {
   heroSecondaryButton?: { text?: string; link?: string }
   welcomeTitle?: string
   welcomeText?: string
+  welcomeImageUrl?: string
   remediesTitle?: string
   remediesSubtitle?: string
   remediesCount?: number
@@ -20,6 +31,7 @@ interface HomepageData {
   ctaTitle?: string
   ctaText?: string
   ctaButton?: { text?: string; link?: string }
+  ctaImageUrl?: string
 }
 
 interface Remedie {
@@ -77,76 +89,161 @@ export default async function HomePage() {
   const ctaButton = homepage?.ctaButton || { text: 'Neem contact op', link: '/contact' }
 
   const heroImageUrl = homepage?.heroImageUrl
+  const welcomeImageUrl = homepage?.welcomeImageUrl
+  const ctaImageUrl = homepage?.ctaImageUrl
 
   return (
     <div>
-      {/* Hero */}
-      <section className="relative py-20 md:py-28 px-4 overflow-hidden">
-        {/* Achtergrondafbeelding */}
+      {/* Hero - Fullscreen met parallax effect */}
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+        {/* Achtergrondafbeelding met parallax effect */}
         {heroImageUrl ? (
           <>
-            <Image
-              src={heroImageUrl}
-              alt=""
-              fill
-              className="object-cover"
-              priority
-            />
-            <div className="absolute inset-0 bg-cream/80" />
+            <div className="absolute inset-0">
+              <Image
+                src={heroImageUrl}
+                alt=""
+                fill
+                className="object-cover"
+                style={{ objectPosition: 'center 30%' }}
+                priority
+              />
+            </div>
+            {/* Gradient overlay voor betere leesbaarheid */}
+            <div className="absolute inset-0 bg-gradient-to-b from-charcoal/40 via-charcoal/20 to-charcoal/60" />
           </>
         ) : (
-          <div className="absolute inset-0 bg-gradient-warm" />
+          <div className="absolute inset-0 bg-gradient-to-br from-sage-700 via-sage-600 to-sage-800" />
         )}
 
-        <div className="relative max-w-4xl mx-auto text-center">
-          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-charcoal leading-tight">
+        {/* Content */}
+        <div className="relative z-10 max-w-4xl mx-auto text-center px-4 py-20">
+          <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl text-white leading-tight drop-shadow-lg">
             {heroTitle}
           </h1>
-          <p className="mt-6 text-xl md:text-2xl text-terracotta font-medium">
+          <p className="mt-6 text-2xl md:text-3xl text-peach-100 font-medium drop-shadow-md">
             {heroSubtitle}
           </p>
-          <p className="mt-4 text-stone max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-6 text-lg text-white/90 max-w-2xl mx-auto leading-relaxed drop-shadow">
             {heroDescription}
           </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href={primaryButton.link || '/remedies'}
-              className="inline-flex items-center justify-center bg-terracotta text-white px-8 py-4 rounded-full font-medium hover:bg-terracotta-dark transition-colors shadow-md hover:shadow-lg"
+              className="inline-flex items-center justify-center bg-terracotta text-white px-8 py-4 rounded-full font-medium hover:bg-terracotta-dark transition-all shadow-lg hover:shadow-xl hover:scale-105"
             >
               {primaryButton.text || 'Bekijk bloesemremedies →'}
             </Link>
             <Link
               href={secondaryButton.link || '/contact'}
-              className="inline-flex items-center justify-center border-2 border-terracotta text-terracotta px-8 py-4 rounded-full font-medium hover:bg-peach-100/80 hover:border-terracotta-dark transition-colors backdrop-blur-sm"
+              className="inline-flex items-center justify-center bg-white/20 backdrop-blur-sm border-2 border-white text-white px-8 py-4 rounded-full font-medium hover:bg-white/30 transition-all"
             >
               {secondaryButton.text || 'Kennismakingsgesprek'}
             </Link>
           </div>
         </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+          <svg className="w-6 h-6 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          </svg>
+        </div>
       </section>
 
-      {/* Intro */}
-      <section className="py-16 md:py-24 px-4 bg-cream">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="font-serif text-2xl md:text-3xl text-charcoal mb-6">
-            {welcomeTitle}
-          </h2>
-          <p className="text-stone leading-relaxed text-lg">
-            {welcomeText}
-          </p>
+      {/* Actie banner - Gratis E-magazine */}
+      <section className="bg-sage-700 py-6 md:py-8">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-4 text-white">
+              <div className="hidden sm:flex w-12 h-12 rounded-full bg-white/10 items-center justify-center flex-shrink-0">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+              </div>
+              <div>
+                <p className="font-medium text-lg">Gratis PRANA E-magazine</p>
+                <p className="text-sage-100 text-sm">Tips, recepten en inspiratie over bloesemremedies</p>
+              </div>
+            </div>
+            <Link
+              href="/gratis-magazine"
+              className="inline-flex items-center bg-white text-sage-700 px-6 py-2.5 rounded-full font-medium hover:bg-peach-100 transition-colors shadow-sm whitespace-nowrap"
+            >
+              Download gratis
+              <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Welkom - Split layout met afbeelding */}
+      <section className="relative">
+        <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[70vh]">
+          {/* Afbeelding kant */}
+          <div className="relative h-[50vh] lg:h-auto order-2 lg:order-1">
+            {welcomeImageUrl ? (
+              <Image
+                src={welcomeImageUrl}
+                alt="Bloesemremedies"
+                fill
+                className="object-cover"
+              />
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-sage-200 via-sage-100 to-peach-100 flex items-center justify-center">
+                <div className="text-center text-sage-600 p-8">
+                  <svg className="w-24 h-24 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                  <p className="text-sm italic">Voeg een afbeelding toe in Sanity Studio</p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Tekst kant */}
+          <div className="flex items-center order-1 lg:order-2 bg-cream">
+            <div className="max-w-xl mx-auto px-8 py-16 lg:py-24 lg:px-16">
+              <span className="text-terracotta uppercase tracking-widest text-sm font-medium">
+                Welkom
+              </span>
+              <h2 className="font-serif text-3xl md:text-4xl text-charcoal mt-4 mb-8">
+                {welcomeTitle}
+              </h2>
+              <p className="text-stone leading-relaxed text-lg">
+                {welcomeText}
+              </p>
+              <Link
+                href="/over-mij"
+                className="inline-flex items-center mt-8 text-terracotta font-medium hover:text-terracotta-dark transition-colors group"
+              >
+                Meer over mij
+                <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Uitgelichte remedies */}
       {remedies.length > 0 && (
-        <section className="py-16 md:py-24 px-4 bg-peach-100">
+        <section className="py-20 md:py-28 px-4 bg-white">
           <div className="max-w-6xl mx-auto">
-            <h2 className="font-serif text-2xl md:text-3xl text-charcoal text-center mb-4">
-              {remediesTitle}
-            </h2>
-            <p className="text-stone text-center max-w-2xl mx-auto mb-12">
-              {remediesSubtitle}
-            </p>
+            <div className="text-center mb-16">
+              <span className="text-terracotta uppercase tracking-widest text-sm font-medium">
+                Collectie
+              </span>
+              <h2 className="font-serif text-3xl md:text-4xl text-charcoal mt-4">
+                {remediesTitle}
+              </h2>
+              <p className="text-stone max-w-2xl mx-auto mt-4">
+                {remediesSubtitle}
+              </p>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {remedies.map((remedie) => {
                 const slug = remedie.slug || remedie._id
@@ -154,49 +251,46 @@ export default async function HomePage() {
                   <Link
                     key={remedie._id}
                     href={`/remedies/${slug}`}
-                    className="group bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 border border-peach-200 hover:border-terracotta/30"
+                    className="group"
                   >
-                    {remedie.imageUrl ? (
-                      <div className="relative aspect-square rounded-xl overflow-hidden mb-4 bg-peach-100">
+                    <div className="relative aspect-[3/4] rounded-2xl overflow-hidden mb-4 bg-sage-100">
+                      {remedie.imageUrl ? (
                         <Image
                           src={remedie.imageUrl}
                           alt={remedie.title || ''}
                           fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          className="object-cover group-hover:scale-110 transition-transform duration-500"
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                         />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-sage-100 to-peach-100">
+                          <span className="text-terracotta text-6xl font-serif">
+                            {remedie.title?.charAt(0) || '?'}
+                          </span>
+                        </div>
+                      )}
+                      {/* Hover overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <span className="text-white font-medium">Bekijk remedie →</span>
                       </div>
-                    ) : (
-                      <div className="aspect-square rounded-xl bg-peach-100 mb-4 flex items-center justify-center">
-                        <span className="text-terracotta text-4xl font-serif">
-                          {remedie.title?.charAt(0) || '?'}
-                        </span>
-                      </div>
-                    )}
-                    <h3 className="font-serif text-lg font-semibold text-charcoal group-hover:text-terracotta">
+                    </div>
+                    <h3 className="font-serif text-xl text-charcoal group-hover:text-terracotta transition-colors">
                       {remedie.title || 'Zonder titel'}
                     </h3>
                     {remedie.kernkwaliteit && (
-                      <p className="text-sm text-sage-600 mt-1 italic">
+                      <p className="text-sage-600 mt-1 italic">
                         {remedie.kernkwaliteit}
                       </p>
                     )}
-                    {remedie.werking && (
-                      <p className="text-stone text-sm mt-3 line-clamp-2 leading-relaxed">
-                        {remedie.werking}
-                      </p>
-                    )}
-                    <span className="inline-block mt-4 text-sage-600 font-medium text-sm group-hover:text-terracotta transition-colors">
-                      Lees meer →
-                    </span>
                   </Link>
                 )
               })}
             </div>
-            <div className="text-center mt-12">
+            <div className="text-center mt-16">
               <Link
                 href="/remedies"
-                className="inline-flex items-center text-terracotta font-medium hover:text-terracotta-dark transition-colors"
+                className="inline-flex items-center justify-center bg-sage-700 text-white px-8 py-4 rounded-full font-medium hover:bg-sage-800 transition-all shadow-md hover:shadow-lg"
               >
                 Bekijk alle remedies
               </Link>
@@ -205,28 +299,39 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Ervaringen */}
+      {/* Ervaringen met achtergrondpatroon */}
       {showTestimonials && testimonials.length > 0 && (
-        <section className="py-16 md:py-24 px-4 bg-cream">
-          <div className="max-w-5xl mx-auto">
-            <h2 className="font-serif text-2xl md:text-3xl text-charcoal text-center mb-4">
-              {testimonialsTitle}
-            </h2>
-            <p className="text-stone text-center max-w-2xl mx-auto mb-12">
-              {testimonialsSubtitle}
-            </p>
+        <section className="relative py-20 md:py-28 px-4 overflow-hidden">
+          {/* Decoratieve achtergrond */}
+          <div className="absolute inset-0 bg-gradient-to-br from-sage-100 via-cream to-peach-50" />
+          <div className="absolute inset-0 opacity-30" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d28a58' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          }} />
+
+          <div className="relative max-w-5xl mx-auto">
+            <div className="text-center mb-16">
+              <span className="text-terracotta uppercase tracking-widest text-sm font-medium">
+                Ervaringen
+              </span>
+              <h2 className="font-serif text-3xl md:text-4xl text-charcoal mt-4">
+                {testimonialsTitle}
+              </h2>
+              <p className="text-stone max-w-2xl mx-auto mt-4">
+                {testimonialsSubtitle}
+              </p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {testimonials.map((testimonial) => (
+              {testimonials.map((testimonial, index) => (
                 <div
                   key={testimonial._id}
-                  className="bg-white rounded-2xl p-8 shadow-sm border border-peach-200"
+                  className={`rounded-2xl p-8 shadow-lg border border-white/50 ${testimonialColors[index % testimonialColors.length]}`}
                 >
-                  <div className="text-terracotta text-4xl font-serif mb-4">&ldquo;</div>
-                  <p className="text-stone leading-relaxed mb-6 italic">
+                  <div className="text-terracotta text-5xl font-serif leading-none mb-4">&ldquo;</div>
+                  <p className="text-charcoal leading-relaxed mb-6 text-lg">
                     {testimonial.quote}
                   </p>
-                  <div className="border-t border-peach-200 pt-4">
-                    <p className="font-medium text-charcoal">
+                  <div className="border-t border-stone/20 pt-4">
+                    <p className="font-semibold text-charcoal">
                       {testimonial.name || testimonial.initials || 'Anoniem'}
                     </p>
                     {testimonial.context && (
@@ -239,27 +344,46 @@ export default async function HomePage() {
             <div className="text-center mt-12">
               <Link
                 href="/ervaringen"
-                className="inline-flex items-center text-terracotta font-medium hover:text-terracotta-dark transition-colors"
+                className="inline-flex items-center text-terracotta font-medium hover:text-terracotta-dark transition-colors group"
               >
-                Lees meer ervaringen →
+                Lees meer ervaringen
+                <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
               </Link>
             </div>
           </div>
         </section>
       )}
 
-      {/* CTA */}
-      <section className="py-20 md:py-28 px-4 bg-peach-200">
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="font-serif text-2xl md:text-3xl text-charcoal mb-4">
+      {/* CTA met achtergrondafbeelding */}
+      <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
+        {ctaImageUrl ? (
+          <>
+            <div className="absolute inset-0">
+              <Image
+                src={ctaImageUrl}
+                alt=""
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="absolute inset-0 bg-sage-900/70" />
+          </>
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-sage-700 via-sage-600 to-sage-800" />
+        )}
+
+        <div className="relative z-10 max-w-2xl mx-auto text-center px-4 py-20">
+          <h2 className="font-serif text-3xl md:text-4xl text-white mb-6 drop-shadow-lg">
             {ctaTitle}
           </h2>
-          <p className="text-stone leading-relaxed mb-8">
+          <p className="text-white/90 leading-relaxed mb-10 text-lg drop-shadow">
             {ctaText}
           </p>
           <Link
             href={ctaButton.link || '/contact'}
-            className="inline-flex items-center justify-center bg-terracotta text-white px-10 py-4 rounded-full font-medium hover:bg-terracotta-dark transition-colors shadow-md hover:shadow-lg"
+            className="inline-flex items-center justify-center bg-terracotta text-white px-10 py-4 rounded-full font-medium hover:bg-terracotta-dark transition-all shadow-lg hover:shadow-xl hover:scale-105"
           >
             {ctaButton.text || 'Neem contact op'}
           </Link>

@@ -107,9 +107,11 @@ export const queries = {
     heroImage, "heroImageUrl": heroImage.asset->url,
     heroPrimaryButton, heroSecondaryButton,
     welcomeTitle, welcomeText,
+    welcomeImage, "welcomeImageUrl": welcomeImage.asset->url,
     remediesTitle, remediesSubtitle, remediesCount,
     testimonialsTitle, testimonialsSubtitle, showTestimonials,
-    ctaTitle, ctaText, ctaButton
+    ctaTitle, ctaText, ctaButton,
+    ctaImage, "ctaImageUrl": ctaImage.asset->url
   }`,
 
   /** Pagina's */
@@ -129,5 +131,92 @@ export const queries = {
       },
       sections,
       seo
+    }`,
+
+  /** Productcategorieën - alleen hoofdcategorieën */
+  productCategoriesMain: `*[_type == "productCategory" && !defined(parent)] | order(order asc) {
+    _id, title, "slug": slug.current, description,
+    "imageUrl": image.asset->url
+  }`,
+
+  /** Productcategorieën met subcategorieën */
+  productCategoriesTree: `*[_type == "productCategory" && !defined(parent)] | order(order asc) {
+    _id, title, "slug": slug.current, description,
+    "imageUrl": image.asset->url,
+    "children": *[_type == "productCategory" && references(^._id)] | order(order asc) {
+      _id, title, "slug": slug.current, description,
+      "imageUrl": image.asset->url
+    }
+  }`,
+
+  /** Alle productcategorieën */
+  productCategories: `*[_type == "productCategory"] | order(order asc) {
+    _id, title, "slug": slug.current, description,
+    parent->{_id, title, "slug": slug.current},
+    "imageUrl": image.asset->url
+  }`,
+
+  /** Eén categorie op slug */
+  productCategoryBySlug: (slug: string) =>
+    `*[_type == "productCategory" && slug.current == "${slug}"][0]{
+      _id, title, "slug": slug.current, description,
+      "imageUrl": image.asset->url,
+      parent->{_id, title, "slug": slug.current},
+      content[]{
+        ...,
+        _type == "image" => {
+          ...,
+          "url": asset->url
+        }
+      }
+    }`,
+
+  /** Producten per categorie */
+  productsByCategory: (categoryId: string) =>
+    `*[_type == "remedie" && category._ref == "${categoryId}"] | order(title asc) {
+      _id, title, "slug": slug.current, kernkwaliteit, werking,
+      "imageUrl": image.asset->url, shortDescription
+    }`,
+
+  /** Producten per categorie slug */
+  productsByCategorySlug: (slug: string) =>
+    `*[_type == "remedie" && category->slug.current == "${slug}"] | order(title asc) {
+      _id, title, "slug": slug.current, kernkwaliteit, werking,
+      "imageUrl": image.asset->url, shortDescription
+    }`,
+
+  /** Pagina's per productcategorie */
+  pagesByCategory: (categorySlug: string) =>
+    `*[_type == "page" && productCategory->slug.current == "${categorySlug}" && showInNavigation == true] | order(order asc) {
+      _id, title, "slug": slug.current, subtitle,
+      "mainImageUrl": mainImage.asset->url
+    }`,
+
+  /** Pagina's met subpagina's */
+  pagesWithChildren: (parentSlug: string) =>
+    `*[_type == "page" && parentPage->slug.current == "${parentSlug}"] | order(order asc) {
+      _id, title, "slug": slug.current, subtitle,
+      "mainImageUrl": mainImage.asset->url
+    }`,
+
+  /** Uitgebreide pagina query met parent en category info */
+  pageBySlugFull: (slug: string) =>
+    `*[_type == "page" && slug.current == "${slug}"][0]{
+      _id, title, "slug": slug.current, subtitle,
+      mainImage, "mainImageUrl": mainImage.asset->url,
+      parentPage->{_id, title, "slug": slug.current},
+      productCategory->{_id, title, "slug": slug.current},
+      content[]{
+        ...,
+        _type == "image" => {
+          ...,
+          "url": asset->url
+        }
+      },
+      sections,
+      seo,
+      "childPages": *[_type == "page" && parentPage._ref == ^._id] | order(order asc) {
+        _id, title, "slug": slug.current
+      }
     }`,
 }

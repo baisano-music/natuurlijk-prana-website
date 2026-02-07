@@ -65,6 +65,13 @@ export const homepageType = {
       type: 'text',
       rows: 4,
     },
+    {
+      name: 'welcomeImage',
+      title: 'Welkom Afbeelding',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'Afbeelding naast de welkomtekst (wordt links getoond)',
+    },
 
     // Remedies sectie
     {
@@ -119,6 +126,13 @@ export const homepageType = {
       title: 'CTA Tekst',
       type: 'text',
       rows: 2,
+    },
+    {
+      name: 'ctaImage',
+      title: 'CTA Achtergrondafbeelding',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'Achtergrondafbeelding voor de CTA sectie onderaan de pagina',
     },
     {
       name: 'ctaButton',

@@ -3,6 +3,7 @@ import { urlFor } from '@/lib/sanity/image'
 import RichContent from '@/components/RichContent'
 import Image from 'next/image'
 import Link from 'next/link'
+import type { PortableTextBlock } from '@portabletext/types'
 
 export const metadata = {
   title: 'Over mij | Natuurlijk Prana',
@@ -12,7 +13,7 @@ export const metadata = {
 interface Section {
   _key: string
   heading?: string
-  body?: unknown[]
+  body?: PortableTextBlock[]
 }
 
 async function getOverMijPage() {
