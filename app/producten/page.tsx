@@ -121,7 +121,7 @@ export default async function ProductenPage() {
               </p>
               <Link
                 href="/remedies"
-                className="inline-flex items-center bg-terracotta text-white px-8 py-3 rounded-full font-medium hover:bg-terracotta-dark transition-colors"
+                className="inline-flex items-center bg-coral text-white px-8 py-3 rounded-full font-medium hover:bg-coral-dark transition-colors"
               >
                 Bekijk alle producten
                 <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -145,7 +145,7 @@ export default async function ProductenPage() {
           </p>
           <Link
             href="/contact"
-            className="inline-flex items-center bg-terracotta text-white px-8 py-4 rounded-full font-medium hover:bg-terracotta-dark transition-colors shadow-md hover:shadow-lg"
+            className="inline-flex items-center bg-coral text-white px-8 py-4 rounded-full font-medium hover:bg-coral-dark transition-colors shadow-md hover:shadow-lg"
           >
             Plan een kennismakingsgesprek
             <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -19,15 +19,30 @@ interface HomepageData {
   heroImageUrl?: string
   heroPrimaryButton?: { text?: string; link?: string }
   heroSecondaryButton?: { text?: string; link?: string }
+  // E-magazine banner
+  showMagazineBanner?: boolean
+  magazineBannerTitle?: string
+  magazineBannerSubtitle?: string
+  magazineBannerButton?: { text?: string; link?: string }
+  // Welkom
+  welcomeLabel?: string
   welcomeTitle?: string
   welcomeText?: string
   welcomeImageUrl?: string
+  welcomeLink?: { text?: string; link?: string }
+  // Remedies
+  remediesLabel?: string
   remediesTitle?: string
   remediesSubtitle?: string
   remediesCount?: number
+  remediesButton?: { text?: string; link?: string }
+  // Testimonials
+  testimonialsLabel?: string
   testimonialsTitle?: string
   testimonialsSubtitle?: string
   showTestimonials?: boolean
+  testimonialsLink?: { text?: string; link?: string }
+  // CTA
   ctaTitle?: string
   ctaText?: string
   ctaButton?: { text?: string; link?: string }
@@ -77,13 +92,33 @@ export default async function HomePage() {
   const heroDescription = homepage?.heroDescription || 'Voor iedereen die op zoek is naar rust, warmte en ondersteuning — of je nu moeder bent, hoogsensitief of gewoon behoefte hebt aan een zachte steun in de rug.'
   const primaryButton = homepage?.heroPrimaryButton || { text: 'Bekijk bloesemremedies →', link: '/remedies' }
   const secondaryButton = homepage?.heroSecondaryButton || { text: 'Kennismakingsgesprek', link: '/contact' }
+
+  // E-magazine banner
+  const showMagazineBanner = homepage?.showMagazineBanner !== false
+  const magazineBannerTitle = homepage?.magazineBannerTitle || 'Gratis PRANA E-magazine'
+  const magazineBannerSubtitle = homepage?.magazineBannerSubtitle || 'Tips, recepten en inspiratie over bloesemremedies'
+  const magazineBannerButton = homepage?.magazineBannerButton || { text: 'Download gratis', link: '/gratis-magazine' }
+
+  // Welkom
+  const welcomeLabel = homepage?.welcomeLabel || 'Welkom'
   const welcomeTitle = homepage?.welcomeTitle || 'Welkom'
   const welcomeText = homepage?.welcomeText || 'Op deze site vind je onze collectie bloesemremedies. Elke remedie ondersteunt een bepaalde innerlijke staat en helpt je in balans te komen. De remedies werken laag voor laag, op een manier die bij je past.'
+  const welcomeLink = homepage?.welcomeLink || { text: 'Meer over mij', link: '/over-mij' }
+
+  // Remedies
+  const remediesLabel = homepage?.remediesLabel || 'Collectie'
   const remediesTitle = homepage?.remediesTitle || 'Ontdek onze remedies'
   const remediesSubtitle = homepage?.remediesSubtitle || 'Elke remedie heeft een unieke kernkwaliteit en werking.'
+  const remediesButton = homepage?.remediesButton || { text: 'Bekijk alle remedies', link: '/remedies' }
+
+  // Testimonials
+  const testimonialsLabel = homepage?.testimonialsLabel || 'Ervaringen'
   const testimonialsTitle = homepage?.testimonialsTitle || 'Wat anderen zeggen'
   const testimonialsSubtitle = homepage?.testimonialsSubtitle || 'Ervaringen van ouders en kinderen'
   const showTestimonials = homepage?.showTestimonials !== false
+  const testimonialsLink = homepage?.testimonialsLink || { text: 'Lees meer ervaringen', link: '/ervaringen' }
+
+  // CTA
   const ctaTitle = homepage?.ctaTitle || 'Benieuwd welke remedie bij jou past?'
   const ctaText = homepage?.ctaText || 'Ik bied een vrijblijvend en kosteloos kennismakingsgesprek aan. Samen kijken we wat je nodig hebt.'
   const ctaButton = homepage?.ctaButton || { text: 'Neem contact op', link: '/contact' }
@@ -113,7 +148,7 @@ export default async function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-b from-charcoal/40 via-charcoal/20 to-charcoal/60" />
           </>
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-sage-700 via-sage-600 to-sage-800" />
+          <div className="absolute inset-0 bg-gradient-to-br from-terracotta via-terracotta-dark to-terracotta" />
         )}
 
         {/* Content */}
@@ -130,7 +165,7 @@ export default async function HomePage() {
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href={primaryButton.link || '/remedies'}
-              className="inline-flex items-center justify-center bg-terracotta text-white px-8 py-4 rounded-full font-medium hover:bg-terracotta-dark transition-all shadow-lg hover:shadow-xl hover:scale-105"
+              className="inline-flex items-center justify-center bg-coral text-white px-8 py-4 rounded-full font-medium hover:bg-coral-dark transition-all shadow-lg hover:shadow-xl hover:scale-105"
             >
               {primaryButton.text || 'Bekijk bloesemremedies →'}
             </Link>
@@ -152,32 +187,34 @@ export default async function HomePage() {
       </section>
 
       {/* Actie banner - Gratis E-magazine */}
-      <section className="bg-sage-700 py-6 md:py-8">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-4 text-white">
-              <div className="hidden sm:flex w-12 h-12 rounded-full bg-white/10 items-center justify-center flex-shrink-0">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      {showMagazineBanner && (
+        <section className="bg-terracotta py-6 md:py-8">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-4 text-white">
+                <div className="hidden sm:flex w-12 h-12 rounded-full bg-white/10 items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="font-medium text-lg">{magazineBannerTitle}</p>
+                  <p className="text-white/80 text-sm">{magazineBannerSubtitle}</p>
+                </div>
+              </div>
+              <Link
+                href={magazineBannerButton.link || '/gratis-magazine'}
+                className="inline-flex items-center bg-white text-terracotta-dark px-6 py-2.5 rounded-full font-medium hover:bg-peach-100 transition-colors shadow-sm whitespace-nowrap"
+              >
+                {magazineBannerButton.text || 'Download gratis'}
+                <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-              </div>
-              <div>
-                <p className="font-medium text-lg">Gratis PRANA E-magazine</p>
-                <p className="text-sage-100 text-sm">Tips, recepten en inspiratie over bloesemremedies</p>
-              </div>
+              </Link>
             </div>
-            <Link
-              href="/gratis-magazine"
-              className="inline-flex items-center bg-white text-sage-700 px-6 py-2.5 rounded-full font-medium hover:bg-peach-100 transition-colors shadow-sm whitespace-nowrap"
-            >
-              Download gratis
-              <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            </Link>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Welkom - Split layout met afbeelding */}
       <section className="relative">
@@ -207,7 +244,7 @@ export default async function HomePage() {
           <div className="flex items-center order-1 lg:order-2 bg-cream">
             <div className="max-w-xl mx-auto px-8 py-16 lg:py-24 lg:px-16">
               <span className="text-terracotta uppercase tracking-widest text-sm font-medium">
-                Welkom
+                {welcomeLabel}
               </span>
               <h2 className="font-serif text-3xl md:text-4xl text-charcoal mt-4 mb-8">
                 {welcomeTitle}
@@ -216,10 +253,10 @@ export default async function HomePage() {
                 {welcomeText}
               </p>
               <Link
-                href="/over-mij"
+                href={welcomeLink.link || '/over-mij'}
                 className="inline-flex items-center mt-8 text-terracotta font-medium hover:text-terracotta-dark transition-colors group"
               >
-                Meer over mij
+                {welcomeLink.text || 'Meer over mij'}
                 <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
@@ -235,7 +272,7 @@ export default async function HomePage() {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <span className="text-terracotta uppercase tracking-widest text-sm font-medium">
-                Collectie
+                {remediesLabel}
               </span>
               <h2 className="font-serif text-3xl md:text-4xl text-charcoal mt-4">
                 {remediesTitle}
@@ -289,10 +326,10 @@ export default async function HomePage() {
             </div>
             <div className="text-center mt-16">
               <Link
-                href="/remedies"
-                className="inline-flex items-center justify-center bg-sage-700 text-white px-8 py-4 rounded-full font-medium hover:bg-sage-800 transition-all shadow-md hover:shadow-lg"
+                href={remediesButton.link || '/remedies'}
+                className="inline-flex items-center justify-center bg-coral text-white px-8 py-4 rounded-full font-medium hover:bg-coral-dark transition-all shadow-md hover:shadow-lg"
               >
-                Bekijk alle remedies
+                {remediesButton.text || 'Bekijk alle remedies'}
               </Link>
             </div>
           </div>
@@ -311,7 +348,7 @@ export default async function HomePage() {
           <div className="relative max-w-5xl mx-auto">
             <div className="text-center mb-16">
               <span className="text-terracotta uppercase tracking-widest text-sm font-medium">
-                Ervaringen
+                {testimonialsLabel}
               </span>
               <h2 className="font-serif text-3xl md:text-4xl text-charcoal mt-4">
                 {testimonialsTitle}
@@ -343,10 +380,10 @@ export default async function HomePage() {
             </div>
             <div className="text-center mt-12">
               <Link
-                href="/ervaringen"
+                href={testimonialsLink.link || '/ervaringen'}
                 className="inline-flex items-center text-terracotta font-medium hover:text-terracotta-dark transition-colors group"
               >
-                Lees meer ervaringen
+                {testimonialsLink.text || 'Lees meer ervaringen'}
                 <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
@@ -371,7 +408,7 @@ export default async function HomePage() {
             <div className="absolute inset-0 bg-sage-900/70" />
           </>
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-sage-700 via-sage-600 to-sage-800" />
+          <div className="absolute inset-0 bg-gradient-to-br from-terracotta via-terracotta-dark to-terracotta" />
         )}
 
         <div className="relative z-10 max-w-2xl mx-auto text-center px-4 py-20">
@@ -383,7 +420,7 @@ export default async function HomePage() {
           </p>
           <Link
             href={ctaButton.link || '/contact'}
-            className="inline-flex items-center justify-center bg-terracotta text-white px-10 py-4 rounded-full font-medium hover:bg-terracotta-dark transition-all shadow-lg hover:shadow-xl hover:scale-105"
+            className="inline-flex items-center justify-center bg-coral text-white px-10 py-4 rounded-full font-medium hover:bg-coral-dark transition-all shadow-lg hover:shadow-xl hover:scale-105"
           >
             {ctaButton.text || 'Neem contact op'}
           </Link>

@@ -22,7 +22,7 @@ export function Footer({ siteSettings }: { siteSettings?: SiteSettings }) {
   const opening = siteSettings?.openingHours
 
   return (
-    <footer className="bg-sage-800 text-peach-100">
+    <footer className="bg-sage-500 text-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
           {/* Brand */}
@@ -40,7 +40,7 @@ export function Footer({ siteSettings }: { siteSettings?: SiteSettings }) {
                 className="h-8 w-auto brightness-0 invert opacity-95"
               />
             </Link>
-            <p className="mt-3 text-sage-300 text-sm leading-relaxed max-w-xs">
+            <p className="mt-3 text-white/80 text-sm leading-relaxed max-w-xs">
               {siteSettings?.description || 'Bloesemremedies voor innerlijke balans'}
             </p>
           </div>
@@ -86,7 +86,7 @@ export function Footer({ siteSettings }: { siteSettings?: SiteSettings }) {
               <li>
                 <Link
                   href="/studio"
-                  className="text-sage-400 hover:text-peach-100 transition-colors text-sm"
+                  className="text-white/70 hover:text-white transition-colors text-sm"
                 >
                   Content beheren
                 </Link>
@@ -165,7 +165,7 @@ export function Footer({ siteSettings }: { siteSettings?: SiteSettings }) {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-sage-700 flex flex-col sm:flex-row items-center justify-between gap-4 text-sage-400 text-sm">
+        <div className="mt-12 pt-8 border-t border-white/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-white/70 text-sm">
           <p>© {new Date().getFullYear()} Natuurlijk Prana. Alle rechten voorbehouden.</p>
           <Link
             href="/privacy-en-disclaimer"

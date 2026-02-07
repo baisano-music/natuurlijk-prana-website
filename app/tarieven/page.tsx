@@ -100,7 +100,7 @@ export default function TarievenPage() {
                 key={tarief.title}
                 className={`relative rounded-3xl p-8 ${
                   tarief.featured
-                    ? 'bg-sage-700 text-white shadow-xl scale-105 z-10'
+                    ? 'bg-terracotta text-white shadow-xl scale-105 z-10'
                     : 'bg-white border border-peach-200 shadow-sm'
                 }`}
               >
@@ -154,8 +154,8 @@ export default function TarievenPage() {
                   href="/contact"
                   className={`block w-full py-3 px-6 rounded-full font-medium text-center transition-all ${
                     tarief.featured
-                      ? 'bg-white text-sage-700 hover:bg-peach-100'
-                      : 'bg-terracotta text-white hover:bg-terracotta-dark'
+                      ? 'bg-white text-terracotta hover:bg-peach-100'
+                      : 'bg-coral text-white hover:bg-coral-dark'
                   }`}
                 >
                   {tarief.price === 'Gratis' ? 'Plan gesprek' : 'Boek consult'}
@@ -201,7 +201,7 @@ export default function TarievenPage() {
                   </p>
                   <Link
                     href="/contact"
-                    className="inline-block mt-4 bg-terracotta text-white px-8 py-3 rounded-full font-medium hover:bg-terracotta-dark transition-colors"
+                    className="inline-block mt-4 bg-coral text-white px-8 py-3 rounded-full font-medium hover:bg-coral-dark transition-colors"
                   >
                     Kies pakket
                   </Link>
@@ -298,7 +298,7 @@ export default function TarievenPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-sage-700 via-sage-600 to-sage-800">
+      <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-terracotta via-terracotta-dark to-terracotta">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="font-serif text-3xl md:text-4xl text-white mb-6">
             Klaar om te beginnen?
@@ -308,7 +308,7 @@ export default function TarievenPage() {
           </p>
           <Link
             href="/contact"
-            className="inline-flex items-center justify-center bg-terracotta text-white px-10 py-4 rounded-full font-medium hover:bg-terracotta-dark transition-all shadow-lg hover:shadow-xl hover:scale-105"
+            className="inline-flex items-center justify-center bg-coral text-white px-10 py-4 rounded-full font-medium hover:bg-coral-dark transition-all shadow-lg hover:shadow-xl hover:scale-105"
           >
             Plan kennismakingsgesprek
           </Link>

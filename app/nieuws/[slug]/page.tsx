@@ -41,9 +41,10 @@ function formatDate(dateStr: string | null) {
 export default async function NieuwsArtikelPage({
   params,
 }: {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }) {
-  const post = await client.fetch(queries.blogPostBySlug(params.slug))
+  const { slug } = await params
+  const post = await client.fetch(queries.blogPostBySlug(slug))
 
   if (!post) {
     notFound()

@@ -28,9 +28,10 @@ function formatDate(dateStr: string | null) {
 export default async function NieuwsPage({
   searchParams,
 }: {
-  searchParams: { page?: string }
+  searchParams: Promise<{ page?: string }>
 }) {
-  const page = Math.max(1, parseInt(searchParams.page || '1', 10))
+  const params = await searchParams
+  const page = Math.max(1, parseInt(params.page || '1', 10))
   const { posts, total } = await getBlogPosts(page)
   const totalPages = Math.ceil(total / PER_PAGE)
 
@@ -141,7 +142,7 @@ export default async function NieuwsPage({
           </p>
           <Link
             href="/contact"
-            className="inline-block bg-terracotta text-white px-8 py-4 rounded-full font-medium hover:bg-terracotta-dark transition-colors shadow-md hover:shadow-lg"
+            className="inline-block bg-coral text-white px-8 py-4 rounded-full font-medium hover:bg-coral-dark transition-colors shadow-md hover:shadow-lg"
           >
             Neem contact op
           </Link>

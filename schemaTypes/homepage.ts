@@ -52,7 +52,44 @@ export const homepageType = {
       ],
     },
 
+    // E-magazine banner
+    {
+      name: 'showMagazineBanner',
+      title: 'Toon E-magazine banner',
+      type: 'boolean',
+      initialValue: true,
+      description: 'Schakel de E-magazine promotiebanner in of uit',
+    },
+    {
+      name: 'magazineBannerTitle',
+      title: 'E-magazine Titel',
+      type: 'string',
+      initialValue: 'Gratis PRANA E-magazine',
+    },
+    {
+      name: 'magazineBannerSubtitle',
+      title: 'E-magazine Ondertitel',
+      type: 'string',
+      initialValue: 'Tips, recepten en inspiratie over bloesemremedies',
+    },
+    {
+      name: 'magazineBannerButton',
+      title: 'E-magazine Knop',
+      type: 'object',
+      fields: [
+        { name: 'text', title: 'Tekst', type: 'string', initialValue: 'Download gratis' },
+        { name: 'link', title: 'Link', type: 'string', initialValue: '/gratis-magazine' },
+      ],
+    },
+
     // Welkom sectie
+    {
+      name: 'welcomeLabel',
+      title: 'Welkom Label',
+      type: 'string',
+      initialValue: 'Welkom',
+      description: 'Klein label boven de welkomtitel',
+    },
     {
       name: 'welcomeTitle',
       title: 'Welkom Titel',
@@ -72,8 +109,24 @@ export const homepageType = {
       options: { hotspot: true },
       description: 'Afbeelding naast de welkomtekst (wordt links getoond)',
     },
+    {
+      name: 'welcomeLink',
+      title: 'Welkom Link',
+      type: 'object',
+      fields: [
+        { name: 'text', title: 'Tekst', type: 'string', initialValue: 'Meer over mij' },
+        { name: 'link', title: 'Link', type: 'string', initialValue: '/over-mij' },
+      ],
+    },
 
     // Remedies sectie
+    {
+      name: 'remediesLabel',
+      title: 'Remedies Label',
+      type: 'string',
+      initialValue: 'Collectie',
+      description: 'Klein label boven de remedietitel',
+    },
     {
       name: 'remediesTitle',
       title: 'Remedies Sectie Titel',
@@ -93,8 +146,24 @@ export const homepageType = {
       initialValue: 4,
       description: 'Hoeveel remedies worden uitgelicht op de homepage',
     },
+    {
+      name: 'remediesButton',
+      title: 'Remedies Knop',
+      type: 'object',
+      fields: [
+        { name: 'text', title: 'Tekst', type: 'string', initialValue: 'Bekijk alle remedies' },
+        { name: 'link', title: 'Link', type: 'string', initialValue: '/remedies' },
+      ],
+    },
 
     // Ervaringen sectie
+    {
+      name: 'testimonialsLabel',
+      title: 'Ervaringen Label',
+      type: 'string',
+      initialValue: 'Ervaringen',
+      description: 'Klein label boven de ervaringentitel',
+    },
     {
       name: 'testimonialsTitle',
       title: 'Ervaringen Sectie Titel',
@@ -112,6 +181,15 @@ export const homepageType = {
       title: 'Toon ervaringen op homepage',
       type: 'boolean',
       initialValue: true,
+    },
+    {
+      name: 'testimonialsLink',
+      title: 'Ervaringen Link',
+      type: 'object',
+      fields: [
+        { name: 'text', title: 'Tekst', type: 'string', initialValue: 'Lees meer ervaringen' },
+        { name: 'link', title: 'Link', type: 'string', initialValue: '/ervaringen' },
+      ],
     },
 
     // CTA sectie

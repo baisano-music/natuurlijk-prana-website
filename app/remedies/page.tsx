@@ -100,7 +100,7 @@ export default async function RemediesPage() {
           </p>
           <Link
             href="/contact"
-            className="inline-block bg-terracotta text-white px-8 py-4 rounded-full font-medium hover:bg-terracotta-dark transition-colors shadow-md hover:shadow-lg"
+            className="inline-block bg-coral text-white px-8 py-4 rounded-full font-medium hover:bg-coral-dark transition-colors shadow-md hover:shadow-lg"
           >
             Neem contact op
           </Link>

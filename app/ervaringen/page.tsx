@@ -83,7 +83,7 @@ export default async function ErvaringenPage() {
           </p>
           <Link
             href="/contact"
-            className="inline-block bg-terracotta text-white px-8 py-3 rounded-full hover:bg-terracotta-dark transition-colors font-medium shadow-sm hover:shadow-md"
+            className="inline-block bg-coral text-white px-8 py-3 rounded-full hover:bg-coral-dark transition-colors font-medium shadow-sm hover:shadow-md"
           >
             Neem contact op
           </Link>

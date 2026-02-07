@@ -162,45 +162,55 @@ export default async function CategoryPage({ params }: PageProps) {
       {/* Subcategories */}
       {subcategories && subcategories.length > 0 && (
         <section className="py-12 md:py-16 px-4">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="font-serif text-2xl md:text-3xl text-charcoal mb-8 text-center">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="font-serif text-2xl md:text-3xl text-charcoal mb-10 text-center">
               Subcategorieën
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className={`grid gap-8 ${
+              subcategories.length === 1
+                ? 'grid-cols-1 max-w-md mx-auto'
+                : subcategories.length === 2
+                  ? 'grid-cols-1 md:grid-cols-2 max-w-3xl mx-auto'
+                  : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+            }`}>
               {subcategories.map((sub: Category) => (
                 <Link
                   key={sub._id}
                   href={`/producten/${sub.slug}`}
-                  className="group bg-white rounded-xl p-6 border border-peach-200 hover:border-terracotta/30 hover:shadow-lg transition-all"
+                  className="group bg-white rounded-2xl p-8 border border-peach-200 hover:border-terracotta/30 hover:shadow-xl transition-all duration-300"
                 >
-                  <div className="flex items-start gap-4">
+                  <div className="flex flex-col items-center text-center">
                     {sub.imageUrl ? (
-                      <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                      <div className="w-28 h-28 rounded-2xl overflow-hidden mb-5 shadow-md group-hover:shadow-lg transition-shadow">
                         <Image
                           src={sub.imageUrl}
                           alt={sub.title}
-                          width={64}
-                          height={64}
-                          className="w-full h-full object-cover"
+                          width={112}
+                          height={112}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                       </div>
                     ) : (
-                      <div className="w-16 h-16 rounded-lg bg-sage-100 flex items-center justify-center flex-shrink-0">
-                        <svg className="w-8 h-8 text-sage-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="w-28 h-28 rounded-2xl bg-gradient-to-br from-sage-100 to-sage-200 flex items-center justify-center mb-5">
+                        <svg className="w-12 h-12 text-sage-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                         </svg>
                       </div>
                     )}
-                    <div>
-                      <h3 className="font-serif text-lg text-charcoal group-hover:text-terracotta transition-colors">
-                        {sub.title}
-                      </h3>
-                      {sub.description && (
-                        <p className="text-sm text-stone mt-1 line-clamp-2">
-                          {sub.description}
-                        </p>
-                      )}
-                    </div>
+                    <h3 className="font-serif text-xl text-charcoal group-hover:text-terracotta transition-colors mb-2">
+                      {sub.title}
+                    </h3>
+                    {sub.description && (
+                      <p className="text-stone text-sm leading-relaxed line-clamp-3">
+                        {sub.description}
+                      </p>
+                    )}
+                    <span className="inline-flex items-center text-sm text-terracotta mt-4 font-medium group-hover:text-terracotta-dark">
+                      Bekijk categorie
+                      <svg className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </span>
                   </div>
                 </Link>
               ))}
@@ -212,11 +222,17 @@ export default async function CategoryPage({ params }: PageProps) {
       {/* Related Pages / Info pagina's */}
       {relatedPages && relatedPages.length > 0 && (
         <section className="py-12 md:py-16 px-4 bg-white">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="font-serif text-2xl md:text-3xl text-charcoal mb-8 text-center">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="font-serif text-2xl md:text-3xl text-charcoal mb-10 text-center">
               Meer informatie
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className={`grid gap-6 ${
+              relatedPages.length === 1
+                ? 'grid-cols-1 max-w-md mx-auto'
+                : relatedPages.length === 2
+                  ? 'grid-cols-1 md:grid-cols-2 max-w-3xl mx-auto'
+                  : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+            }`}>
               {relatedPages.map((page: RelatedPage) => (
                 <Link
                   key={page._id}
@@ -225,23 +241,23 @@ export default async function CategoryPage({ params }: PageProps) {
                 >
                   <div className="flex items-start gap-4">
                     {page.mainImageUrl ? (
-                      <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                      <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 shadow-sm">
                         <Image
                           src={page.mainImageUrl}
                           alt={page.title}
-                          width={64}
-                          height={64}
-                          className="w-full h-full object-cover"
+                          width={80}
+                          height={80}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                       </div>
                     ) : (
-                      <div className="w-16 h-16 rounded-lg bg-sage-100 flex items-center justify-center flex-shrink-0">
-                        <svg className="w-8 h-8 text-sage-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-sage-100 to-sage-200 flex items-center justify-center flex-shrink-0">
+                        <svg className="w-10 h-10 text-sage-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
                       </div>
                     )}
-                    <div>
+                    <div className="flex-1 min-w-0">
                       <h3 className="font-serif text-lg text-charcoal group-hover:text-terracotta transition-colors">
                         {page.title}
                       </h3>
@@ -250,9 +266,9 @@ export default async function CategoryPage({ params }: PageProps) {
                           {page.subtitle}
                         </p>
                       )}
-                      <span className="inline-flex items-center text-sm text-terracotta mt-2 group-hover:text-terracotta-dark">
+                      <span className="inline-flex items-center text-sm text-terracotta mt-3 font-medium group-hover:text-terracotta-dark">
                         Lees meer
-                        <svg className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
                       </span>
@@ -350,7 +366,7 @@ export default async function CategoryPage({ params }: PageProps) {
           </p>
           <Link
             href="/contact"
-            className="inline-flex items-center bg-terracotta text-white px-8 py-3 rounded-full font-medium hover:bg-terracotta-dark transition-colors"
+            className="inline-flex items-center bg-coral text-white px-8 py-3 rounded-full font-medium hover:bg-coral-dark transition-colors"
           >
             Neem contact op
             <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

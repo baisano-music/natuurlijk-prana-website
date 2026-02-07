@@ -102,7 +102,7 @@ export default function GratisMagazinePage() {
       {/* CTA Section */}
       <section className="py-20 md:py-28 px-4">
         <div className="max-w-2xl mx-auto">
-          <div className="bg-gradient-to-br from-sage-700 via-sage-600 to-sage-800 rounded-3xl p-10 md:p-16 text-center shadow-xl">
+          <div className="bg-gradient-to-br from-terracotta via-terracotta-dark to-terracotta rounded-3xl p-10 md:p-16 text-center shadow-xl">
             <div className="w-20 h-20 mx-auto mb-8 bg-white/10 rounded-2xl flex items-center justify-center">
               <svg className="w-10 h-10 text-peach-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -121,7 +121,7 @@ export default function GratisMagazinePage() {
               href="https://page.co/u2yuqq"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center bg-terracotta text-white px-10 py-4 rounded-full font-medium hover:bg-terracotta-dark transition-all shadow-lg hover:shadow-xl hover:scale-105 text-lg"
+              className="inline-flex items-center justify-center bg-coral text-white px-10 py-4 rounded-full font-medium hover:bg-coral-dark transition-all shadow-lg hover:shadow-xl hover:scale-105 text-lg"
             >
               Ja, ik wil het gratis magazine!
               <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -238,7 +238,7 @@ function MobileMenu({
           <Link
             href="/contact"
             onClick={onClose}
-            className="block w-full py-4 px-6 bg-terracotta text-white text-center rounded-full font-medium hover:bg-terracotta-dark transition-colors shadow-md"
+            className="block w-full py-4 px-6 bg-coral text-white text-center rounded-full font-medium hover:bg-coral-dark transition-colors shadow-md"
           >
             Kennismakingsgesprek
           </Link>
@@ -318,7 +318,7 @@ export function Header() {
             ))}
             <Link
               href="/contact"
-              className="ml-4 bg-terracotta text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-terracotta-dark transition-colors shadow-sm hover:shadow-md"
+              className="ml-4 bg-coral text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-coral-dark transition-colors shadow-sm hover:shadow-md"
             >
               Contact
             </Link>

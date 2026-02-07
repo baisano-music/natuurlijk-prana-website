@@ -8,9 +8,10 @@ import RichContent from '@/components/RichContent'
 export default async function RemedieDetail({
   params,
 }: {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }) {
-  const remedie = await client.fetch(queries.remedieBySlug(params.slug))
+  const { slug } = await params
+  const remedie = await client.fetch(queries.remedieBySlug(slug))
 
   if (!remedie) {
     notFound()
@@ -110,7 +111,7 @@ export default async function RemedieDetail({
             </div>
             <Link
               href="/contact"
-              className="bg-terracotta text-white px-6 py-3 rounded-full hover:bg-terracotta-dark transition-colors font-medium text-center shadow-sm hover:shadow-md"
+              className="bg-coral text-white px-6 py-3 rounded-full hover:bg-coral-dark transition-colors font-medium text-center shadow-sm hover:shadow-md"
             >
               Bestel deze remedie
             </Link>

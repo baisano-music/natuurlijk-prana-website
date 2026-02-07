@@ -175,7 +175,7 @@ export default async function DynamicPage({ params }: PageProps) {
           </p>
           <Link
             href="/contact"
-            className="inline-flex items-center bg-terracotta text-white px-8 py-3 rounded-full font-medium hover:bg-terracotta-dark transition-colors"
+            className="inline-flex items-center bg-coral text-white px-8 py-3 rounded-full font-medium hover:bg-coral-dark transition-colors"
           >
             Neem contact op
             <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
