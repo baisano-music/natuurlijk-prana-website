@@ -63,6 +63,13 @@ export default defineConfig({
                   .schemaType('siteSettings')
                   .documentId('siteSettings')
               ),
+            // Pagina Instellingen (voor nieuws, contact, etc.)
+            S.listItem()
+              .title('Pagina Instellingen')
+              .child(
+                S.documentTypeList('pageSettings')
+                  .title('Pagina Instellingen')
+              ),
             S.divider(),
             // Producten folder met categorieën en bijbehorende pagina's
             S.listItem()
