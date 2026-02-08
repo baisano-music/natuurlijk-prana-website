@@ -226,6 +226,15 @@ export const homepageType = {
         { name: 'link', title: 'Link', type: 'string', initialValue: '/ervaringen' },
       ],
     },
+    {
+      name: 'testimonialsBackgroundImage',
+      title: 'Ervaringen Achtergrondafbeelding',
+      type: 'image',
+      description: 'Sfeervolle achtergrondafbeelding voor de ervaringen sectie (wordt vervaagd getoond)',
+      options: {
+        hotspot: true,
+      },
+    },
 
     // Nieuws sectie
     {

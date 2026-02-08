@@ -138,6 +138,7 @@ export const queries = {
     welcomeImage, "welcomeImageUrl": welcomeImage.asset->url,
     remediesLabel, remediesTitle, remediesSubtitle, remediesCount, remediesButton,
     testimonialsLabel, testimonialsTitle, testimonialsSubtitle, showTestimonials, testimonialsLink,
+    testimonialsBackgroundImage, "testimonialsBackgroundImageUrl": testimonialsBackgroundImage.asset->url,
     newsLabel, newsTitle, newsSubtitle, showNews, newsCount, newsLink,
     faqLabel, faqTitle, faqSubtitle, showFaq, faqLink,
     ctaTitle, ctaText, ctaButton,

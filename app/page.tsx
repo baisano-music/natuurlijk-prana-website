@@ -80,6 +80,7 @@ interface HomepageData {
   testimonialsSubtitle?: string
   showTestimonials?: boolean
   testimonialsLink?: { text?: string; link?: string }
+  testimonialsBackgroundImageUrl?: string
   // Nieuws
   newsLabel?: string
   newsTitle?: string
@@ -210,6 +211,7 @@ export default async function HomePage() {
   const testimonialsSubtitle = homepage?.testimonialsSubtitle || 'Ervaringen van ouders en kinderen'
   const showTestimonials = homepage?.showTestimonials !== false
   const testimonialsLink = homepage?.testimonialsLink || { text: 'Lees meer ervaringen', link: '/ervaringen' }
+  const testimonialsBackgroundImageUrl = homepage?.testimonialsBackgroundImageUrl
 
   // Nieuws
   const newsLabel = homepage?.newsLabel || 'Nieuws'
@@ -472,11 +474,28 @@ export default async function HomePage() {
       {/* Ervaringen met achtergrondpatroon */}
       {showTestimonials && testimonials.length > 0 && (
         <section className="relative py-20 md:py-28 px-4 overflow-hidden">
-          {/* Decoratieve achtergrond */}
-          <div className="absolute inset-0 bg-gradient-to-br from-sage-100 via-cream to-peach-50" />
-          <div className="absolute inset-0 opacity-30" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d28a58' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }} />
+          {/* Achtergrondafbeelding (indien ingesteld) */}
+          {testimonialsBackgroundImageUrl ? (
+            <>
+              <div className="absolute inset-0">
+                <Image
+                  src={testimonialsBackgroundImageUrl}
+                  alt=""
+                  fill
+                  className="object-cover blur-sm"
+                />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-br from-cream/85 via-sage-50/80 to-peach-50/85" />
+            </>
+          ) : (
+            <>
+              {/* Decoratieve achtergrond (fallback) */}
+              <div className="absolute inset-0 bg-gradient-to-br from-sage-100 via-cream to-peach-50" />
+              <div className="absolute inset-0 opacity-30" style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d28a58' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+              }} />
+            </>
+          )}
 
           <div className="relative max-w-5xl mx-auto">
             <div className="text-center mb-16">
