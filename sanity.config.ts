@@ -47,7 +47,7 @@ export default defineConfig({
         S.list()
           .title('Content')
           .items([
-            // ===== WEBSITE INSTELLINGEN =====
+            // ===== WEBSITE =====
             S.listItem()
               .title('🏠 Homepage')
               .child(
@@ -55,12 +55,81 @@ export default defineConfig({
                   .schemaType('homepage')
                   .documentId('homepage')
               ),
+            S.divider(),
+
+            // ===== INSTELLINGEN (uitgesplitst) =====
             S.listItem()
-              .title('⚙️ Site Instellingen')
+              .title('⚙️ Instellingen')
               .child(
-                S.document()
-                  .schemaType('siteSettings')
-                  .documentId('siteSettings')
+                S.list()
+                  .title('Instellingen')
+                  .items([
+                    S.listItem()
+                      .title('📝 Site Info')
+                      .schemaType('siteSettings')
+                      .child(
+                        S.document()
+                          .schemaType('siteSettings')
+                          .documentId('siteSettings')
+                          .title('Site Titel & Beschrijving')
+                      ),
+                    S.listItem()
+                      .title('📞 Contact & Locatie')
+                      .schemaType('siteSettings')
+                      .child(
+                        S.document()
+                          .schemaType('siteSettings')
+                          .documentId('siteSettings')
+                          .title('Contactgegevens & Openingstijden')
+                      ),
+                    S.listItem()
+                      .title('🏢 Bedrijfsgegevens (SEO)')
+                      .schemaType('siteSettings')
+                      .child(
+                        S.document()
+                          .schemaType('siteSettings')
+                          .documentId('siteSettings')
+                          .title('KvK, BTW & Google Maps')
+                      ),
+                    S.divider(),
+                    S.listItem()
+                      .title('📱 Social Media')
+                      .schemaType('siteSettings')
+                      .child(
+                        S.document()
+                          .schemaType('siteSettings')
+                          .documentId('siteSettings')
+                          .title('Social Media Links')
+                      ),
+                    S.listItem()
+                      .title('🦶 Footer')
+                      .schemaType('siteSettings')
+                      .child(
+                        S.document()
+                          .schemaType('siteSettings')
+                          .documentId('siteSettings')
+                          .title('Footer Navigatie')
+                      ),
+                    S.divider(),
+                    S.listItem()
+                      .title('⚠️ Disclaimers')
+                      .schemaType('siteSettings')
+                      .child(
+                        S.document()
+                          .schemaType('siteSettings')
+                          .documentId('siteSettings')
+                          .title('Blog & Product Disclaimers')
+                      ),
+                    S.listItem()
+                      .title('📊 Analytics')
+                      .schemaType('siteSettings')
+                      .child(
+                        S.document()
+                          .schemaType('siteSettings')
+                          .documentId('siteSettings')
+                          .title('Google Analytics & Tag Manager')
+                      ),
+                  ])
               ),
             S.listItem()
               .title('📄 Pagina Instellingen')

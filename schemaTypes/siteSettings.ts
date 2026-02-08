@@ -6,13 +6,13 @@ export const siteSettingsType = {
   title: 'Site Instellingen',
   type: 'document',
   groups: [
-    { name: 'general', title: 'Algemeen' },
-    { name: 'disclaimers', title: 'Disclaimers' },
-    { name: 'contact', title: 'Contact' },
-    { name: 'business', title: 'Bedrijfsgegevens (SEO)' },
-    { name: 'social', title: 'Social Media' },
-    { name: 'footer', title: 'Footer' },
-    { name: 'analytics', title: 'Analytics' },
+    { name: 'general', title: '📝 Site Info', default: true },
+    { name: 'contact', title: '📞 Contact & Locatie' },
+    { name: 'business', title: '🏢 Bedrijfsgegevens (SEO)' },
+    { name: 'social', title: '📱 Social Media' },
+    { name: 'footer', title: '🦶 Footer' },
+    { name: 'disclaimers', title: '⚠️ Disclaimers' },
+    { name: 'analytics', title: '📊 Analytics' },
   ],
   fields: [
     // Algemeen
