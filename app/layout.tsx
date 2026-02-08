@@ -35,7 +35,7 @@ export default async function RootLayout({
                 l=d.createElement(e);l.async=1;l.src=u;
                 n=d.getElementsByTagName(e)[0];n.parentNode.insertBefore(l,n);
               })(window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
-              ml('account', '1116466');
+              ml('account', '2098239');
             `,
           }}
         />
