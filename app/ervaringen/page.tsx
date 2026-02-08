@@ -4,12 +4,12 @@ import Link from 'next/link'
 // Geen caching voor verse data
 export const revalidate = 0
 
-// Kleuren voor testimonial kaarten - meer uitgesproken
+// Kleuren voor testimonial kaarten - meer uitgesproken met gradients
 const testimonialColors = [
-  'bg-terracotta/10 border-terracotta/30',
-  'bg-sage-200 border-sage-400',
-  'bg-peach-200 border-peach-300',
-  'bg-coral/10 border-coral/30',
+  'bg-gradient-to-br from-sage-200 to-sage-100 border-l-4 border-l-sage-600',
+  'bg-gradient-to-br from-peach-200 to-peach-100 border-l-4 border-l-terracotta',
+  'bg-gradient-to-br from-coral/20 to-peach-100 border-l-4 border-l-coral',
+  'bg-gradient-to-br from-terracotta/15 to-peach-50 border-l-4 border-l-terracotta-dark',
 ]
 
 export const metadata = {
@@ -52,18 +52,18 @@ export default async function ErvaringenPage() {
             {testimonials.map((testimonial, index) => (
               <article
                 key={testimonial._id}
-                className={`rounded-2xl p-8 shadow-md border-2 ${testimonialColors[index % testimonialColors.length]}`}
+                className={`rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 ${testimonialColors[index % testimonialColors.length]}`}
               >
-                <div className="text-terracotta text-7xl font-serif leading-none mb-2 -mt-2">&ldquo;</div>
-                <p className="text-charcoal leading-relaxed mb-6 text-lg">
+                <div className="text-terracotta text-6xl font-serif leading-none mb-4">&ldquo;</div>
+                <p className="text-charcoal leading-relaxed mb-6 text-lg font-medium">
                   {testimonial.quote}
                 </p>
-                <footer className="border-t border-charcoal/10 pt-4">
-                  <p className="font-semibold text-charcoal">
+                <footer className="border-t border-charcoal/15 pt-4">
+                  <p className="font-bold text-charcoal">
                     {testimonial.name || testimonial.initials || 'Anoniem'}
                   </p>
                   {testimonial.context && (
-                    <p className="text-sm text-terracotta-dark font-medium">{testimonial.context}</p>
+                    <p className="text-sm text-terracotta font-medium">{testimonial.context}</p>
                   )}
                 </footer>
               </article>

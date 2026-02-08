@@ -7,11 +7,11 @@ import { FAQSection } from '@/components/FAQSection'
 // Geen caching voor verse data
 export const revalidate = 0
 
-// Kleuren voor testimonial kaarten
+// Kleuren voor testimonial kaarten - meer uitgesproken
 const testimonialColors = [
-  'bg-white/90 backdrop-blur-sm',
-  'bg-sage-50/90 backdrop-blur-sm',
-  'bg-peach-100/90 backdrop-blur-sm',
+  'bg-gradient-to-br from-sage-100 to-sage-50 border-l-4 border-l-sage-500',
+  'bg-gradient-to-br from-peach-100 to-peach-50 border-l-4 border-l-terracotta',
+  'bg-gradient-to-br from-coral/15 to-peach-50 border-l-4 border-l-coral',
 ]
 
 // PortableText configuratie voor simpele rich text
@@ -493,18 +493,18 @@ export default async function HomePage() {
               {testimonials.map((testimonial, index) => (
                 <div
                   key={testimonial._id}
-                  className={`rounded-2xl p-8 shadow-lg border border-white/50 ${testimonialColors[index % testimonialColors.length]}`}
+                  className={`rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 ${testimonialColors[index % testimonialColors.length]}`}
                 >
                   <div className="text-terracotta text-5xl font-serif leading-none mb-4">&ldquo;</div>
-                  <p className="text-charcoal leading-relaxed mb-6 text-lg">
+                  <p className="text-charcoal leading-relaxed mb-6 text-lg font-medium">
                     {testimonial.quote}
                   </p>
-                  <div className="border-t border-stone/20 pt-4">
-                    <p className="font-semibold text-charcoal">
+                  <div className="border-t border-charcoal/10 pt-4">
+                    <p className="font-bold text-charcoal">
                       {testimonial.name || testimonial.initials || 'Anoniem'}
                     </p>
                     {testimonial.context && (
-                      <p className="text-sm text-sage-600">{testimonial.context}</p>
+                      <p className="text-sm text-terracotta font-medium">{testimonial.context}</p>
                     )}
                   </div>
                 </div>
