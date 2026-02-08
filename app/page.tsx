@@ -2,6 +2,7 @@ import { client, queries } from '@/lib/SanityClient'
 import Link from 'next/link'
 import Image from 'next/image'
 import { PortableText } from '@portabletext/react'
+import { FAQSection } from '@/components/FAQSection'
 
 // Geen caching voor verse data
 export const revalidate = 0
@@ -86,6 +87,12 @@ interface HomepageData {
   showNews?: boolean
   newsCount?: number
   newsLink?: { text?: string; link?: string }
+  // FAQ
+  faqLabel?: string
+  faqTitle?: string
+  faqSubtitle?: string
+  showFaq?: boolean
+  faqLink?: { text?: string; link?: string }
   // CTA
   ctaTitle?: string
   ctaText?: RichTextValue
@@ -120,6 +127,14 @@ interface BlogPost {
   type: string | null
 }
 
+interface FAQItem {
+  _id: string
+  question: string
+  answer?: unknown[]
+  shortAnswer?: string
+  category?: string
+}
+
 async function getHomepageData(): Promise<HomepageData | null> {
   return client.fetch(queries.homepage)
 }
@@ -136,6 +151,10 @@ async function getFeaturedBlogPosts(count: number): Promise<BlogPost[]> {
   return client.fetch(queries.blogPostsFeatured(count))
 }
 
+async function getFeaturedFAQs(): Promise<FAQItem[]> {
+  return client.fetch(queries.faqFeatured)
+}
+
 // Datum formatter
 function formatDate(dateStr: string | null) {
   if (!dateStr) return ''
@@ -150,10 +169,11 @@ export default async function HomePage() {
   const homepage = await getHomepageData()
   const remediesCount = homepage?.remediesCount || 3
   const newsCount = homepage?.newsCount || 3
-  const [remedies, testimonials, blogPosts] = await Promise.all([
+  const [remedies, testimonials, blogPosts, faqs] = await Promise.all([
     getFeaturedRemedies(remediesCount),
     getFeaturedTestimonials(),
     getFeaturedBlogPosts(newsCount),
+    getFeaturedFAQs(),
   ])
 
   // Default waarden als er nog geen content in Sanity staat
@@ -196,6 +216,12 @@ export default async function HomePage() {
   const newsSubtitle = homepage?.newsSubtitle || 'Verhalen, inzichten en tips over bloesemremedies'
   const showNews = homepage?.showNews !== false
   const newsLink = homepage?.newsLink || { text: 'Bekijk alle artikelen', link: '/nieuws' }
+
+  // FAQ
+  const faqTitle = homepage?.faqTitle || 'Veelgestelde vragen'
+  const faqSubtitle = homepage?.faqSubtitle || 'Antwoorden op de meest gestelde vragen over bloesemremedies'
+  const showFaq = homepage?.showFaq !== false
+  const faqLink = homepage?.faqLink || { text: 'Bekijk alle vragen', link: '/faq' }
 
   // CTA
   const ctaTitle = homepage?.ctaTitle || 'Benieuwd welke remedie bij jou past?'
@@ -571,6 +597,19 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+      )}
+
+      {/* Veelgestelde vragen */}
+      {showFaq && faqs.length > 0 && (
+        <div className="bg-cream">
+          <FAQSection
+            items={faqs}
+            title={faqTitle}
+            subtitle={faqSubtitle}
+            showMoreLink={faqLink}
+            className="py-20 md:py-28"
+          />
+        </div>
       )}
 
       {/* CTA met achtergrondafbeelding */}

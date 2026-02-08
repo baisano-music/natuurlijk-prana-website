@@ -29,6 +29,19 @@ interface Product {
   shortDescription?: string
 }
 
+interface ShopProduct {
+  _id: string
+  title: string
+  slug: string
+  imageUrl?: string
+  shortDescription?: string
+  price?: string
+  priceNote?: string
+  shopUrl?: string
+  shopButtonText?: string
+  inStock?: boolean
+}
+
 interface RelatedPage {
   _id: string
   title: string
@@ -47,6 +60,10 @@ async function getCategory(slug: string): Promise<Category | null> {
 
 async function getProducts(slug: string): Promise<Product[]> {
   return client.fetch(queries.productsByCategorySlug(slug))
+}
+
+async function getShopProducts(slug: string): Promise<ShopProduct[]> {
+  return client.fetch(queries.shopProductsByCategorySlug(slug))
 }
 
 async function getSubcategories(categoryId: string) {
@@ -82,8 +99,9 @@ export default async function CategoryPage({ params }: PageProps) {
     notFound()
   }
 
-  const [products, subcategories, relatedPages] = await Promise.all([
+  const [products, shopProducts, subcategories, relatedPages] = await Promise.all([
     getProducts(categorySlug),
+    getShopProducts(categorySlug),
     getSubcategories(category._id),
     getRelatedPages(categorySlug),
   ])
@@ -281,14 +299,13 @@ export default async function CategoryPage({ params }: PageProps) {
         </section>
       )}
 
-      {/* Products Grid */}
-      <section className="py-12 md:py-20 px-4">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-2xl md:text-3xl text-charcoal mb-8 text-center">
-            {products.length > 0 ? `${category.title} producten` : 'Producten'}
-          </h2>
-
-          {products.length > 0 ? (
+      {/* Products Grid - Remedies */}
+      {products.length > 0 && (
+        <section className="py-12 md:py-20 px-4">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="font-serif text-2xl md:text-3xl text-charcoal mb-8 text-center">
+              {category.title} remedies
+            </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {products.map((product) => (
                 <Link
@@ -330,7 +347,86 @@ export default async function CategoryPage({ params }: PageProps) {
                 </Link>
               ))}
             </div>
-          ) : (
+          </div>
+        </section>
+      )}
+
+      {/* Shop Products Grid */}
+      {shopProducts.length > 0 && (
+        <section className="py-12 md:py-20 px-4 bg-white">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="font-serif text-2xl md:text-3xl text-charcoal mb-8 text-center">
+              {category.title} producten
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {shopProducts.map((product) => (
+                <div
+                  key={product._id}
+                  className="group bg-cream rounded-2xl overflow-hidden border border-peach-200 shadow-sm hover:shadow-xl transition-all duration-300"
+                >
+                  <div className="aspect-square relative overflow-hidden bg-sage-50">
+                    {product.imageUrl ? (
+                      <Image
+                        src={product.imageUrl}
+                        alt={product.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <svg className="w-12 h-12 text-sage-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        </svg>
+                      </div>
+                    )}
+                    {!product.inStock && (
+                      <div className="absolute top-3 right-3 bg-stone/80 text-white text-xs px-2 py-1 rounded">
+                        Uitverkocht
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-5">
+                    <h3 className="font-serif text-lg text-charcoal">
+                      {product.title}
+                    </h3>
+                    {product.shortDescription && (
+                      <p className="text-sm text-stone mt-2 line-clamp-2">
+                        {product.shortDescription}
+                      </p>
+                    )}
+                    {product.price && (
+                      <div className="mt-3">
+                        <span className="text-lg font-semibold text-terracotta">{product.price}</span>
+                        {product.priceNote && (
+                          <span className="text-xs text-stone ml-1">{product.priceNote}</span>
+                        )}
+                      </div>
+                    )}
+                    {product.shopUrl && (
+                      <a
+                        href={product.shopUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-4 inline-flex items-center justify-center w-full bg-coral text-white px-4 py-2.5 rounded-full text-sm font-medium hover:bg-coral-dark transition-colors"
+                      >
+                        {product.shopButtonText || 'Bekijk in shop'}
+                        <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Empty state when no products */}
+      {products.length === 0 && shopProducts.length === 0 && subcategories.length === 0 && (
+        <section className="py-12 md:py-20 px-4">
+          <div className="max-w-6xl mx-auto">
             <div className="text-center py-12 bg-white rounded-2xl border border-peach-200">
               <div className="w-16 h-16 mx-auto mb-4 bg-sage-100 rounded-xl flex items-center justify-center">
                 <svg className="w-8 h-8 text-sage-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -341,18 +437,18 @@ export default async function CategoryPage({ params }: PageProps) {
                 Er zijn nog geen producten in deze categorie.
               </p>
               <Link
-                href="/remedies"
+                href="/producten"
                 className="inline-flex items-center text-terracotta font-medium mt-4 hover:text-terracotta-dark transition-colors"
               >
-                Bekijk alle producten
+                Bekijk alle categorieën
                 <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
             </div>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
       {/* CTA */}
       <section className="py-16 px-4 bg-sage-50">

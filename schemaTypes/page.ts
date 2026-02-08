@@ -1,12 +1,17 @@
 // schemaTypes/page.ts
+// Met verbeterde internal linking en SEO/GEO checks
+
+import { SEOCheckerInput } from './seoCheckerField'
+
 export const pageType = {
   name: 'page',
   title: 'Pagina',
   type: 'document',
   groups: [
     { name: 'content', title: 'Inhoud', default: true },
+    { name: 'links', title: 'Links & Relaties' },
     { name: 'organization', title: 'Organisatie' },
-    { name: 'seo', title: 'SEO' },
+    { name: 'seo', title: 'SEO/GEO' },
   ],
   fields: [
     {
@@ -74,11 +79,50 @@ export const pageType = {
     {
       name: 'content',
       title: 'Inhoud',
-      description: 'Voeg tekst en afbeeldingen toe. Afbeeldingen kunnen links, rechts of over de volle breedte worden geplaatst.',
+      description: 'Voeg tekst en afbeeldingen toe. Gebruik de link-knop om naar andere pagina\'s te linken.',
       type: 'array',
       group: 'content',
       of: [
-        { type: 'block' },
+        {
+          type: 'block',
+          marks: {
+            annotations: [
+              {
+                name: 'link',
+                type: 'object',
+                title: 'Externe Link',
+                icon: () => '🌐',
+                fields: [
+                  {
+                    name: 'href',
+                    type: 'url',
+                    title: 'URL',
+                  },
+                ],
+              },
+              {
+                name: 'internalLink',
+                type: 'object',
+                title: 'Interne Link',
+                icon: () => '🔗',
+                fields: [
+                  {
+                    name: 'reference',
+                    type: 'reference',
+                    title: 'Link naar',
+                    to: [
+                      { type: 'page' },
+                      { type: 'blog' },
+                      { type: 'dienst' },
+                      { type: 'remedie' },
+                      { type: 'faq' },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        },
         {
           type: 'image',
           options: { hotspot: true },
@@ -112,14 +156,74 @@ export const pageType = {
         },
       ],
     },
+    // Gerelateerde content voor internal linking
+    {
+      name: 'relatedPages',
+      title: 'Gerelateerde pagina\'s',
+      type: 'array',
+      group: 'links',
+      description: 'Selecteer gerelateerde content om onderaan te tonen (verbetert interne linking)',
+      of: [
+        {
+          type: 'reference',
+          to: [
+            { type: 'page' },
+            { type: 'blog' },
+            { type: 'dienst' },
+            { type: 'remedie' },
+          ],
+        },
+      ],
+      validation: (Rule: { max: (n: number) => unknown }) => Rule.max(6),
+    },
     {
       name: 'seo',
-      title: 'SEO',
+      title: 'SEO/GEO Instellingen',
       type: 'object',
       group: 'seo',
+      description: 'Optimaliseer deze pagina voor zoekmachines en AI',
+      components: {
+        input: SEOCheckerInput,
+      },
       fields: [
-        { name: 'title', title: 'SEO Titel', type: 'string' },
-        { name: 'description', title: 'Meta Beschrijving', type: 'text', rows: 3 },
+        {
+          name: 'title',
+          title: 'SEO Titel',
+          type: 'string',
+          description: 'Ideaal: 50-60 tekens. Laat leeg om paginatitel te gebruiken.',
+          validation: (Rule: { max: (n: number) => { warning: (msg: string) => unknown } }) =>
+            Rule.max(70).warning('Titel is langer dan aanbevolen voor zoekresultaten'),
+        },
+        {
+          name: 'description',
+          title: 'Meta Beschrijving',
+          type: 'text',
+          rows: 3,
+          description: 'Ideaal: 120-160 tekens. Beschrijf waar de pagina over gaat.',
+          validation: (Rule: { max: (n: number) => { warning: (msg: string) => unknown } }) =>
+            Rule.max(170).warning('Beschrijving is langer dan aanbevolen'),
+        },
+        {
+          name: 'focusKeyword',
+          title: 'Focus Keyword',
+          type: 'string',
+          description: 'Het belangrijkste zoekwoord voor deze pagina',
+        },
+        {
+          name: 'secondaryKeywords',
+          title: 'Secundaire Keywords',
+          type: 'array',
+          of: [{ type: 'string' }],
+          description: 'Extra zoekwoorden (max 5)',
+          validation: (Rule: { max: (n: number) => unknown }) => Rule.max(5),
+        },
+        {
+          name: 'noIndex',
+          title: 'Niet indexeren',
+          type: 'boolean',
+          description: 'Verberg deze pagina voor zoekmachines',
+          initialValue: false,
+        },
       ],
     },
     // Legacy veld - behouden voor oude content

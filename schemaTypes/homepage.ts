@@ -270,6 +270,43 @@ export const homepageType = {
       ],
     },
 
+    // FAQ sectie
+    {
+      name: 'faqLabel',
+      title: 'FAQ Label',
+      type: 'string',
+      initialValue: 'FAQ',
+      description: 'Klein label boven de FAQ titel',
+    },
+    {
+      name: 'faqTitle',
+      title: 'FAQ Sectie Titel',
+      type: 'string',
+      initialValue: 'Veelgestelde vragen',
+    },
+    {
+      name: 'faqSubtitle',
+      title: 'FAQ Sectie Ondertitel',
+      type: 'string',
+      initialValue: 'Antwoorden op de meest gestelde vragen over bloesemremedies',
+    },
+    {
+      name: 'showFaq',
+      title: 'Toon FAQ op homepage',
+      type: 'boolean',
+      initialValue: true,
+      description: 'Toont uitgelichte FAQ items (items met "Uitgelicht op homepage" aangevinkt)',
+    },
+    {
+      name: 'faqLink',
+      title: 'FAQ Link',
+      type: 'object',
+      fields: [
+        { name: 'text', title: 'Tekst', type: 'string', initialValue: 'Bekijk alle vragen' },
+        { name: 'link', title: 'Link', type: 'string', initialValue: '/faq' },
+      ],
+    },
+
     // CTA sectie
     {
       name: 'ctaTitle',

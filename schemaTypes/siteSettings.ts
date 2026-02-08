@@ -1,4 +1,6 @@
 // schemaTypes/siteSettings.ts – Algemene site-instellingen (singleton)
+// Inclusief LocalBusiness gegevens voor schema.org SEO
+
 export const siteSettingsType = {
   name: 'siteSettings',
   title: 'Site Instellingen',
@@ -6,6 +8,7 @@ export const siteSettingsType = {
   groups: [
     { name: 'general', title: 'Algemeen' },
     { name: 'contact', title: 'Contact' },
+    { name: 'business', title: 'Bedrijfsgegevens (SEO)' },
     { name: 'social', title: 'Social Media' },
     { name: 'footer', title: 'Footer' },
     { name: 'analytics', title: 'Analytics' },
@@ -52,6 +55,141 @@ export const siteSettingsType = {
       type: 'string',
       group: 'contact',
       initialValue: 'Gratis parkeren voor de deur',
+    },
+
+    // Bedrijfsgegevens voor LocalBusiness schema.org (SEO)
+    {
+      name: 'localBusiness',
+      title: 'LocalBusiness gegevens',
+      type: 'object',
+      group: 'business',
+      description: 'Gestructureerde bedrijfsgegevens voor Google rich snippets en lokale SEO',
+      fields: [
+        {
+          name: 'businessType',
+          title: 'Type bedrijf',
+          type: 'string',
+          initialValue: 'HealthAndBeautyBusiness',
+          options: {
+            list: [
+              { title: 'Health & Beauty Business', value: 'HealthAndBeautyBusiness' },
+              { title: 'Medical Business', value: 'MedicalBusiness' },
+              { title: 'Professional Service', value: 'ProfessionalService' },
+            ],
+          },
+        },
+        {
+          name: 'legalName',
+          title: 'Officiële bedrijfsnaam',
+          type: 'string',
+          description: 'Zoals geregistreerd bij KvK',
+        },
+        {
+          name: 'kvkNumber',
+          title: 'KvK nummer',
+          type: 'string',
+        },
+        {
+          name: 'vatNumber',
+          title: 'BTW nummer',
+          type: 'string',
+        },
+        {
+          name: 'streetAddress',
+          title: 'Straat + huisnummer',
+          type: 'string',
+        },
+        {
+          name: 'postalCode',
+          title: 'Postcode',
+          type: 'string',
+        },
+        {
+          name: 'city',
+          title: 'Plaats',
+          type: 'string',
+        },
+        {
+          name: 'country',
+          title: 'Land',
+          type: 'string',
+          initialValue: 'NL',
+        },
+        {
+          name: 'geo',
+          title: 'Coördinaten',
+          type: 'object',
+          description: 'Voor Google Maps en lokale zoekresultaten',
+          fields: [
+            {
+              name: 'lat',
+              title: 'Latitude',
+              type: 'number',
+              description: 'Bijv: 52.3676',
+            },
+            {
+              name: 'lng',
+              title: 'Longitude',
+              type: 'number',
+              description: 'Bijv: 4.9041',
+            },
+          ],
+        },
+        {
+          name: 'priceRange',
+          title: 'Prijsklasse',
+          type: 'string',
+          options: {
+            list: [
+              { title: '€ (Budget)', value: '€' },
+              { title: '€€ (Gemiddeld)', value: '€€' },
+              { title: '€€€ (Premium)', value: '€€€' },
+            ],
+          },
+          initialValue: '€€',
+        },
+        {
+          name: 'openingHoursSpec',
+          title: 'Openingstijden (schema.org formaat)',
+          type: 'array',
+          description: 'Gestructureerde openingstijden voor zoekmachines',
+          of: [
+            {
+              type: 'object',
+              fields: [
+                {
+                  name: 'dayOfWeek',
+                  title: 'Dag(en)',
+                  type: 'array',
+                  of: [{ type: 'string' }],
+                  options: {
+                    list: [
+                      { title: 'Maandag', value: 'Monday' },
+                      { title: 'Dinsdag', value: 'Tuesday' },
+                      { title: 'Woensdag', value: 'Wednesday' },
+                      { title: 'Donderdag', value: 'Thursday' },
+                      { title: 'Vrijdag', value: 'Friday' },
+                      { title: 'Zaterdag', value: 'Saturday' },
+                      { title: 'Zondag', value: 'Sunday' },
+                    ],
+                  },
+                },
+                { name: 'opens', title: 'Opent om', type: 'string', description: 'Bijv: 09:00' },
+                { name: 'closes', title: 'Sluit om', type: 'string', description: 'Bijv: 17:00' },
+              ],
+              preview: {
+                select: { days: 'dayOfWeek', opens: 'opens', closes: 'closes' },
+                prepare({ days, opens, closes }: { days?: string[]; opens?: string; closes?: string }) {
+                  return {
+                    title: days?.join(', ') || 'Geen dagen',
+                    subtitle: `${opens || '?'} - ${closes || '?'}`,
+                  }
+                },
+              },
+            },
+          ],
+        },
+      ],
     },
 
     // Social Media

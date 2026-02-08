@@ -43,79 +43,144 @@ export default defineConfig({
   theme: studioTheme,
   plugins: [
     structureTool({
-      structure: (S, context) =>
+      structure: (S) =>
         S.list()
           .title('Content')
           .items([
-            // Homepage (singleton)
+            // ===== WEBSITE INSTELLINGEN =====
             S.listItem()
-              .title('Homepage')
+              .title('🏠 Homepage')
               .child(
                 S.document()
                   .schemaType('homepage')
                   .documentId('homepage')
               ),
-            // Site-instellingen (singleton)
             S.listItem()
-              .title('Site Instellingen')
+              .title('⚙️ Site Instellingen')
               .child(
                 S.document()
                   .schemaType('siteSettings')
                   .documentId('siteSettings')
               ),
-            // Pagina Instellingen (voor nieuws, contact, etc.)
             S.listItem()
-              .title('Pagina Instellingen')
+              .title('📄 Pagina Instellingen')
               .child(
                 S.documentTypeList('pageSettings')
                   .title('Pagina Instellingen')
               ),
             S.divider(),
-            // Producten folder met categorieën en bijbehorende pagina's
+
+            // ===== PRODUCTEN & CATEGORIEËN =====
             S.listItem()
-              .title('Producten')
+              .title('📦 Producten & Categorieën')
               .child(
                 S.list()
-                  .title('Producten')
+                  .title('Producten & Categorieën')
                   .items([
+                    // Hoofdcategorieën (zonder parent)
                     S.listItem()
-                      .title('Categorieën beheren')
-                      .child(S.documentTypeList('productCategory').title('Categorieën')),
-                    S.divider(),
+                      .title('📂 Hoofdcategorieën')
+                      .child(
+                        S.documentList()
+                          .title('Hoofdcategorieën (Bloesemremedies, Celzouten, etc.)')
+                          .filter('_type == "productCategory" && !defined(parent)')
+                          .defaultOrdering([{ field: 'order', direction: 'asc' }])
+                      ),
+                    // Subcategorieën (met parent)
                     S.listItem()
-                      .title('Alle Producten')
-                      .child(S.documentTypeList('remedie').title('Alle Producten')),
-                    S.divider(),
-                    // Pagina's per categorie
+                      .title('📁 Subcategorieën')
+                      .child(
+                        S.documentList()
+                          .title('Subcategorieën (vallen onder een hoofdcategorie)')
+                          .filter('_type == "productCategory" && defined(parent)')
+                          .defaultOrdering([{ field: 'title', direction: 'asc' }])
+                      ),
+                    // Alle categorieën
                     S.listItem()
-                      .title("Pagina's per categorie")
+                      .title('📋 Alle categorieën')
                       .child(
                         S.documentTypeList('productCategory')
-                          .title('Selecteer categorie')
+                          .title('Alle categorieën')
+                      ),
+                    S.divider(),
+                    // Remedies (uitgebreide productinfo op site)
+                    S.listItem()
+                      .title('🌸 Remedies')
+                      .child(
+                        S.documentTypeList('remedie')
+                          .title('Remedies (met uitgebreide info op de site)')
+                      ),
+                    // Shop Producten (link naar externe shop)
+                    S.listItem()
+                      .title('🛒 Shop Producten')
+                      .child(
+                        S.documentTypeList('product')
+                          .title('Shop Producten (link naar webshop)')
+                      ),
+                    S.divider(),
+                    // Per categorie bekijken
+                    S.listItem()
+                      .title('🔍 Per categorie bekijken')
+                      .child(
+                        S.documentList()
+                          .title('Selecteer een categorie')
+                          .filter('_type == "productCategory"')
+                          .defaultOrdering([{ field: 'title', direction: 'asc' }])
                           .child((categoryId) =>
-                            S.documentList()
-                              .title("Pagina's in deze categorie")
-                              .filter('_type == "page" && productCategory._ref == $categoryId')
-                              .params({ categoryId })
+                            S.list()
+                              .title('Inhoud van categorie')
+                              .items([
+                                S.listItem()
+                                  .title('📁 Subcategorieën')
+                                  .child(
+                                    S.documentList()
+                                      .title('Subcategorieën')
+                                      .filter('_type == "productCategory" && parent._ref == $categoryId')
+                                      .params({ categoryId })
+                                  ),
+                                S.listItem()
+                                  .title('🌸 Remedies')
+                                  .child(
+                                    S.documentList()
+                                      .title('Remedies in deze categorie')
+                                      .filter('_type == "remedie" && category._ref == $categoryId')
+                                      .params({ categoryId })
+                                  ),
+                                S.listItem()
+                                  .title('🛒 Shop Producten')
+                                  .child(
+                                    S.documentList()
+                                      .title('Shop producten in deze categorie')
+                                      .filter('_type == "product" && category._ref == $categoryId')
+                                      .params({ categoryId })
+                                  ),
+                                S.listItem()
+                                  .title("📄 Gekoppelde pagina's")
+                                  .child(
+                                    S.documentList()
+                                      .title("Pagina's gekoppeld aan deze categorie")
+                                      .filter('_type == "page" && productCategory._ref == $categoryId')
+                                      .params({ categoryId })
+                                  ),
+                              ])
                           )
                       ),
                   ])
               ),
-            // Diensten
+            S.divider(),
+
+            // ===== CONTENT =====
             S.listItem()
-              .title('Diensten')
+              .title('💼 Diensten')
               .child(S.documentTypeList('dienst').title('Diensten')),
-            // Nieuws
             S.listItem()
-              .title('Nieuws')
-              .child(S.documentTypeList('blog').title('Nieuws')),
-            // Ervaringen / Testimonials
+              .title('📰 Nieuws / Blog')
+              .child(S.documentTypeList('blog').title('Nieuws / Blog')),
             S.listItem()
-              .title('Ervaringen')
-              .child(S.documentTypeList('testimonial').title('Ervaringen')),
-            // FAQ - voor GEO optimalisatie
+              .title('⭐ Ervaringen')
+              .child(S.documentTypeList('testimonial').title('Ervaringen / Testimonials')),
             S.listItem()
-              .title('FAQ (Veelgestelde Vragen)')
+              .title('❓ FAQ')
               .child(
                 S.documentTypeList('faq')
                   .title('Veelgestelde Vragen')
@@ -124,15 +189,14 @@ export default defineConfig({
                     { field: 'order', direction: 'asc' },
                   ])
               ),
-            S.divider(),
-            // Redirects
             S.listItem()
-              .title('Redirects')
-              .child(S.documentTypeList('redirect').title('Redirects')),
+              .title('👤 Auteurs')
+              .child(S.documentTypeList('author').title('Auteurs (voor E-E-A-T SEO)')),
             S.divider(),
-            // Pagina's - georganiseerd
+
+            // ===== PAGINA'S =====
             S.listItem()
-              .title("Pagina's")
+              .title("📑 Pagina's")
               .child(
                 S.list()
                   .title("Pagina's")
@@ -149,14 +213,14 @@ export default defineConfig({
                       .title("Losse pagina's")
                       .child(
                         S.documentList()
-                          .title("Losse pagina's (zonder categorie)")
+                          .title("Pagina's zonder categorie of parent")
                           .filter('_type == "page" && !defined(productCategory) && !defined(parentPage)')
                       ),
                     S.listItem()
-                      .title("Pagina's met bovenliggende")
+                      .title("Per bovenliggende pagina")
                       .child(
-                        S.documentTypeList('page')
-                          .title('Selecteer bovenliggende pagina')
+                        S.documentList()
+                          .title('Pagina\'s met subpagina\'s')
                           .filter('_type == "page" && count(*[_type == "page" && parentPage._ref == ^._id]) > 0')
                           .child((parentId) =>
                             S.documentList()
@@ -167,6 +231,12 @@ export default defineConfig({
                       ),
                   ])
               ),
+            S.divider(),
+
+            // ===== TECHNISCH =====
+            S.listItem()
+              .title('🔀 Redirects')
+              .child(S.documentTypeList('redirect').title('Redirects')),
           ]),
     }),
     visionTool(),

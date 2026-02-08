@@ -136,6 +136,7 @@ export const queries = {
     remediesLabel, remediesTitle, remediesSubtitle, remediesCount, remediesButton,
     testimonialsLabel, testimonialsTitle, testimonialsSubtitle, showTestimonials, testimonialsLink,
     newsLabel, newsTitle, newsSubtitle, showNews, newsCount, newsLink,
+    faqLabel, faqTitle, faqSubtitle, showFaq, faqLink,
     ctaTitle, ctaText, ctaButton,
     ctaImage, "ctaImageUrl": ctaImage.asset->url
   }`,
@@ -211,6 +212,15 @@ export const queries = {
       "imageUrl": image.asset->url, shortDescription
     }`,
 
+  /** Shop producten per categorie slug */
+  shopProductsByCategorySlug: (slug: string) =>
+    `*[_type == "product" && category->slug.current == "${slug}"] | order(coalesce(order, 999) asc, title asc) {
+      _id, title, "slug": slug.current,
+      "imageUrl": image.asset->url, shortDescription,
+      price, priceNote, shopUrl, shopButtonText, inStock,
+      variants
+    }`,
+
   /** Pagina's per productcategorie */
   pagesByCategory: (categorySlug: string) =>
     `*[_type == "page" && productCategory->slug.current == "${categorySlug}" && showInNavigation == true] | order(order asc) {
@@ -264,7 +274,7 @@ export const queries = {
 
   /** FAQ - Uitgelichte vragen (voor homepage) */
   faqFeatured: `*[_type == "faq" && featured == true] | order(order asc) [0...5] {
-    _id, question, shortAnswer, category
+    _id, question, answer, shortAnswer, category
   }`,
 
   /** FAQ - Voor schema.org markup (alleen vraag + kort antwoord) */

@@ -1,13 +1,19 @@
 // schemaTypes/productCategory.ts
+// Hiërarchische categorieën voor producten
+// - Hoofdcategorieën: Bloesemremedies, Celzouten, Essentiële Oliën (zonder parent)
+// - Subcategorieën: PRANA Remedies, Alaskan Essences, etc. (met parent)
+
 export const productCategoryType = {
   name: 'productCategory',
   title: 'Productcategorie',
   type: 'document',
+  icon: () => '📂',
   fields: [
     {
       name: 'title',
       title: 'Naam',
       type: 'string',
+      description: 'Bijv. "Bloesemremedies" of "PRANA Remedies"',
       validation: (Rule: { required: () => unknown }) => Rule.required(),
     },
     {
@@ -15,6 +21,7 @@ export const productCategoryType = {
       title: 'URL-naam',
       type: 'slug',
       options: { source: 'title' },
+      description: 'Wordt gebruikt in de URL: /producten/[slug]',
       validation: (Rule: { required: () => unknown }) => Rule.required(),
     },
     {
@@ -22,13 +29,14 @@ export const productCategoryType = {
       title: 'Beschrijving',
       type: 'text',
       rows: 3,
+      description: 'Korte beschrijving voor overzichtspagina\'s',
     },
     {
       name: 'parent',
       title: 'Bovenliggende categorie',
       type: 'reference',
       to: [{ type: 'productCategory' }],
-      description: 'Laat leeg voor hoofdcategorieën',
+      description: 'Selecteer de hoofdcategorie waar deze onder valt. Laat LEEG voor hoofdcategorieën (Bloesemremedies, Celzouten, etc.)',
     },
     {
       name: 'order',
