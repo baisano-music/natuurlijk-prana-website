@@ -115,6 +115,7 @@ interface Testimonial {
   initials?: string
   quote: string
   context?: string
+  backgroundImageUrl?: string
 }
 
 interface BlogPost {
@@ -493,19 +494,34 @@ export default async function HomePage() {
               {testimonials.map((testimonial, index) => (
                 <div
                   key={testimonial._id}
-                  className={`rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 ${testimonialColors[index % testimonialColors.length]}`}
+                  className={`relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 ${testimonialColors[index % testimonialColors.length]}`}
                 >
-                  <div className="text-terracotta text-5xl font-serif leading-none mb-4">&ldquo;</div>
-                  <p className="text-charcoal leading-relaxed mb-6 text-lg font-medium">
-                    {testimonial.quote}
-                  </p>
-                  <div className="border-t border-charcoal/10 pt-4">
-                    <p className="font-bold text-charcoal">
-                      {testimonial.name || testimonial.initials || 'Anoniem'}
+                  {/* Achtergrondafbeelding met blur */}
+                  {testimonial.backgroundImageUrl && (
+                    <div className="absolute inset-0">
+                      <Image
+                        src={testimonial.backgroundImageUrl}
+                        alt=""
+                        fill
+                        className="object-cover blur-sm opacity-20"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/60 to-white/40" />
+                    </div>
+                  )}
+                  {/* Content */}
+                  <div className="relative p-8">
+                    <div className="text-terracotta text-5xl font-serif leading-none mb-4">&ldquo;</div>
+                    <p className="text-charcoal leading-relaxed mb-6 text-lg font-medium">
+                      {testimonial.quote}
                     </p>
-                    {testimonial.context && (
-                      <p className="text-sm text-terracotta font-medium">{testimonial.context}</p>
-                    )}
+                    <div className="border-t border-charcoal/10 pt-4">
+                      <p className="font-bold text-charcoal">
+                        {testimonial.name || testimonial.initials || 'Anoniem'}
+                      </p>
+                      {testimonial.context && (
+                        <p className="text-sm text-terracotta font-medium">{testimonial.context}</p>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}

@@ -57,6 +57,15 @@ export const testimonialType = {
       description: 'Koppel deze ervaring aan een specifieke dienst',
     },
     {
+      name: 'backgroundImage',
+      title: 'Achtergrondafbeelding',
+      type: 'image',
+      description: 'Optionele sfeervolle achtergrondafbeelding (wordt vervaagd getoond)',
+      options: {
+        hotspot: true,
+      },
+    },
+    {
       name: 'featured',
       title: 'Uitgelicht op homepage?',
       type: 'boolean',

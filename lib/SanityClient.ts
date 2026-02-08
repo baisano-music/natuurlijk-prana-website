@@ -104,12 +104,14 @@ export const queries = {
 
   /** Testimonials / Ervaringen */
   testimonials: `*[_type == "testimonial"] | order(_createdAt desc) {
-    _id, name, initials, quote, context, featured
+    _id, name, initials, quote, context, featured,
+    "backgroundImageUrl": backgroundImage.asset->url
   }`,
 
   /** Uitgelichte testimonials (voor homepage) */
   testimonialsFeatured: `*[_type == "testimonial" && featured == true] | order(_createdAt desc) [0...3] {
-    _id, name, initials, quote, context
+    _id, name, initials, quote, context,
+    "backgroundImageUrl": backgroundImage.asset->url
   }`,
 
   /** Site-instellingen (singleton) */

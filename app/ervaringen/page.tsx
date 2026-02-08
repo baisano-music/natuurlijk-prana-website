@@ -1,4 +1,5 @@
 import { client, queries } from '@/lib/SanityClient'
+import Image from 'next/image'
 import Link from 'next/link'
 
 // Geen caching voor verse data
@@ -23,6 +24,7 @@ interface Testimonial {
   initials?: string
   quote: string
   context?: string
+  backgroundImageUrl?: string
 }
 
 async function getTestimonials(): Promise<Testimonial[]> {
@@ -52,20 +54,35 @@ export default async function ErvaringenPage() {
             {testimonials.map((testimonial, index) => (
               <article
                 key={testimonial._id}
-                className={`rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 ${testimonialColors[index % testimonialColors.length]}`}
+                className={`relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 ${testimonialColors[index % testimonialColors.length]}`}
               >
-                <div className="text-terracotta text-6xl font-serif leading-none mb-4">&ldquo;</div>
-                <p className="text-charcoal leading-relaxed mb-6 text-lg font-medium">
-                  {testimonial.quote}
-                </p>
-                <footer className="border-t border-charcoal/15 pt-4">
-                  <p className="font-bold text-charcoal">
-                    {testimonial.name || testimonial.initials || 'Anoniem'}
+                {/* Achtergrondafbeelding met blur */}
+                {testimonial.backgroundImageUrl && (
+                  <div className="absolute inset-0">
+                    <Image
+                      src={testimonial.backgroundImageUrl}
+                      alt=""
+                      fill
+                      className="object-cover blur-sm opacity-25"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/70 to-white/50" />
+                  </div>
+                )}
+                {/* Content */}
+                <div className="relative p-8">
+                  <div className="text-terracotta text-6xl font-serif leading-none mb-4">&ldquo;</div>
+                  <p className="text-charcoal leading-relaxed mb-6 text-lg font-medium">
+                    {testimonial.quote}
                   </p>
-                  {testimonial.context && (
-                    <p className="text-sm text-terracotta font-medium">{testimonial.context}</p>
-                  )}
-                </footer>
+                  <footer className="border-t border-charcoal/15 pt-4">
+                    <p className="font-bold text-charcoal">
+                      {testimonial.name || testimonial.initials || 'Anoniem'}
+                    </p>
+                    {testimonial.context && (
+                      <p className="text-sm text-terracotta font-medium">{testimonial.context}</p>
+                    )}
+                  </footer>
+                </div>
               </article>
             ))}
           </div>
