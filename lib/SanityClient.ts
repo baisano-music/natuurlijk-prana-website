@@ -4,11 +4,20 @@
  */
 import { createClient } from 'next-sanity'
 
+// Client met CDN caching (voor publieke content)
 export const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '0xp96ddy',
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   apiVersion: '2024-01-01',
   useCdn: true,
+})
+
+// Client zonder CDN (voor real-time updates zoals siteSettings)
+export const clientNoCdn = createClient({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '0xp96ddy',
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  apiVersion: '2024-01-01',
+  useCdn: false,
 })
 
 /** GROQ queries voor hergebruik */
