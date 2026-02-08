@@ -16,42 +16,7 @@
 }
 
 /* MailerLite form styling voor footer */
-.ml-embedded {
-  --ml-color-background: transparent;
-  --ml-color-border: rgba(255, 255, 255, 0.3);
-  --ml-color-text: #faf8f5;
-  --ml-color-button-background: #e07a5f;
-  --ml-color-button-text: #ffffff;
-}
-
 .ml-embedded .ml-form-embedWrapper {
   background: transparent !important;
-}
-
-.ml-embedded .ml-form-embedBody {
   padding: 0 !important;
-}
-
-.ml-embedded .ml-form-fieldRow input {
-  background: rgba(255, 255, 255, 0.1) !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  color: #faf8f5 !important;
-  border-radius: 9999px !important;
-  padding: 0.75rem 1.25rem !important;
-}
-
-.ml-embedded .ml-form-fieldRow input::placeholder {
-  color: rgba(250, 248, 245, 0.6) !important;
-}
-
-.ml-embedded .ml-form-embedSubmit button {
-  background: #e07a5f !important;
-  border-radius: 9999px !important;
-  padding: 0.75rem 1.5rem !important;
-  font-weight: 500 !important;
-  transition: all 0.2s !important;
-}
-
-.ml-embedded .ml-form-embedSubmit button:hover {
-  background: #c5614a !important;
 }

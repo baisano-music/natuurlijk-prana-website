@@ -108,18 +108,9 @@ Floriande Zuid, eiland 2`
   return (
     <footer className="bg-sage-500 text-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-16">
-        {/* Nieuwsbrief sectie */}
+        {/* Nieuwsbrief sectie - MailerLite embed */}
         <div className="mb-12 pb-12 border-b border-white/20">
-          <div className="max-w-xl">
-            <h3 className="font-serif text-xl text-cream mb-2">
-              Blijf op de hoogte
-            </h3>
-            <p className="text-peach-200 text-sm mb-4">
-              Schrijf je in voor de nieuwsbrief en ontvang tips, inspiratie en nieuws over bloesemremedies.
-            </p>
-            {/* MailerLite embed form */}
-            <div className="ml-embedded" data-form="J6o7fS"></div>
-          </div>
+          <div className="ml-embedded" data-form="J6o7fS"></div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
