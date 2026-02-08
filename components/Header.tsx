@@ -143,12 +143,12 @@ function MobileMenu({
     <div className="md:hidden fixed inset-0 z-50">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-charcoal/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-charcoal/60 backdrop-blur-md"
         onClick={onClose}
       />
 
       {/* Menu panel */}
-      <div className="absolute right-0 top-0 h-full w-[85%] max-w-sm bg-cream shadow-2xl">
+      <div className="absolute right-0 top-0 h-full w-[85%] max-w-sm bg-white shadow-2xl isolate">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-peach-200">
           <span className="font-serif text-xl text-charcoal">Menu</span>
@@ -234,7 +234,7 @@ function MobileMenu({
         </nav>
 
         {/* CTA */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-peach-200 bg-cream">
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-peach-200 bg-white">
           <Link
             href="/contact"
             onClick={onClose}
