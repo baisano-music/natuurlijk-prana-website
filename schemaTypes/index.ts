@@ -11,6 +11,7 @@ import { productType } from './product'
 import { redirectType } from './redirect'
 import { remedieType } from './remedie'
 import { siteSettingsType } from './siteSettings'
+import { tarievenPageType } from './tarievenPage'
 import { testimonialType } from './testimonial'
 
 export const schemaTypes = [
@@ -30,6 +31,7 @@ export const schemaTypes = [
   redirectType,
   testimonialType,
   siteSettingsType,
+  tarievenPageType,
   // Object types (voor rich text)
   calloutType,
 ]

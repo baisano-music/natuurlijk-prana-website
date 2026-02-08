@@ -283,4 +283,28 @@ export const queries = {
     "question": question,
     "answer": coalesce(shortAnswer, pt::text(answer))
   }`,
+
+  /** Tarieven pagina (singleton) */
+  tarievenPage: `*[_type == "tarievenPage"][0]{
+    heroSubtitle, heroTitle, heroDescription,
+    tarieven[]{
+      title, price, duration, description, featured, featuredLabel,
+      includes, buttonText, buttonLink
+    },
+    pakkettenTitle, pakkettenHeading,
+    pakketten[]{
+      title, price, originalPrice, savings, description, note,
+      buttonText, buttonLink
+    },
+    extraTitle,
+    extraOpties[]{
+      title, price, duration, description
+    },
+    infoTitle,
+    infoItems[]{
+      icon, text
+    },
+    ctaTitle, ctaDescription, ctaButtonText, ctaButtonLink,
+    seoTitle, seoDescription
+  }`,
 }

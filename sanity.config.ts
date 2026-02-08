@@ -55,6 +55,13 @@ export default defineConfig({
                   .schemaType('homepage')
                   .documentId('homepage')
               ),
+            S.listItem()
+              .title('💰 Tarieven Pagina')
+              .child(
+                S.document()
+                  .schemaType('tarievenPage')
+                  .documentId('tarievenPage')
+              ),
             S.divider(),
 
             // ===== INSTELLINGEN (uitgesplitst) =====
@@ -315,7 +322,7 @@ export default defineConfig({
     types: schemaTypes as import('sanity').SchemaTypeDefinition[],
     templates: (prev) =>
       prev
-        .filter((t) => t.id !== 'siteSettings' && t.id !== 'homepage')
+        .filter((t) => t.id !== 'siteSettings' && t.id !== 'homepage' && t.id !== 'tarievenPage')
         .concat([
           {
             id: 'siteSettings',
@@ -328,6 +335,12 @@ export default defineConfig({
             title: 'Homepage',
             schemaType: 'homepage',
             value: { _id: 'homepage' },
+          },
+          {
+            id: 'tarievenPage',
+            title: 'Tarieven Pagina',
+            schemaType: 'tarievenPage',
+            value: { _id: 'tarievenPage' },
           },
         ]),
   },

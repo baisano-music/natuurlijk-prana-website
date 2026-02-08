@@ -1,77 +1,173 @@
 import Link from 'next/link'
+import { client, queries } from '@/lib/SanityClient'
+import type { Metadata } from 'next'
 
-export const metadata = {
-  title: 'Tarieven & Consult | Natuurlijk Prana',
-  description: 'Bekijk de tarieven voor bloesemtherapie consulten. Inclusief gratis kennismakingsgesprek, intake en vervolgconsulten.',
+export const revalidate = 0
+
+interface Tarief {
+  title: string
+  price: string
+  duration?: string
+  description?: string
+  featured?: boolean
+  featuredLabel?: string
+  includes?: string[]
+  buttonText?: string
+  buttonLink?: string
 }
 
-const tarieven = [
-  {
-    title: 'Kennismakingsgesprek',
-    price: 'Gratis',
-    duration: 'max. 20 minuten',
-    description: 'Telefonisch of via video. Vrijblijvend gesprek om te bepalen of een consult bij jou past.',
-    featured: false,
-    includes: [
-      'Kennismaking en eerste indruk',
-      'Bespreken van je vraag of situatie',
-      'Uitleg over de werkwijze',
-      'Geen verplichting',
-    ],
-  },
-  {
-    title: 'Intake Consult',
-    price: '€85',
-    duration: '60-75 minuten',
-    description: 'Uitgebreid eerste consult waarin we samen kijken naar wat er speelt en welke remedies passen.',
-    featured: true,
-    includes: [
-      'Uitgebreide intake en kennismaking',
-      'Persoonlijke remedieselectie',
-      'Doseerflesje (30ml) voor 4-6 weken',
-      'Nazorg via e-mail',
-    ],
-  },
-  {
-    title: 'Vervolgconsult',
-    price: '€70',
-    duration: 'ca. 50 minuten',
-    description: 'Evaluatie van de voortgang en afstemming van de remedies op de huidige situatie.',
-    featured: false,
-    includes: [
-      'Evaluatie van de afgelopen periode',
-      'Nieuw doseerflesje indien nodig',
-      'Bijstellen van de aanpak',
-      'Binnen 6 maanden na vorig consult',
-    ],
-  },
-]
+interface Pakket {
+  title: string
+  price: string
+  originalPrice?: string
+  savings?: string
+  description?: string
+  note?: string
+  buttonText?: string
+  buttonLink?: string
+}
 
-const pakketten = [
-  {
-    title: '3-Sessie Pakket',
-    price: '€195',
-    originalPrice: '€225',
-    description: 'Intake + 2 vervolgconsulten over een periode van 3-4 maanden. Inclusief remedies bij elke sessie.',
-    note: 'Betaalbaar in 2 termijnen',
-  },
-]
+interface ExtraOptie {
+  title: string
+  price: string
+  duration?: string
+  description?: string
+}
 
-const extraOpties = [
-  {
-    title: 'Telefonisch Consult',
-    price: '€45',
-    duration: '30 minuten',
-    description: 'Coaching op afstand. Verzendkosten voor rekening cliënt.',
-  },
-  {
-    title: 'Los Doseerflesje',
-    price: '€20',
-    description: 'Voor bestaande cliënten. Bijvoorbeeld voor broers/zussen of herhaalbehoefte.',
-  },
-]
+interface InfoItem {
+  icon?: string
+  text: string
+}
 
-export default function TarievenPage() {
+interface TarievenPageData {
+  heroSubtitle?: string
+  heroTitle?: string
+  heroDescription?: string
+  tarieven?: Tarief[]
+  pakkettenTitle?: string
+  pakkettenHeading?: string
+  pakketten?: Pakket[]
+  extraTitle?: string
+  extraOpties?: ExtraOptie[]
+  infoTitle?: string
+  infoItems?: InfoItem[]
+  ctaTitle?: string
+  ctaDescription?: string
+  ctaButtonText?: string
+  ctaButtonLink?: string
+  seoTitle?: string
+  seoDescription?: string
+}
+
+async function getTarievenPage(): Promise<TarievenPageData | null> {
+  return client.fetch(queries.tarievenPage)
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const data = await getTarievenPage()
+  return {
+    title: data?.seoTitle || 'Tarieven & Consult | Natuurlijk Prana',
+    description:
+      data?.seoDescription ||
+      'Bekijk de tarieven voor bloesemtherapie consulten. Inclusief gratis kennismakingsgesprek, intake en vervolgconsulten.',
+  }
+}
+
+// Icon component for info items
+function InfoIcon({ type }: { type?: string }) {
+  const iconClass = 'w-4 h-4 text-sage-600'
+
+  switch (type) {
+    case 'clock':
+      return (
+        <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+      )
+    case 'heart':
+      return (
+        <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+          />
+        </svg>
+      )
+    case 'money':
+      return (
+        <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"
+          />
+        </svg>
+      )
+    case 'check':
+      return (
+        <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+        </svg>
+      )
+    case 'warning':
+      return (
+        <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+          />
+        </svg>
+      )
+    case 'info':
+    default:
+      return (
+        <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+      )
+  }
+}
+
+export default async function TarievenPage() {
+  const data = await getTarievenPage()
+
+  // Fallback values if CMS is empty
+  const heroSubtitle = data?.heroSubtitle || 'Tarieven'
+  const heroTitle = data?.heroTitle || 'Investeer in jezelf'
+  const heroDescription =
+    data?.heroDescription ||
+    'Persoonlijke begeleiding met bloesemremedies. Elke sessie is maatwerk, afgestemd op jouw situatie en behoeften.'
+
+  const tarieven = data?.tarieven || []
+  const pakkettenTitle = data?.pakkettenTitle || 'Voordeelpakket'
+  const pakkettenHeading = data?.pakkettenHeading || 'Bespaar met een pakket'
+  const pakketten = data?.pakketten || []
+  const extraTitle = data?.extraTitle || 'Extra opties'
+  const extraOpties = data?.extraOpties || []
+  const infoTitle = data?.infoTitle || 'Goed om te weten'
+  const infoItems = data?.infoItems || []
+  const ctaTitle = data?.ctaTitle || 'Klaar om te beginnen?'
+  const ctaDescription =
+    data?.ctaDescription ||
+    'Plan een gratis kennismakingsgesprek en ontdek of bloesemtherapie bij jou past.'
+  const ctaButtonText = data?.ctaButtonText || 'Plan kennismakingsgesprek'
+  const ctaButtonLink = data?.ctaButtonLink || '/contact'
+
   return (
     <div className="bg-cream min-h-screen">
       {/* Hero */}
@@ -79,238 +175,211 @@ export default function TarievenPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-sage-100 via-cream to-peach-50" />
         <div className="relative max-w-4xl mx-auto px-4 text-center">
           <span className="text-terracotta uppercase tracking-widest text-sm font-medium">
-            Tarieven
+            {heroSubtitle}
           </span>
-          <h1 className="font-serif text-4xl md:text-5xl text-charcoal mt-4">
-            Investeer in jezelf
-          </h1>
+          <h1 className="font-serif text-4xl md:text-5xl text-charcoal mt-4">{heroTitle}</h1>
           <p className="text-lg text-stone mt-6 max-w-2xl mx-auto leading-relaxed">
-            Persoonlijke begeleiding met bloesemremedies. Elke sessie is maatwerk,
-            afgestemd op jouw situatie en behoeften.
+            {heroDescription}
           </p>
         </div>
       </section>
 
       {/* Hoofdtarieven */}
-      <section className="py-16 md:py-24 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {tarieven.map((tarief) => (
-              <div
-                key={tarief.title}
-                className={`relative rounded-3xl p-8 ${
-                  tarief.featured
-                    ? 'bg-terracotta text-white shadow-xl scale-105 z-10'
-                    : 'bg-white border border-peach-200 shadow-sm'
-                }`}
-              >
-                {tarief.featured && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                    <span className="bg-terracotta text-white text-sm font-medium px-4 py-1.5 rounded-full shadow-md">
-                      Meest gekozen
-                    </span>
-                  </div>
-                )}
-
-                <div className="text-center mb-6">
-                  <h3 className={`font-serif text-xl ${tarief.featured ? 'text-white' : 'text-charcoal'}`}>
-                    {tarief.title}
-                  </h3>
-                  <div className="mt-4">
-                    <span className={`text-4xl font-bold ${tarief.featured ? 'text-white' : 'text-terracotta'}`}>
-                      {tarief.price}
-                    </span>
-                  </div>
-                  <p className={`text-sm mt-2 ${tarief.featured ? 'text-sage-100' : 'text-stone'}`}>
-                    {tarief.duration}
-                  </p>
-                </div>
-
-                <p className={`text-center mb-6 ${tarief.featured ? 'text-sage-100' : 'text-stone'}`}>
-                  {tarief.description}
-                </p>
-
-                <ul className="space-y-3 mb-8">
-                  {tarief.includes.map((item, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <svg
-                        className={`w-5 h-5 mt-0.5 flex-shrink-0 ${
-                          tarief.featured ? 'text-peach-200' : 'text-sage-500'
-                        }`}
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      <span className={tarief.featured ? 'text-sage-50' : 'text-charcoal'}>
-                        {item}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-
-                <Link
-                  href="/contact"
-                  className={`block w-full py-3 px-6 rounded-full font-medium text-center transition-all ${
+      {tarieven.length > 0 && (
+        <section className="py-16 md:py-24 px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {tarieven.map((tarief) => (
+                <div
+                  key={tarief.title}
+                  className={`relative rounded-3xl p-8 ${
                     tarief.featured
-                      ? 'bg-white text-terracotta hover:bg-peach-100'
-                      : 'bg-coral text-white hover:bg-coral-dark'
+                      ? 'bg-terracotta text-white shadow-xl scale-105 z-10'
+                      : 'bg-white border border-peach-200 shadow-sm'
                   }`}
                 >
-                  {tarief.price === 'Gratis' ? 'Plan gesprek' : 'Boek consult'}
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pakket */}
-      <section className="py-16 md:py-24 px-4 bg-peach-50">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <span className="text-terracotta uppercase tracking-widest text-sm font-medium">
-              Voordeelpakket
-            </span>
-            <h2 className="font-serif text-3xl text-charcoal mt-4">
-              Bespaar met een pakket
-            </h2>
-          </div>
-
-          {pakketten.map((pakket) => (
-            <div
-              key={pakket.title}
-              className="bg-white rounded-3xl p-8 md:p-12 shadow-lg border border-peach-200"
-            >
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                <div>
-                  <h3 className="font-serif text-2xl text-charcoal">{pakket.title}</h3>
-                  <p className="text-stone mt-2 max-w-lg">{pakket.description}</p>
-                  {pakket.note && (
-                    <p className="text-sage-600 text-sm mt-2 font-medium">{pakket.note}</p>
+                  {tarief.featured && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                      <span className="bg-terracotta text-white text-sm font-medium px-4 py-1.5 rounded-full shadow-md">
+                        {tarief.featuredLabel || 'Meest gekozen'}
+                      </span>
+                    </div>
                   )}
-                </div>
-                <div className="text-center md:text-right">
-                  <div className="flex items-baseline gap-3 justify-center md:justify-end">
-                    <span className="text-stone line-through text-lg">{pakket.originalPrice}</span>
-                    <span className="text-4xl font-bold text-terracotta">{pakket.price}</span>
+
+                  <div className="text-center mb-6">
+                    <h3
+                      className={`font-serif text-xl ${tarief.featured ? 'text-white' : 'text-charcoal'}`}
+                    >
+                      {tarief.title}
+                    </h3>
+                    <div className="mt-4">
+                      <span
+                        className={`text-4xl font-bold ${tarief.featured ? 'text-white' : 'text-terracotta'}`}
+                      >
+                        {tarief.price}
+                      </span>
+                    </div>
+                    {tarief.duration && (
+                      <p className={`text-sm mt-2 ${tarief.featured ? 'text-sage-100' : 'text-stone'}`}>
+                        {tarief.duration}
+                      </p>
+                    )}
                   </div>
-                  <p className="text-sage-600 text-sm mt-1">
-                    Bespaar €30
-                  </p>
+
+                  {tarief.description && (
+                    <p className={`text-center mb-6 ${tarief.featured ? 'text-sage-100' : 'text-stone'}`}>
+                      {tarief.description}
+                    </p>
+                  )}
+
+                  {tarief.includes && tarief.includes.length > 0 && (
+                    <ul className="space-y-3 mb-8">
+                      {tarief.includes.map((item, index) => (
+                        <li key={index} className="flex items-start gap-3">
+                          <svg
+                            className={`w-5 h-5 mt-0.5 flex-shrink-0 ${
+                              tarief.featured ? 'text-peach-200' : 'text-sage-500'
+                            }`}
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                          <span className={tarief.featured ? 'text-sage-50' : 'text-charcoal'}>
+                            {item}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
                   <Link
-                    href="/contact"
-                    className="inline-block mt-4 bg-coral text-white px-8 py-3 rounded-full font-medium hover:bg-coral-dark transition-colors"
+                    href={tarief.buttonLink || '/contact'}
+                    className={`block w-full py-3 px-6 rounded-full font-medium text-center transition-all ${
+                      tarief.featured
+                        ? 'bg-white text-terracotta hover:bg-peach-100'
+                        : 'bg-coral text-white hover:bg-coral-dark'
+                    }`}
                   >
-                    Kies pakket
+                    {tarief.buttonText || (tarief.price === 'Gratis' ? 'Plan gesprek' : 'Boek consult')}
                   </Link>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Extra opties */}
-      <section className="py-16 md:py-24 px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="font-serif text-3xl text-charcoal">
-              Extra opties
-            </h2>
           </div>
+        </section>
+      )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {extraOpties.map((optie) => (
+      {/* Pakket */}
+      {pakketten.length > 0 && (
+        <section className="py-16 md:py-24 px-4 bg-peach-50">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <span className="text-terracotta uppercase tracking-widest text-sm font-medium">
+                {pakkettenTitle}
+              </span>
+              <h2 className="font-serif text-3xl text-charcoal mt-4">{pakkettenHeading}</h2>
+            </div>
+
+            {pakketten.map((pakket) => (
               <div
-                key={optie.title}
-                className="bg-white rounded-2xl p-6 border border-peach-200"
+                key={pakket.title}
+                className="bg-white rounded-3xl p-8 md:p-12 shadow-lg border border-peach-200"
               >
-                <div className="flex justify-between items-start mb-3">
-                  <h3 className="font-serif text-lg text-charcoal">{optie.title}</h3>
-                  <span className="text-xl font-bold text-terracotta">{optie.price}</span>
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                  <div>
+                    <h3 className="font-serif text-2xl text-charcoal">{pakket.title}</h3>
+                    {pakket.description && (
+                      <p className="text-stone mt-2 max-w-lg">{pakket.description}</p>
+                    )}
+                    {pakket.note && (
+                      <p className="text-sage-600 text-sm mt-2 font-medium">{pakket.note}</p>
+                    )}
+                  </div>
+                  <div className="text-center md:text-right">
+                    <div className="flex items-baseline gap-3 justify-center md:justify-end">
+                      {pakket.originalPrice && (
+                        <span className="text-stone line-through text-lg">
+                          {pakket.originalPrice}
+                        </span>
+                      )}
+                      <span className="text-4xl font-bold text-terracotta">{pakket.price}</span>
+                    </div>
+                    {pakket.savings && <p className="text-sage-600 text-sm mt-1">{pakket.savings}</p>}
+                    <Link
+                      href={pakket.buttonLink || '/contact'}
+                      className="inline-block mt-4 bg-coral text-white px-8 py-3 rounded-full font-medium hover:bg-coral-dark transition-colors"
+                    >
+                      {pakket.buttonText || 'Kies pakket'}
+                    </Link>
+                  </div>
                 </div>
-                {optie.duration && (
-                  <p className="text-sm text-sage-600 mb-2">{optie.duration}</p>
-                )}
-                <p className="text-stone">{optie.description}</p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Belangrijke info */}
-      <section className="py-16 md:py-24 px-4 bg-sage-50">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="font-serif text-2xl text-charcoal text-center mb-8">
-            Goed om te weten
-          </h2>
-
-          <div className="bg-white rounded-2xl p-8 border border-sage-200 space-y-4">
-            <div className="flex gap-4">
-              <div className="w-8 h-8 rounded-full bg-sage-100 flex items-center justify-center flex-shrink-0">
-                <svg className="w-4 h-4 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <p className="text-stone">
-                Bloesemremedies zijn een natuurlijke ondersteuning en vervangen geen medische of psychologische zorg.
-                Raadpleeg bij twijfel altijd een arts.
-              </p>
+      {/* Extra opties */}
+      {extraOpties.length > 0 && (
+        <section className="py-16 md:py-24 px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="font-serif text-3xl text-charcoal">{extraTitle}</h2>
             </div>
 
-            <div className="flex gap-4">
-              <div className="w-8 h-8 rounded-full bg-sage-100 flex items-center justify-center flex-shrink-0">
-                <svg className="w-4 h-4 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <p className="text-stone">
-                Vervolgconsulten dienen binnen 6 maanden na het vorige consult plaats te vinden.
-              </p>
-            </div>
-
-            <div className="flex gap-4">
-              <div className="w-8 h-8 rounded-full bg-sage-100 flex items-center justify-center flex-shrink-0">
-                <svg className="w-4 h-4 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-              </div>
-              <p className="text-stone">
-                Remedies zijn veilig naast andere behandelingen en medicijnen.
-              </p>
-            </div>
-
-            <div className="flex gap-4">
-              <div className="w-8 h-8 rounded-full bg-sage-100 flex items-center justify-center flex-shrink-0">
-                <svg className="w-4 h-4 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-              </div>
-              <p className="text-stone">
-                Financiële drempels? Neem gerust contact op om de mogelijkheden te bespreken.
-              </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {extraOpties.map((optie) => (
+                <div key={optie.title} className="bg-white rounded-2xl p-6 border border-peach-200">
+                  <div className="flex justify-between items-start mb-3">
+                    <h3 className="font-serif text-lg text-charcoal">{optie.title}</h3>
+                    <span className="text-xl font-bold text-terracotta">{optie.price}</span>
+                  </div>
+                  {optie.duration && <p className="text-sm text-sage-600 mb-2">{optie.duration}</p>}
+                  {optie.description && <p className="text-stone">{optie.description}</p>}
+                </div>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
+
+      {/* Belangrijke info */}
+      {infoItems.length > 0 && (
+        <section className="py-16 md:py-24 px-4 bg-sage-50">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="font-serif text-2xl text-charcoal text-center mb-8">{infoTitle}</h2>
+
+            <div className="bg-white rounded-2xl p-8 border border-sage-200 space-y-4">
+              {infoItems.map((item, index) => (
+                <div key={index} className="flex gap-4">
+                  <div className="w-8 h-8 rounded-full bg-sage-100 flex items-center justify-center flex-shrink-0">
+                    <InfoIcon type={item.icon} />
+                  </div>
+                  <p className="text-stone">{item.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* CTA */}
       <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-terracotta via-terracotta-dark to-terracotta">
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="font-serif text-3xl md:text-4xl text-white mb-6">
-            Klaar om te beginnen?
-          </h2>
-          <p className="text-sage-100 leading-relaxed mb-10 text-lg">
-            Plan een gratis kennismakingsgesprek en ontdek of bloesemtherapie bij jou past.
-          </p>
+          <h2 className="font-serif text-3xl md:text-4xl text-white mb-6">{ctaTitle}</h2>
+          <p className="text-sage-100 leading-relaxed mb-10 text-lg">{ctaDescription}</p>
           <Link
-            href="/contact"
+            href={ctaButtonLink}
             className="inline-flex items-center justify-center bg-coral text-white px-10 py-4 rounded-full font-medium hover:bg-coral-dark transition-all shadow-lg hover:shadow-xl hover:scale-105"
           >
-            Plan kennismakingsgesprek
+            {ctaButtonText}
           </Link>
         </div>
       </section>
