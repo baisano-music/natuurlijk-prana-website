@@ -38,13 +38,21 @@ function formatDate(dateStr: string | null) {
   })
 }
 
+async function getDisclaimer(): Promise<string | null> {
+  const settings = await client.fetch(queries.siteSettings)
+  return settings?.blogDisclaimer || null
+}
+
 export default async function NieuwsArtikelPage({
   params,
 }: {
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const post = await client.fetch(queries.blogPostBySlug(slug))
+  const [post, disclaimer] = await Promise.all([
+    client.fetch(queries.blogPostBySlug(slug)),
+    getDisclaimer(),
+  ])
 
   if (!post) {
     notFound()
@@ -92,6 +100,15 @@ export default async function NieuwsArtikelPage({
                   value={post.content}
                   components={portableTextComponents}
                 />
+              </div>
+            )}
+
+            {/* Disclaimer */}
+            {disclaimer && (
+              <div className="mt-12 pt-8 border-t border-peach-200">
+                <p className="text-[11px] text-stone/60 leading-relaxed whitespace-pre-line">
+                  {disclaimer}
+                </p>
               </div>
             )}
           </div>

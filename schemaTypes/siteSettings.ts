@@ -7,6 +7,7 @@ export const siteSettingsType = {
   type: 'document',
   groups: [
     { name: 'general', title: 'Algemeen' },
+    { name: 'disclaimers', title: 'Disclaimers' },
     { name: 'contact', title: 'Contact' },
     { name: 'business', title: 'Bedrijfsgegevens (SEO)' },
     { name: 'social', title: 'Social Media' },
@@ -28,6 +29,28 @@ export const siteSettingsType = {
       type: 'text',
       group: 'general',
       validation: (Rule: { required: () => unknown }) => Rule.required(),
+    },
+
+    // Disclaimers
+    {
+      name: 'blogDisclaimer',
+      title: 'Nieuws/Blog Disclaimer',
+      type: 'text',
+      rows: 5,
+      group: 'disclaimers',
+      description: 'Deze tekst wordt automatisch onder alle nieuwsberichten getoond',
+      initialValue: `Disclaimer
+Bloesem-, edelsteen- en omgevingsremedies en celzouten worden gebruikt ter ondersteuning van persoonlijk welzijn en balans.
+Ze zijn geen vervanging voor medische, psychologische of andere professionele zorg.
+Bij klachten of twijfel wordt geadviseerd contact op te nemen met een arts of gekwalificeerd zorgverlener.`,
+    },
+    {
+      name: 'productDisclaimer',
+      title: 'Product Disclaimer',
+      type: 'text',
+      rows: 5,
+      group: 'disclaimers',
+      description: 'Optioneel: disclaimer voor productpagina\'s (remedies)',
     },
 
     // Contact

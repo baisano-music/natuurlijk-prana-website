@@ -115,7 +115,8 @@ export const queries = {
   /** Site-instellingen (singleton) */
   siteSettings: `*[_type == "siteSettings"][0]{
     title, description, contactInfo, socialMedia, openingHours, parkingInfo,
-    footerNavigation, footerBottomLinks, googleAnalyticsId, googleTagManagerId
+    footerNavigation, footerBottomLinks, googleAnalyticsId, googleTagManagerId,
+    blogDisclaimer, productDisclaimer
   }`,
 
   /** Pagina-instellingen per type */
