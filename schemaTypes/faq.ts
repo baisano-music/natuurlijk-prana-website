@@ -17,6 +17,9 @@ export const faqType = {
         list: [
           { title: 'Algemeen', value: 'algemeen' },
           { title: 'Bloesemremedies', value: 'bloesemremedies' },
+          { title: 'Celzouten', value: 'celzouten' },
+          { title: 'Aromatherapie', value: 'aromatherapie' },
+          { title: 'Essentiële oliën', value: 'essentiele-olien' },
           { title: 'Consulten & Sessies', value: 'consulten' },
           { title: 'Bestellen & Verzenden', value: 'bestellen' },
           { title: 'Over Natuurlijk Prana', value: 'over-ons' },
@@ -107,6 +110,9 @@ export const faqType = {
       const categoryNames: Record<string, string> = {
         algemeen: 'Algemeen',
         bloesemremedies: 'Bloesemremedies',
+        celzouten: 'Celzouten',
+        aromatherapie: 'Aromatherapie',
+        'essentiele-olien': 'Essentiële oliën',
         consulten: 'Consulten & Sessies',
         bestellen: 'Bestellen & Verzenden',
         'over-ons': 'Over Natuurlijk Prana',
