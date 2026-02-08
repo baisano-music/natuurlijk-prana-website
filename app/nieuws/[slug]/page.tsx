@@ -5,7 +5,16 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { urlFor } from '@/lib/sanity/image'
 
-export const dynamic = 'force-dynamic'
+// Revalidate elke 60 seconden voor verse data, maar wel statisch pre-renderen
+export const revalidate = 60
+
+// Pre-render alle nieuwsartikelen voor Pagefind indexering
+export async function generateStaticParams() {
+  const posts = await client.fetch<{ slug: string }[]>(
+    `*[_type == "blog" && draft != true]{ "slug": slug.current }`
+  )
+  return posts.map((p) => ({ slug: p.slug }))
+}
 
 const portableTextComponents = {
   types: {

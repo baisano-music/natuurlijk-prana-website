@@ -2,7 +2,8 @@ import Link from 'next/link'
 import { client, queries } from '@/lib/SanityClient'
 import type { Metadata } from 'next'
 
-export const revalidate = 0
+// Revalidate elke 60 seconden voor Pagefind indexering
+export const revalidate = 60
 
 interface Tarief {
   title: string

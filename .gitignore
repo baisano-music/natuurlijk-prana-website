@@ -14,6 +14,9 @@ sanity.json
 .env.local
 .env.*.local
 
+# Pagefind (generated during build)
+public/pagefind
+
 # Misc
 .DS_Store
 *.pem

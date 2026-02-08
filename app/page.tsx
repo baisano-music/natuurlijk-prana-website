@@ -4,8 +4,8 @@ import Image from 'next/image'
 import { PortableText } from '@portabletext/react'
 import { FAQSection } from '@/components/FAQSection'
 
-// Geen caching voor verse data
-export const revalidate = 0
+// Revalidate elke 60 seconden voor Pagefind indexering
+export const revalidate = 60
 
 // Kleuren voor testimonial kaarten - meer uitgesproken
 const testimonialColors = [

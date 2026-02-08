@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "dev:clean": "rm -rf .next node_modules/.cache && next dev",
-    "build": "next build",
+    "build": "next build && npm run postbuild",
+    "postbuild": "npx pagefind --site .next/server/app --output-path public/pagefind",
     "start": "next start",
     "import:remedies": "npx tsx scripts/import-remedies.ts",
     "import:wordpress": "npx tsx scripts/import-from-wordpress.ts"
@@ -22,6 +23,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.24",
+    "pagefind": "^1.4.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.0",
     "tsx": "^4.7.0",

@@ -5,6 +5,17 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import RichContent from '@/components/RichContent'
 
+// Revalidate elke 60 seconden voor verse data, maar wel statisch pre-renderen
+export const revalidate = 60
+
+// Pre-render alle remedies voor Pagefind indexering
+export async function generateStaticParams() {
+  const remedies = await client.fetch<{ slug: string }[]>(
+    `*[_type == "remedie"]{ "slug": slug.current }`
+  )
+  return remedies.map((r) => ({ slug: r.slug }))
+}
+
 export default async function RemedieDetail({
   params,
 }: {

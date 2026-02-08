@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState, useRef, useEffect } from 'react'
+import { SearchModal } from './SearchModal'
 
 interface NavItem {
   href?: string
@@ -175,7 +176,7 @@ function MobileMenu({
                     className={`w-full flex items-center justify-between py-3 px-4 rounded-xl font-medium transition-colors ${
                       item.children.some(c => pathname === c.href || pathname.startsWith(c.href + '/'))
                         ? 'bg-peach-100 text-terracotta'
-                        : 'text-charcoal hover:bg-sage-50'
+                        : 'bg-white text-charcoal hover:bg-sage-50'
                     }`}
                   >
                     {item.label}
@@ -223,7 +224,7 @@ function MobileMenu({
                   className={`block py-3 px-4 rounded-xl font-medium transition-colors ${
                     pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href!))
                       ? 'bg-peach-100 text-terracotta'
-                      : 'text-charcoal hover:bg-sage-50'
+                      : 'bg-white text-charcoal hover:bg-sage-50'
                   }`}
                 >
                   {item.label}
@@ -252,6 +253,7 @@ export function Header() {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+  const [searchOpen, setSearchOpen] = useState(false)
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -269,6 +271,18 @@ export function Header() {
       document.body.style.overflow = ''
     }
   }, [mobileOpen])
+
+  // Keyboard shortcut: Cmd/Ctrl + K to open search
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        setSearchOpen(true)
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   return (
     <header className="sticky top-0 z-40 bg-cream/95 backdrop-blur-sm border-b border-peach-200 shadow-sm">
@@ -316,25 +330,49 @@ export function Header() {
                 </Link>
               )
             ))}
+            {/* Search button */}
+            <button
+              onClick={() => setSearchOpen(true)}
+              className="p-2 rounded-lg text-sage-700 hover:text-terracotta hover:bg-peach-100 transition-colors"
+              aria-label="Zoeken"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
             <Link
               href="/contact"
-              className="ml-4 bg-coral text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-coral-dark transition-colors shadow-sm hover:shadow-md"
+              className="ml-2 bg-coral text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-coral-dark transition-colors shadow-sm hover:shadow-md"
             >
               Contact
             </Link>
           </nav>
 
-          {/* Mobile menu button */}
-          <button
-            type="button"
-            onClick={() => setMobileOpen(true)}
-            className="md:hidden p-2 rounded-lg text-sage-700 hover:bg-peach-100 transition-colors"
-            aria-label="Menu openen"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
+          {/* Mobile buttons */}
+          <div className="flex items-center gap-1 md:hidden">
+            {/* Mobile search button */}
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
+              className="p-2 rounded-lg text-sage-700 hover:bg-peach-100 transition-colors"
+              aria-label="Zoeken"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+            {/* Mobile menu button */}
+            <button
+              type="button"
+              onClick={() => setMobileOpen(true)}
+              className="p-2 rounded-lg text-sage-700 hover:bg-peach-100 transition-colors"
+              aria-label="Menu openen"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -343,6 +381,12 @@ export function Header() {
         isOpen={mobileOpen}
         onClose={() => setMobileOpen(false)}
         pathname={pathname}
+      />
+
+      {/* Search modal */}
+      <SearchModal
+        isOpen={searchOpen}
+        onClose={() => setSearchOpen(false)}
       />
     </header>
   )

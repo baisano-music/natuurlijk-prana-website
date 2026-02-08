@@ -2,8 +2,8 @@ import { client, queries } from '@/lib/SanityClient'
 import Image from 'next/image'
 import Link from 'next/link'
 
-// Geen caching voor verse data
-export const revalidate = 0
+// Revalidate elke 60 seconden voor Pagefind indexering
+export const revalidate = 60
 
 // Kleuren voor testimonial kaarten - meer uitgesproken met gradients
 const testimonialColors = [
