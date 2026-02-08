@@ -187,7 +187,7 @@ export default async function TarievenPage() {
 
       {/* Hoofdtarieven */}
       {tarieven.length > 0 && (
-        <section className="py-16 md:py-24 px-4">
+        <section className="py-16 md:py-24 px-4 bg-white">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {tarieven.map((tarief) => (
@@ -329,15 +329,18 @@ export default async function TarievenPage() {
 
       {/* Extra opties */}
       {extraOpties.length > 0 && (
-        <section className="py-16 md:py-24 px-4">
+        <section className="py-16 md:py-24 px-4 bg-gradient-to-br from-cream via-peach-50/50 to-cream">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="font-serif text-3xl text-charcoal">{extraTitle}</h2>
+              <span className="text-terracotta uppercase tracking-widest text-sm font-medium">
+                Aanvullend
+              </span>
+              <h2 className="font-serif text-3xl text-charcoal mt-4">{extraTitle}</h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {extraOpties.map((optie) => (
-                <div key={optie.title} className="bg-white rounded-2xl p-6 border border-peach-200">
+                <div key={optie.title} className="bg-white rounded-2xl p-6 border border-peach-200 shadow-sm hover:shadow-md transition-shadow">
                   <div className="flex justify-between items-start mb-3">
                     <h3 className="font-serif text-lg text-charcoal">{optie.title}</h3>
                     <span className="text-xl font-bold text-terracotta">{optie.price}</span>

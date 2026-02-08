@@ -59,16 +59,24 @@ export default async function NieuwsPage({
   const ctaButton = settings?.ctaButton || { text: 'Neem contact op', link: '/contact' }
 
   return (
-    <div className="bg-cream min-h-[60vh]">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-16">
-        <header className="text-center mb-16">
-          <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-charcoal mb-4">
+    <div className="min-h-[60vh]">
+      {/* Hero header */}
+      <section className="bg-gradient-to-br from-peach-100 via-cream to-sage-50 py-16 md:py-24">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <span className="text-terracotta uppercase tracking-widest text-sm font-medium">
+            Blog
+          </span>
+          <h1 className="font-serif text-4xl md:text-5xl text-charcoal mt-4">
             {pageTitle}
           </h1>
-          <p className="text-lg text-stone max-w-2xl mx-auto italic">
+          <p className="text-lg text-stone max-w-2xl mx-auto mt-6 italic">
             {pageSubtitle}
           </p>
-        </header>
+        </div>
+      </section>
+
+      <div className="bg-cream">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-16">
 
         {posts.length === 0 ? (
           <div className="p-12 md:p-16 bg-white rounded-2xl text-center shadow-sm border border-peach-200">
@@ -156,11 +164,16 @@ export default async function NieuwsPage({
           </>
         )}
 
-        <section className="mt-20 p-10 md:p-14 bg-white rounded-2xl text-center shadow-sm border border-peach-200">
+        </div>
+      </div>
+
+      {/* CTA Section */}
+      <section className="bg-gradient-to-br from-sage-100 via-sage-50 to-peach-50 py-16 md:py-20">
+        <div className="max-w-2xl mx-auto px-4 text-center">
           <h3 className="font-serif text-2xl md:text-3xl text-charcoal mb-4">
             {ctaTitle}
           </h3>
-          <p className="text-stone mb-6 max-w-xl mx-auto leading-relaxed">
+          <p className="text-stone mb-8 max-w-xl mx-auto leading-relaxed">
             {ctaText}
           </p>
           <Link
@@ -169,8 +182,8 @@ export default async function NieuwsPage({
           >
             {ctaButton.text || 'Neem contact op'}
           </Link>
-        </section>
-      </div>
+        </div>
+      </section>
     </div>
   )
 }

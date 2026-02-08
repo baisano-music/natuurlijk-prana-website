@@ -124,7 +124,8 @@ export const queries = {
   /** Pagina-instellingen per type */
   pageSettings: (pageType: string) =>
     `*[_type == "pageSettings" && pageType == "${pageType}"][0]{
-      title, subtitle, introContent, ctaTitle, ctaText, ctaButton
+      title, subtitle, introContent, ctaTitle, ctaText, ctaButton,
+      formTitle, kennismakingTitle, kennismakingText
     }`,
 
   /** Homepage (singleton) */

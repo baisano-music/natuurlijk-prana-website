@@ -15,8 +15,12 @@
   }
 }
 
-/* MailerLite form styling voor footer */
+/* MailerLite form styling */
 .ml-embedded .ml-form-embedWrapper {
   background: transparent !important;
   padding: 0 !important;
+}
+
+.ml-embedded .ml-form-embedContent {
+  margin: 0 !important;
 }

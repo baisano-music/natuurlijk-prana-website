@@ -22,6 +22,9 @@ type OverMijPage = {
 type PageSettings = {
   title?: string
   subtitle?: string
+  formTitle?: string
+  kennismakingTitle?: string
+  kennismakingText?: string
 }
 
 async function getSiteSettings(): Promise<SiteSettings | null> {
@@ -52,26 +55,35 @@ export default async function ContactPage() {
   // CMS waarden met fallbacks
   const pageTitle = pageSettings?.title || 'Contact'
   const pageSubtitle = pageSettings?.subtitle || 'Benieuwd welke remedie bij jou past? Ik bied een vrijblijvend en kosteloos kennismakingsgesprek aan. Neem gerust contact op.'
+  const formTitle = pageSettings?.formTitle || 'Stuur een bericht'
+  const kennismakingTitle = pageSettings?.kennismakingTitle || 'Gratis kennismaking'
+  const kennismakingText = pageSettings?.kennismakingText || 'Wil je eerst even kennismaken? Ik bied een vrijblijvend en kosteloos gesprek aan om te kijken of bloesemremedies iets voor jou kunnen betekenen.'
 
   return (
-    <div className="bg-cream min-h-[60vh]">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 md:py-16">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="font-serif text-3xl md:text-4xl text-charcoal mb-4">
+    <div className="min-h-[60vh]">
+      {/* Hero header met gradient */}
+      <section className="bg-gradient-to-br from-sage-100 via-cream to-peach-50 py-16 md:py-20">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <span className="text-terracotta uppercase tracking-widest text-sm font-medium">
+            Neem contact op
+          </span>
+          <h1 className="font-serif text-4xl md:text-5xl text-charcoal mt-4">
             {pageTitle}
           </h1>
-          <p className="text-stone leading-relaxed max-w-2xl mx-auto text-lg">
+          <p className="text-stone leading-relaxed max-w-2xl mx-auto text-lg mt-6">
             {pageSubtitle}
           </p>
         </div>
+      </section>
 
-        <div className="grid md:grid-cols-5 gap-8 md:gap-12">
+      <div className="bg-cream">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 md:py-16">
+          <div className="grid md:grid-cols-5 gap-8 md:gap-12">
           {/* Contactformulier */}
           <div className="md:col-span-3">
             <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-peach-100">
               <h2 className="font-serif text-xl text-charcoal mb-6">
-                Stuur een bericht
+                {formTitle}
               </h2>
               <ContactForm />
             </div>
@@ -183,24 +195,23 @@ export default async function ContactPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3 className="font-medium text-charcoal">Gratis kennismaking</h3>
+                <h3 className="font-medium text-charcoal">{kennismakingTitle}</h3>
               </div>
               <p className="text-stone text-sm leading-relaxed">
-                Wil je eerst even kennismaken? Ik bied een vrijblijvend en
-                kosteloos gesprek aan om te kijken of bloesemremedies iets
-                voor jou kunnen betekenen.
+                {kennismakingText}
               </p>
             </div>
           </div>
-        </div>
+          </div>
 
-        <div className="mt-12 text-center">
-          <Link
-            href="/"
-            className="inline-flex items-center text-sage-600 hover:text-terracotta font-medium transition-colors"
-          >
-            ← Terug naar home
-          </Link>
+          <div className="mt-12 text-center">
+            <Link
+              href="/"
+              className="inline-flex items-center text-sage-600 hover:text-terracotta font-medium transition-colors"
+            >
+              ← Terug naar home
+            </Link>
+          </div>
         </div>
       </div>
     </div>

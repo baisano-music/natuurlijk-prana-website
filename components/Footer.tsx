@@ -108,11 +108,6 @@ Floriande Zuid, eiland 2`
   return (
     <footer className="bg-sage-500 text-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-16">
-        {/* Nieuwsbrief sectie - MailerLite embed */}
-        <div className="mb-12 pb-12 border-b border-white/20">
-          <div className="ml-embedded" data-form="J6o7fS"></div>
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
           {/* Brand */}
           <div>

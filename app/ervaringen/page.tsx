@@ -35,19 +35,24 @@ export default async function ErvaringenPage() {
   const testimonials = await getTestimonials()
 
   return (
-    <div className="bg-cream min-h-[60vh]">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 md:py-16">
-        <header className="text-center mb-12">
+    <div className="min-h-[60vh]">
+      {/* Hero header met gradient */}
+      <section className="bg-gradient-to-br from-peach-100 via-cream to-sage-50 py-16 md:py-20">
+        <div className="max-w-4xl mx-auto px-4 text-center">
           <span className="text-terracotta uppercase tracking-widest text-sm font-medium">
             Ervaringen
           </span>
-          <h1 className="font-serif text-4xl md:text-5xl text-charcoal mt-2">
+          <h1 className="font-serif text-4xl md:text-5xl text-charcoal mt-4">
             Wat anderen zeggen
           </h1>
-          <p className="text-lg text-stone mt-4 max-w-2xl mx-auto">
+          <p className="text-lg text-stone mt-6 max-w-2xl mx-auto">
             Lees hier ervaringen van ouders, kinderen en anderen die met de bloesemremedies hebben gewerkt.
           </p>
-        </header>
+        </div>
+      </section>
+
+      <div className="bg-cream">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 md:py-16">
 
         {testimonials.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -94,16 +99,17 @@ export default async function ErvaringenPage() {
           </div>
         )}
 
-        <div className="text-center mt-16">
-          <p className="text-stone mb-6">
-            Wil je ook je ervaring delen? Neem gerust contact op.
-          </p>
-          <Link
-            href="/contact"
-            className="inline-block bg-coral text-white px-8 py-3 rounded-full hover:bg-terracotta hover:text-white transition-colors font-medium shadow-sm hover:shadow-md"
-          >
-            Neem contact op
-          </Link>
+          <div className="text-center mt-16">
+            <p className="text-stone mb-6">
+              Wil je ook je ervaring delen? Neem gerust contact op.
+            </p>
+            <Link
+              href="/contact"
+              className="inline-block bg-coral text-white px-8 py-3 rounded-full hover:bg-terracotta hover:text-white transition-colors font-medium shadow-sm hover:shadow-md"
+            >
+              Neem contact op
+            </Link>
+          </div>
         </div>
       </div>
     </div>

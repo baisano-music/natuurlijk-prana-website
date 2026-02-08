@@ -64,6 +64,29 @@ export const pageSettingsType = {
         { name: 'link', title: 'Link', type: 'string' },
       ],
     },
+    // Contact-specifieke velden
+    {
+      name: 'formTitle',
+      title: 'Formulier titel',
+      type: 'string',
+      description: 'Titel boven het contactformulier (bijv. "Stuur een bericht")',
+      hidden: ({ parent }: { parent?: { pageType?: string } }) => parent?.pageType !== 'contact',
+    },
+    {
+      name: 'kennismakingTitle',
+      title: 'Kennismaking blok - Titel',
+      type: 'string',
+      description: 'Titel van het kennismakingsgesprek blokje',
+      hidden: ({ parent }: { parent?: { pageType?: string } }) => parent?.pageType !== 'contact',
+    },
+    {
+      name: 'kennismakingText',
+      title: 'Kennismaking blok - Tekst',
+      type: 'text',
+      rows: 3,
+      description: 'Tekst in het kennismakingsgesprek blokje',
+      hidden: ({ parent }: { parent?: { pageType?: string } }) => parent?.pageType !== 'contact',
+    },
   ],
   preview: {
     select: {

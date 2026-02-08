@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 import { Header } from './Header'
+import { NewsletterSection } from './NewsletterSection'
 import { Footer } from './Footer'
 import { GoogleAnalytics } from './GoogleAnalytics'
 import { OrganizationSchema } from './StructuredData'
@@ -67,6 +68,7 @@ export function LayoutWrapper({
       />
       <Header />
       <main className="flex-1">{children}</main>
+      <NewsletterSection />
       <Footer siteSettings={siteSettings} />
     </>
   )
