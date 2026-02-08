@@ -120,6 +120,21 @@ export const remedieType = {
       to: [{ type: 'productCategory' }],
       description: 'Selecteer de productcategorie waartoe dit product behoort',
     },
+    // Shop link
+    {
+      name: 'shopUrl',
+      title: 'Link naar webshop',
+      type: 'url',
+      description: 'Directe link naar het product in de Jortt shop (bijv. https://prana.jortt.shop/product/...)',
+      validation: (Rule: { uri: (opts: { scheme: string[] }) => unknown }) =>
+        Rule.uri({ scheme: ['http', 'https'] }),
+    },
+    {
+      name: 'shopButtonText',
+      title: 'Bestelknop tekst',
+      type: 'string',
+      description: 'Tekst op de bestelknop (standaard: "Bestel in shop")',
+    },
     // Uitgebreide velden (optioneel - behouden voor backwards compatibility)
     {
       name: 'remedieType',

@@ -33,7 +33,8 @@ export const queries = {
   remedies: `*[_type == "remedie"] | order(coalesce(order, 999) asc, title asc) {
     _id, title, "slug": slug.current, kernkwaliteit, werking, mantra,
     image, "imageUrl": image.asset->url,
-    ontstaan, ingredienten, edelstenen
+    ontstaan, ingredienten, edelstenen,
+    shopUrl, shopButtonText
   }`,
 
   /** Eén remedie op slug */
@@ -42,6 +43,7 @@ export const queries = {
       _id, title, "slug": slug.current, kernkwaliteit, werking, mantra,
       image, "imageUrl": image.asset->url,
       ontstaan, ingredienten, edelstenen,
+      shopUrl, shopButtonText,
       content[]{
         ...,
         _type == "image" => {
@@ -214,7 +216,8 @@ export const queries = {
   productsByCategorySlug: (slug: string) =>
     `*[_type == "remedie" && category->slug.current == "${slug}"] | order(coalesce(order, 999) asc, title asc) {
       _id, title, "slug": slug.current, kernkwaliteit, werking,
-      "imageUrl": image.asset->url, shortDescription
+      "imageUrl": image.asset->url, shortDescription,
+      shopUrl, shopButtonText
     }`,
 
   /** Shop producten per categorie slug */

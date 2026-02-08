@@ -27,6 +27,8 @@ interface Product {
   werking?: string
   imageUrl?: string
   shortDescription?: string
+  shopUrl?: string
+  shopButtonText?: string
 }
 
 interface ShopProduct {
@@ -308,43 +310,59 @@ export default async function CategoryPage({ params }: PageProps) {
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {products.map((product) => (
-                <Link
+                <div
                   key={product._id}
-                  href={`/remedies/${product.slug}`}
-                  className="group bg-white rounded-2xl overflow-hidden border border-peach-200 hover:border-terracotta/30 shadow-sm hover:shadow-xl transition-all duration-300"
+                  className="group bg-white rounded-2xl overflow-hidden border border-peach-200 shadow-sm hover:shadow-xl transition-all duration-300"
                 >
-                  <div className="aspect-square relative overflow-hidden bg-sage-50">
-                    {product.imageUrl ? (
-                      <Image
-                        src={product.imageUrl}
-                        alt={product.title}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <svg className="w-12 h-12 text-sage-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                        </svg>
-                      </div>
-                    )}
-                  </div>
+                  <Link href={`/remedies/${product.slug}`}>
+                    <div className="aspect-square relative overflow-hidden bg-sage-50">
+                      {product.imageUrl ? (
+                        <Image
+                          src={product.imageUrl}
+                          alt={product.title}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <svg className="w-12 h-12 text-sage-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                  </Link>
                   <div className="p-5">
-                    <h3 className="font-serif text-lg text-charcoal group-hover:text-terracotta transition-colors">
-                      {product.title}
-                    </h3>
-                    {product.kernkwaliteit && (
-                      <p className="text-sm text-terracotta mt-1">
-                        {product.kernkwaliteit}
-                      </p>
-                    )}
-                    {(product.shortDescription || product.werking) && (
-                      <p className="text-sm text-stone mt-2 line-clamp-2">
-                        {product.shortDescription || product.werking}
-                      </p>
+                    <Link href={`/remedies/${product.slug}`}>
+                      <h3 className="font-serif text-lg text-charcoal group-hover:text-terracotta transition-colors">
+                        {product.title}
+                      </h3>
+                      {product.kernkwaliteit && (
+                        <p className="text-sm text-terracotta mt-1">
+                          {product.kernkwaliteit}
+                        </p>
+                      )}
+                      {(product.shortDescription || product.werking) && (
+                        <p className="text-sm text-stone mt-2 line-clamp-2">
+                          {product.shortDescription || product.werking}
+                        </p>
+                      )}
+                    </Link>
+                    {product.shopUrl && (
+                      <a
+                        href={product.shopUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-4 inline-flex items-center justify-center w-full bg-coral text-white px-4 py-2.5 rounded-full text-sm font-medium hover:bg-coral-dark transition-colors"
+                      >
+                        {product.shopButtonText || 'Bestel in shop'}
+                        <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </a>
                     )}
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           </div>

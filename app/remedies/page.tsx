@@ -21,6 +21,8 @@ async function getRemedies() {
     kernkwaliteit: string | null
     werking: string | null
     imageUrl: string | null
+    shopUrl?: string | null
+    shopButtonText?: string | null
   }>>(queries.remedies)
 }
 
@@ -82,41 +84,56 @@ export default async function RemediesPage() {
                 key={remedie._id}
                 className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-peach-200 hover:border-terracotta/30"
               >
-                <Link href={`/remedies/${slug}`} className="block p-8">
-                  {remedie.imageUrl ? (
-                    <div className="relative aspect-square rounded-xl overflow-hidden mb-6 bg-peach-100">
-                      <Image
-                        src={remedie.imageUrl}
-                        alt={remedie.title || ''}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      />
-                    </div>
-                  ) : (
-                    <div className="aspect-square rounded-xl bg-peach-100 mb-6 flex items-center justify-center">
-                      <span className="text-terracotta text-5xl font-serif">
-                        {remedie.title?.charAt(0) || '?'}
-                      </span>
-                    </div>
+                <div className="p-8">
+                  <Link href={`/remedies/${slug}`} className="block">
+                    {remedie.imageUrl ? (
+                      <div className="relative aspect-square rounded-xl overflow-hidden mb-6 bg-peach-100">
+                        <Image
+                          src={remedie.imageUrl}
+                          alt={remedie.title || ''}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                      </div>
+                    ) : (
+                      <div className="aspect-square rounded-xl bg-peach-100 mb-6 flex items-center justify-center">
+                        <span className="text-terracotta text-5xl font-serif">
+                          {remedie.title?.charAt(0) || '?'}
+                        </span>
+                      </div>
+                    )}
+                    <h2 className="font-serif text-xl font-semibold text-charcoal group-hover:text-terracotta transition-colors">
+                      {remedie.title || 'Zonder titel'}
+                    </h2>
+                    {remedie.kernkwaliteit && (
+                      <p className="text-sm font-medium text-sage-600 mt-1 italic">
+                        {remedie.kernkwaliteit}
+                      </p>
+                    )}
+                    {remedie.werking && (
+                      <p className="text-sage-700 line-clamp-3 mt-4 leading-relaxed">
+                        {remedie.werking}
+                      </p>
+                    )}
+                    <span className="inline-block mt-6 text-sage-600 font-medium text-sm group-hover:text-terracotta transition-colors">
+                      Lees meer over deze remedie →
+                    </span>
+                  </Link>
+                  {remedie.shopUrl && (
+                    <a
+                      href={remedie.shopUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-4 inline-flex items-center justify-center w-full bg-coral text-white px-4 py-2.5 rounded-full text-sm font-medium hover:bg-coral-dark transition-colors"
+                    >
+                      {remedie.shopButtonText || 'Bestel in shop'}
+                      <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
                   )}
-                  <h2 className="font-serif text-xl font-semibold text-charcoal group-hover:text-terracotta transition-colors">
-                    {remedie.title || 'Zonder titel'}
-                  </h2>
-                  {remedie.kernkwaliteit && (
-                    <p className="text-sm font-medium text-sage-600 mt-1 italic">
-                      {remedie.kernkwaliteit}
-                    </p>
-                  )}
-                  {remedie.werking && (
-                    <p className="text-sage-700 line-clamp-3 mt-4 leading-relaxed">
-                      {remedie.werking}
-                    </p>
-                  )}
-                  <span className="inline-block mt-6 text-sage-600 font-medium text-sm group-hover:text-terracotta transition-colors">
-                    Lees meer over deze remedie →
-                  </span>
-                </Link>
+                </div>
               </article>
             )
             })}
