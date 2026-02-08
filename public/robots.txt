@@ -1,0 +1,60 @@
+# Robots.txt voor Natuurlijk Prana
+# GEO-geoptimaliseerd: AI crawlers toegestaan
+
+# Standaard crawlers
+User-agent: *
+Allow: /
+Disallow: /studio/
+Disallow: /api/
+Disallow: /_next/
+
+# Google
+User-agent: Googlebot
+Allow: /
+
+# Bing
+User-agent: Bingbot
+Allow: /
+
+# OpenAI GPTBot (ChatGPT)
+User-agent: GPTBot
+Allow: /
+
+# Google Gemini / Bard
+User-agent: Google-Extended
+Allow: /
+
+# Anthropic Claude
+User-agent: anthropic-ai
+Allow: /
+User-agent: Claude-Web
+Allow: /
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+
+# Common Crawl (gebruikt door veel AI)
+User-agent: CCBot
+Allow: /
+
+# Cohere AI
+User-agent: cohere-ai
+Allow: /
+
+# Meta AI
+User-agent: FacebookBot
+Allow: /
+User-agent: Meta-ExternalAgent
+Allow: /
+
+# Amazon/Alexa
+User-agent: Amazonbot
+Allow: /
+
+# Apple (Siri/Spotlight)
+User-agent: Applebot
+Allow: /
+
+# Sitemap
+Sitemap: https://natuurlijkprana.nl/sitemap.xml

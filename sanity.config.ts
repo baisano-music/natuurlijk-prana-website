@@ -113,6 +113,22 @@ export default defineConfig({
             S.listItem()
               .title('Ervaringen')
               .child(S.documentTypeList('testimonial').title('Ervaringen')),
+            // FAQ - voor GEO optimalisatie
+            S.listItem()
+              .title('FAQ (Veelgestelde Vragen)')
+              .child(
+                S.documentTypeList('faq')
+                  .title('Veelgestelde Vragen')
+                  .defaultOrdering([
+                    { field: 'category', direction: 'asc' },
+                    { field: 'order', direction: 'asc' },
+                  ])
+              ),
+            S.divider(),
+            // Redirects
+            S.listItem()
+              .title('Redirects')
+              .child(S.documentTypeList('redirect').title('Redirects')),
             S.divider(),
             // Pagina's - georganiseerd
             S.listItem()

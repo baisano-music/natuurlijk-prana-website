@@ -250,4 +250,26 @@ export const queries = {
   redirects: `*[_type == "redirect" && active == true]{
     source, destination, permanent
   }`,
+
+  /** FAQ - Alle vragen per categorie */
+  faqByCategory: (category: string) =>
+    `*[_type == "faq" && category == "${category}"] | order(order asc) {
+      _id, question, answer, shortAnswer, category, featured
+    }`,
+
+  /** FAQ - Alle vragen */
+  faqAll: `*[_type == "faq"] | order(category asc, order asc) {
+    _id, question, answer, shortAnswer, category, featured
+  }`,
+
+  /** FAQ - Uitgelichte vragen (voor homepage) */
+  faqFeatured: `*[_type == "faq" && featured == true] | order(order asc) [0...5] {
+    _id, question, shortAnswer, category
+  }`,
+
+  /** FAQ - Voor schema.org markup (alleen vraag + kort antwoord) */
+  faqForSchema: `*[_type == "faq"] | order(category asc, order asc) {
+    "question": question,
+    "answer": coalesce(shortAnswer, pt::text(answer))
+  }`,
 }

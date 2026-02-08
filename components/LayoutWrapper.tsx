@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation'
 import { Header } from './Header'
 import { Footer } from './Footer'
 import { GoogleAnalytics } from './GoogleAnalytics'
+import { OrganizationSchema } from './StructuredData'
 
 type FooterLink = {
   label?: string
@@ -51,6 +52,15 @@ export function LayoutWrapper({
 
   return (
     <>
+      {/* Schema.org Organization data voor GEO */}
+      <OrganizationSchema
+        name={siteSettings?.title || 'Natuurlijk Prana'}
+        description={siteSettings?.description || 'Bloesemremedies voor innerlijke balans'}
+        email={siteSettings?.contactInfo?.email}
+        phone={siteSettings?.contactInfo?.phone}
+        address={siteSettings?.contactInfo?.address}
+        socialMedia={siteSettings?.socialMedia}
+      />
       <GoogleAnalytics
         gaId={siteSettings?.googleAnalyticsId}
         gtmId={siteSettings?.googleTagManagerId}
