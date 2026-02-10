@@ -5,8 +5,36 @@ import { LayoutWrapper } from '@/components/LayoutWrapper'
 import { clientNoCdn, queries } from '@/lib/SanityClient'
 
 export const metadata: Metadata = {
-  title: 'Natuurlijk Prana',
-  description: 'Bloesemremedies voor innerlijke balans',
+  title: 'Natuurlijk Prana | Bloesemremedies & Holistische Begeleiding',
+  description: 'Natuurlijk Prana biedt bloesemremedies en holistische begeleiding voor vrouwen, moeders en kinderen. Ontdek natuurlijke ondersteuning voor innerlijke balans en persoonlijke groei. Praktijk in Hoofddorp.',
+  metadataBase: new URL('https://natuurlijkprana.nl'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: 'Natuurlijk Prana | Bloesemremedies & Holistische Begeleiding',
+    description: 'Natuurlijk Prana biedt bloesemremedies en holistische begeleiding voor vrouwen, moeders en kinderen. Ontdek natuurlijke ondersteuning voor innerlijke balans.',
+    url: 'https://natuurlijkprana.nl',
+    siteName: 'Natuurlijk Prana',
+    locale: 'nl_NL',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Natuurlijk Prana | Bloesemremedies & Holistische Begeleiding',
+    description: 'Bloesemremedies en holistische begeleiding voor innerlijke balans en persoonlijke groei.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
 }
 
 // Revalidate elke 60 seconden voor verse data

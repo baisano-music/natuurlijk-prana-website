@@ -55,8 +55,8 @@ export function LayoutWrapper({
     <>
       {/* Schema.org Organization data voor GEO */}
       <OrganizationSchema
-        name={siteSettings?.title || 'Natuurlijk Prana'}
-        description={siteSettings?.description || 'Bloesemremedies voor innerlijke balans'}
+        name="Natuurlijk Prana"
+        description="Praktijk voor begeleiding en natuurlijke ondersteuning met bloesemremedies"
         email={siteSettings?.contactInfo?.email}
         phone={siteSettings?.contactInfo?.phone}
         address={siteSettings?.contactInfo?.address}
