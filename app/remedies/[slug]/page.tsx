@@ -10,10 +10,10 @@ export const revalidate = 60
 
 // Pre-render alle remedies voor Pagefind indexering
 export async function generateStaticParams() {
-  const remedies = await client.fetch<{ slug: string }[]>(
-    `*[_type == "remedie"]{ "slug": slug.current }`
+  const remedies = await client.fetch<{ slug: string | null }[]>(
+    `*[_type == "remedie" && defined(slug.current)]{ "slug": slug.current }`
   )
-  return remedies.map((r) => ({ slug: r.slug }))
+  return remedies.filter((r) => r.slug).map((r) => ({ slug: r.slug as string }))
 }
 
 export default async function RemedieDetail({
