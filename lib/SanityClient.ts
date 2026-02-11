@@ -87,8 +87,25 @@ export const queries = {
   /** Eén blogpost op slug */
   blogPostBySlug: (slug: string) =>
     `*[_type == "blog" && slug.current == "${slug}"][0]{
-      _id, title, type, "slug": slug.current, content, publishedAt, excerpt, categories,
-      "mainImageUrl": mainImage.asset->url
+      _id, title, type, "slug": slug.current, publishedAt, excerpt, categories,
+      "mainImageUrl": mainImage.asset->url,
+      content[]{
+        ...,
+        markDefs[]{
+          ...,
+          _type == "internalLink" => {
+            ...,
+            "slug": reference->slug.current,
+            "docType": reference->_type
+          }
+        }
+      },
+      relatedPosts[]->{
+        _id, title, "slug": slug.current, _type,
+        "mainImageUrl": mainImage.asset->url,
+        "imageUrl": image.asset->url,
+        excerpt, kernkwaliteit, description
+      }
     }`,
 
   /** Diensten, gesorteerd op volgorde */

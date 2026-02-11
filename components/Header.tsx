@@ -198,16 +198,16 @@ function MobileMenu({
                       expandedItem === item.label ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                     }`}
                   >
-                    <div className="pl-4 py-2 space-y-1">
+                    <div className="ml-4 mt-1 py-2 space-y-1 bg-sage-50 rounded-xl">
                       {item.children.map((child) => (
                         <Link
                           key={child.href}
                           href={child.href}
                           onClick={onClose}
-                          className={`block py-2.5 px-4 rounded-lg transition-colors ${
+                          className={`block py-2.5 px-4 mx-2 rounded-lg transition-colors ${
                             pathname === child.href || pathname.startsWith(child.href + '/')
-                              ? 'bg-terracotta/10 text-terracotta font-medium'
-                              : 'text-stone hover:text-charcoal hover:bg-sage-50'
+                              ? 'bg-white text-terracotta font-medium shadow-sm'
+                              : 'text-charcoal hover:bg-white hover:shadow-sm'
                           }`}
                         >
                           {child.label}

@@ -1,3 +1,4 @@
+import React from 'react'
 import { client, queries } from '@/lib/SanityClient'
 import { PortableText } from 'next-sanity'
 import Image from 'next/image'
@@ -33,6 +34,42 @@ const portableTextComponents = {
             />
           </div>
         </figure>
+      )
+    },
+  },
+  marks: {
+    link: ({ children, value }: { children: React.ReactNode; value?: { href?: string } }) => {
+      const href = value?.href || '#'
+      const isExternal = href.startsWith('http')
+      return (
+        <a
+          href={href}
+          target={isExternal ? '_blank' : undefined}
+          rel={isExternal ? 'noopener noreferrer' : undefined}
+          className="text-terracotta hover:underline"
+        >
+          {children}
+        </a>
+      )
+    },
+    internalLink: ({ children, value }: { children: React.ReactNode; value?: { slug?: string; docType?: string } }) => {
+      if (!value?.slug) return <>{children}</>
+
+      // Bepaal de juiste URL prefix op basis van document type
+      const prefixMap: Record<string, string> = {
+        blog: '/nieuws',
+        page: '',
+        dienst: '/diensten',
+        remedie: '/remedies',
+        faq: '/veelgestelde-vragen',
+      }
+      const prefix = prefixMap[value.docType || ''] ?? ''
+      const href = `${prefix}/${value.slug}`
+
+      return (
+        <Link href={href} className="text-terracotta hover:underline">
+          {children}
+        </Link>
       )
     },
   },
@@ -122,6 +159,66 @@ export default async function NieuwsArtikelPage({
             )}
           </div>
         </article>
+
+        {/* Gerelateerde artikelen */}
+        {post.relatedPosts && post.relatedPosts.length > 0 && (
+          <section className="mt-12">
+            <h2 className="font-serif text-2xl text-charcoal mb-6">Misschien ook interessant</h2>
+            <div className="grid gap-6 sm:grid-cols-2">
+              {post.relatedPosts.map((related: {
+                _id: string
+                title: string
+                slug: string
+                _type: string
+                mainImageUrl?: string
+                imageUrl?: string
+                excerpt?: string
+                kernkwaliteit?: string
+                description?: string
+              }) => {
+                // Bepaal URL prefix
+                const prefixMap: Record<string, string> = {
+                  blog: '/nieuws',
+                  page: '',
+                  dienst: '/diensten',
+                  remedie: '/remedies',
+                }
+                const prefix = prefixMap[related._type] ?? ''
+                const href = `${prefix}/${related.slug}`
+                const imageUrl = related.mainImageUrl || related.imageUrl
+                const description = related.excerpt || related.kernkwaliteit || related.description
+
+                return (
+                  <Link
+                    key={related._id}
+                    href={href}
+                    className="group bg-white rounded-xl overflow-hidden border border-peach-200 hover:border-terracotta/30 transition-colors"
+                  >
+                    {imageUrl && (
+                      <div className="relative aspect-[16/10] overflow-hidden">
+                        <Image
+                          src={imageUrl}
+                          alt={related.title}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          sizes="(max-width: 640px) 100vw, 50vw"
+                        />
+                      </div>
+                    )}
+                    <div className="p-4">
+                      <h3 className="font-serif text-lg text-charcoal group-hover:text-terracotta transition-colors">
+                        {related.title}
+                      </h3>
+                      {description && (
+                        <p className="mt-2 text-sm text-stone line-clamp-2">{description}</p>
+                      )}
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   )

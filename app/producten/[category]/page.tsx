@@ -44,14 +44,6 @@ interface ShopProduct {
   inStock?: boolean
 }
 
-interface RelatedPage {
-  _id: string
-  title: string
-  slug: string
-  subtitle?: string
-  mainImageUrl?: string
-}
-
 interface PageProps {
   params: Promise<{ category: string }>
 }
@@ -75,9 +67,6 @@ async function getSubcategories(categoryId: string) {
   }`)
 }
 
-async function getRelatedPages(slug: string): Promise<RelatedPage[]> {
-  return client.fetch(queries.pagesByCategory(slug))
-}
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { category: categorySlug } = await params
@@ -101,11 +90,10 @@ export default async function CategoryPage({ params }: PageProps) {
     notFound()
   }
 
-  const [products, shopProducts, subcategories, relatedPages] = await Promise.all([
+  const [products, shopProducts, subcategories] = await Promise.all([
     getProducts(categorySlug),
     getShopProducts(categorySlug),
     getSubcategories(category._id),
-    getRelatedPages(categorySlug),
   ])
 
   return (
@@ -231,68 +219,6 @@ export default async function CategoryPage({ params }: PageProps) {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
                     </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Related Pages / Info pagina's */}
-      {relatedPages && relatedPages.length > 0 && (
-        <section className="py-12 md:py-16 px-4 bg-white">
-          <div className="max-w-5xl mx-auto">
-            <h2 className="font-serif text-2xl md:text-3xl text-charcoal mb-10 text-center">
-              Meer informatie
-            </h2>
-            <div className={`grid gap-6 ${
-              relatedPages.length === 1
-                ? 'grid-cols-1 max-w-md mx-auto'
-                : relatedPages.length === 2
-                  ? 'grid-cols-1 md:grid-cols-2 max-w-3xl mx-auto'
-                  : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
-            }`}>
-              {relatedPages.map((page: RelatedPage) => (
-                <Link
-                  key={page._id}
-                  href={`/${page.slug}`}
-                  className="group bg-cream rounded-xl p-6 border border-peach-200 hover:border-terracotta/30 hover:shadow-lg transition-all"
-                >
-                  <div className="flex items-start gap-4">
-                    {page.mainImageUrl ? (
-                      <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 shadow-sm">
-                        <Image
-                          src={page.mainImageUrl}
-                          alt={page.title}
-                          width={80}
-                          height={80}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                      </div>
-                    ) : (
-                      <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-sage-100 to-sage-200 flex items-center justify-center flex-shrink-0">
-                        <svg className="w-10 h-10 text-sage-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                      </div>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-serif text-lg text-charcoal group-hover:text-terracotta transition-colors">
-                        {page.title}
-                      </h3>
-                      {page.subtitle && (
-                        <p className="text-sm text-stone mt-1 line-clamp-2">
-                          {page.subtitle}
-                        </p>
-                      )}
-                      <span className="inline-flex items-center text-sm text-terracotta mt-3 font-medium group-hover:text-terracotta-dark">
-                        Lees meer
-                        <svg className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </span>
-                    </div>
                   </div>
                 </Link>
               ))}
