@@ -8,6 +8,7 @@ out
 # Sanity
 dist
 sanity.json
+.sanity/
 
 # Env
 .env
@@ -20,3 +21,9 @@ public/pagefind
 # Misc
 .DS_Store
 *.pem
+
+# TypeScript build cache
+tsconfig.tsbuildinfo
+
+# WordPress images (imported separately)
+wp-images/
