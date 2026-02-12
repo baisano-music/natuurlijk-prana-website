@@ -62,6 +62,13 @@ export default defineConfig({
                   .schemaType('tarievenPage')
                   .documentId('tarievenPage')
               ),
+            S.listItem()
+              .title('📬 Gratis Magazine Pagina')
+              .child(
+                S.document()
+                  .schemaType('magazinePage')
+                  .documentId('magazinePage')
+              ),
             S.divider(),
 
             // ===== INSTELLINGEN (uitgesplitst) =====
@@ -322,7 +329,7 @@ export default defineConfig({
     types: schemaTypes as import('sanity').SchemaTypeDefinition[],
     templates: (prev) =>
       prev
-        .filter((t) => t.id !== 'siteSettings' && t.id !== 'homepage' && t.id !== 'tarievenPage')
+        .filter((t) => t.id !== 'siteSettings' && t.id !== 'homepage' && t.id !== 'tarievenPage' && t.id !== 'magazinePage')
         .concat([
           {
             id: 'siteSettings',
@@ -341,6 +348,12 @@ export default defineConfig({
             title: 'Tarieven Pagina',
             schemaType: 'tarievenPage',
             value: { _id: 'tarievenPage' },
+          },
+          {
+            id: 'magazinePage',
+            title: 'Gratis Magazine Pagina',
+            schemaType: 'magazinePage',
+            value: { _id: 'magazinePage' },
           },
         ]),
   },
