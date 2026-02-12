@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { MagazineSignupForm } from '@/components/MagazineSignupForm'
 
 export const metadata = {
   title: 'Gratis E-magazine | Natuurlijk Prana',
@@ -99,23 +98,11 @@ export default function GratisMagazinePage() {
         </div>
       </section>
 
-      {/* CTA Section met formulier */}
+      {/* CTA Section met MailerLite formulier */}
       <section className="py-20 md:py-28 px-4">
         <div className="max-w-xl mx-auto">
-          <div className="bg-gradient-to-br from-terracotta via-terracotta-dark to-terracotta rounded-3xl p-8 md:p-12 shadow-xl">
-            <h2 className="font-serif text-2xl md:text-3xl text-white mb-2 text-center">
-              Ontvang het PRANA Magazine
-            </h2>
-            <p className="text-white/80 mb-8 text-center">
-              boordevol tips, een interview en meer <span className="font-semibold text-white">GRATIS</span> in je mailbox!
-            </p>
-
-            <MagazineSignupForm />
-
-            <p className="text-white/60 text-sm mt-6 text-center">
-              Je gegevens worden nooit gedeeld met derden
-            </p>
-          </div>
+          {/* MailerLite Embedded Form */}
+          <div className="ml-embedded" data-form="WqWldg"></div>
         </div>
       </section>
 
