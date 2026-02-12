@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Script from 'next/script'
 import './globals.css'
 import { LayoutWrapper } from '@/components/LayoutWrapper'
+import { GoogleAnalytics } from '@/components/GoogleAnalytics'
 import { clientNoCdn, queries } from '@/lib/SanityClient'
 
 export const metadata: Metadata = {
@@ -51,6 +52,11 @@ export default async function RootLayout({
   return (
     <html lang="nl">
       <body className="flex flex-col min-h-screen">
+        {/* Google Analytics / Tag Manager */}
+        <GoogleAnalytics
+          gaId={siteSettings?.googleAnalyticsId}
+          gtmId={siteSettings?.googleTagManagerId}
+        />
         <LayoutWrapper siteSettings={siteSettings}>{children}</LayoutWrapper>
         {/* MailerLite Universal Script */}
         <Script
