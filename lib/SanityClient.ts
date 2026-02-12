@@ -331,4 +331,14 @@ export const queries = {
     ctaTitle, ctaDescription, ctaButtonText, ctaButtonLink,
     seoTitle, seoDescription
   }`,
+
+  /** Gratis Magazine pagina (singleton) */
+  magazinePage: `*[_type == "magazinePage"][0]{
+    heroTitle, heroSubtitle, heroBadge,
+    highlightsTitle,
+    highlights[]{
+      icon, title, description
+    },
+    ctaTitle, ctaText, ctaButtonText, ctaButtonLink
+  }`,
 }

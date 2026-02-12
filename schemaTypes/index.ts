@@ -4,6 +4,7 @@ import { calloutType } from './callout'
 import { dienstType } from './dienst'
 import { faqType, faqBlockType } from './faq'
 import { homepageType } from './homepage'
+import { magazinePageType } from './magazinePage'
 import { pageType } from './page'
 import { pageSettingsType } from './pageSettings'
 import { productCategoryType } from './productCategory'
@@ -26,6 +27,7 @@ export const schemaTypes = [
   faqType,
   faqBlockType,
   homepageType,
+  magazinePageType,
   pageType,
   pageSettingsType,
   redirectType,
