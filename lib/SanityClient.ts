@@ -335,10 +335,26 @@ export const queries = {
   /** Gratis Magazine pagina (singleton) */
   magazinePage: `*[_type == "magazinePage"][0]{
     heroTitle, heroSubtitle, heroBadge,
+    heroStyle{
+      backgroundColor, textColor, backgroundOverlay,
+      "backgroundImageUrl": backgroundImage.asset->url
+    },
+    formStyle{
+      backgroundColor, textColor, backgroundOverlay,
+      "backgroundImageUrl": backgroundImage.asset->url
+    },
     highlightsTitle,
     highlights[]{
       icon, title, description
     },
-    ctaTitle, ctaText, ctaButtonText, ctaButtonLink
+    highlightsStyle{
+      backgroundColor, textColor, backgroundOverlay,
+      "backgroundImageUrl": backgroundImage.asset->url
+    },
+    ctaTitle, ctaText, ctaButtonText, ctaButtonLink,
+    ctaStyle{
+      backgroundColor, textColor, backgroundOverlay,
+      "backgroundImageUrl": backgroundImage.asset->url
+    }
   }`,
 }

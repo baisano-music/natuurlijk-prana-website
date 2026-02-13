@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { client, queries } from '@/lib/SanityClient'
+import MailerLiteForm from '@/components/MailerLiteForm'
 
 export const revalidate = 60
 
@@ -8,20 +9,89 @@ export const metadata = {
   description: 'Download het gratis PRANA e-magazine met tips over bloesemremedies, celzouten, interviews en recepten.',
 }
 
+type SectionStyle = {
+  backgroundColor?: string
+  backgroundImageUrl?: string
+  backgroundOverlay?: string
+  textColor?: 'dark' | 'light'
+}
+
 type MagazinePage = {
   heroTitle?: string
   heroSubtitle?: string
   heroBadge?: string
+  heroStyle?: SectionStyle
+  formStyle?: SectionStyle
   highlightsTitle?: string
   highlights?: {
     icon?: string
     title?: string
     description?: string
   }[]
+  highlightsStyle?: SectionStyle
   ctaTitle?: string
   ctaText?: string
   ctaButtonText?: string
   ctaButtonLink?: string
+  ctaStyle?: SectionStyle
+}
+
+// Helper: genereer section styles
+function getSectionProps(style?: SectionStyle) {
+  const bg = style?.backgroundColor || undefined
+  const bgImage = style?.backgroundImageUrl || undefined
+  const isLight = style?.textColor === 'light'
+
+  const overlayOpacity =
+    style?.backgroundOverlay === 'light' ? '0.3'
+    : style?.backgroundOverlay === 'dark' ? '0.7'
+    : '0.5'
+
+  return { bg, bgImage, isLight, overlayOpacity }
+}
+
+// Section wrapper met optionele achtergrondkleur en -afbeelding
+function StyledSection({
+  style,
+  defaultBg,
+  className = '',
+  children,
+}: {
+  style?: SectionStyle
+  defaultBg?: string
+  className?: string
+  children: React.ReactNode
+}) {
+  const { bg, bgImage, isLight, overlayOpacity } = getSectionProps(style)
+  const backgroundColor = bg || defaultBg
+
+  return (
+    <section
+      className={`relative overflow-hidden ${className}`}
+      style={{
+        ...(backgroundColor && !bgImage ? { backgroundColor } : {}),
+      }}
+    >
+      {bgImage && (
+        <>
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${bgImage})` }}
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundColor: bg || '#000000',
+              opacity: parseFloat(overlayOpacity),
+            }}
+          />
+        </>
+      )}
+      <div className={`relative ${isLight ? 'text-white' : ''}`}>
+        {children}
+      </div>
+    </section>
+  )
 }
 
 // Icon mapping
@@ -104,20 +174,33 @@ export default async function GratisMagazinePage() {
   const ctaButtonText = pageData?.ctaButtonText || 'Plan een kennismakingsgesprek'
   const ctaButtonLink = pageData?.ctaButtonLink || '/contact'
 
+  const heroIsLight = pageData?.heroStyle?.textColor === 'light'
+  const highlightsIsLight = pageData?.highlightsStyle?.textColor === 'light'
+  const ctaIsLight = pageData?.ctaStyle?.textColor === 'light'
+
   return (
     <div className="bg-cream min-h-screen">
       {/* Hero */}
-      <section className="relative py-20 md:py-28 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-terracotta/10 via-peach-100 to-sage-100" />
-        <div className="absolute inset-0 opacity-20" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d28a58' fill-opacity='0.2'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }} />
+      <StyledSection style={pageData?.heroStyle} className="py-20 md:py-28">
+        {/* Fallback pattern als er geen achtergrondafbeelding is */}
+        {!pageData?.heroStyle?.backgroundImageUrl && (
+          <>
+            <div className="absolute inset-0 bg-gradient-to-br from-terracotta/10 via-peach-100 to-sage-100" />
+            <div className="absolute inset-0 opacity-20" style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d28a58' fill-opacity='0.2'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+            }} />
+          </>
+        )}
 
         <div className="relative max-w-4xl mx-auto px-4 text-center">
-          <span className="inline-block bg-terracotta/10 text-terracotta px-4 py-1.5 rounded-full text-sm font-medium mb-6">
+          <span className={`inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-6 ${
+            heroIsLight ? 'bg-white/20 text-white' : 'bg-terracotta/10 text-terracotta'
+          }`}>
             {heroBadge}
           </span>
-          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-charcoal leading-tight">
+          <h1 className={`font-serif text-4xl md:text-5xl lg:text-6xl leading-tight ${
+            heroIsLight ? 'text-white' : 'text-charcoal'
+          }`}>
             {heroTitle.includes(' ') ? (
               <>
                 {heroTitle.split(' ').slice(0, -1).join(' ')}<br />
@@ -125,25 +208,30 @@ export default async function GratisMagazinePage() {
               </>
             ) : heroTitle}
           </h1>
-          <p className="text-lg md:text-xl text-stone mt-6 max-w-2xl mx-auto leading-relaxed">
+          <p className={`text-lg md:text-xl mt-6 max-w-2xl mx-auto leading-relaxed ${
+            heroIsLight ? 'text-white/90' : 'text-stone'
+          }`}>
             {heroSubtitle}
           </p>
         </div>
-      </section>
+      </StyledSection>
 
-      {/* MailerLite formulier - NU EERST */}
-      <section className="py-20 md:py-28 px-4">
+      {/* MailerLite formulier */}
+      <StyledSection style={pageData?.formStyle} className="py-20 md:py-28 px-4">
         <div className="max-w-xl mx-auto">
-          {/* MailerLite Embedded Form */}
-          <div className="ml-embedded" data-form="WqWldg"></div>
+          <MailerLiteForm formId="WqWldg" />
         </div>
-      </section>
+      </StyledSection>
 
-      {/* Content highlights - NU ONDER HET FORMULIER */}
-      <section className="py-16 md:py-24 px-4 bg-peach-50/50">
+      {/* Content highlights */}
+      <StyledSection
+        style={pageData?.highlightsStyle}
+        defaultBg={!pageData?.highlightsStyle?.backgroundColor ? undefined : undefined}
+        className={`py-16 md:py-24 px-4 ${!pageData?.highlightsStyle?.backgroundColor && !pageData?.highlightsStyle?.backgroundImageUrl ? 'bg-peach-50/50' : ''}`}
+      >
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="font-serif text-3xl text-charcoal">
+            <h2 className={`font-serif text-3xl ${highlightsIsLight ? 'text-white' : 'text-charcoal'}`}>
               {highlightsTitle}
             </h2>
           </div>
@@ -152,7 +240,7 @@ export default async function GratisMagazinePage() {
             {highlights.map((item, index) => (
               <div
                 key={index}
-                className="bg-white rounded-2xl p-8 border border-peach-200 shadow-sm hover:shadow-md transition-shadow"
+                className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 border border-peach-200 shadow-sm hover:shadow-md transition-shadow"
               >
                 <div className="w-12 h-12 rounded-xl bg-sage-100 flex items-center justify-center text-sage-600 mb-4">
                   {getIcon(item.icon)}
@@ -167,20 +255,27 @@ export default async function GratisMagazinePage() {
             ))}
           </div>
         </div>
-      </section>
+      </StyledSection>
 
       {/* Extra info / CTA */}
-      <section className="py-16 px-4 bg-cream">
+      <StyledSection
+        style={pageData?.ctaStyle}
+        className={`py-16 px-4 ${!pageData?.ctaStyle?.backgroundColor && !pageData?.ctaStyle?.backgroundImageUrl ? 'bg-cream' : ''}`}
+      >
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="font-serif text-2xl text-charcoal mb-6">
+          <h2 className={`font-serif text-2xl mb-6 ${ctaIsLight ? 'text-white' : 'text-charcoal'}`}>
             {ctaTitle}
           </h2>
-          <p className="text-stone mb-8 leading-relaxed">
+          <p className={`mb-8 leading-relaxed ${ctaIsLight ? 'text-white/90' : 'text-stone'}`}>
             {ctaText}
           </p>
           <Link
             href={ctaButtonLink}
-            className="inline-flex items-center text-terracotta font-medium hover:text-terracotta-dark transition-colors group"
+            className={`inline-flex items-center font-medium transition-colors group ${
+              ctaIsLight
+                ? 'text-white hover:text-white/80'
+                : 'text-terracotta hover:text-terracotta-dark'
+            }`}
           >
             {ctaButtonText}
             <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -188,7 +283,7 @@ export default async function GratisMagazinePage() {
             </svg>
           </Link>
         </div>
-      </section>
+      </StyledSection>
     </div>
   )
 }
