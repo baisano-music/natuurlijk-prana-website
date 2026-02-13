@@ -174,14 +174,6 @@ Floriande Zuid, eiland 2`
                   )}
                 </li>
               ))}
-              <li>
-                <Link
-                  href="/studio"
-                  className="text-white/70 hover:text-white transition-colors text-sm"
-                >
-                  Content beheren
-                </Link>
-              </li>
             </ul>
           </div>
 
