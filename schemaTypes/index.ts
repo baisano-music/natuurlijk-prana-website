@@ -1,6 +1,7 @@
 import { authorType } from './author'
 import { blogType } from './blog'
 import { calloutType } from './callout'
+import { coloredSectionType } from './coloredSection'
 import { dienstType } from './dienst'
 import { faqType, faqBlockType } from './faq'
 import { homepageType } from './homepage'
@@ -36,4 +37,5 @@ export const schemaTypes = [
   tarievenPageType,
   // Object types (voor rich text)
   calloutType,
+  coloredSectionType,
 ]

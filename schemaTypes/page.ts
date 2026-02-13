@@ -154,6 +154,8 @@ export const pageType = {
             },
           ],
         },
+        { type: 'coloredSection' },
+        { type: 'callout' },
       ],
     },
     // Gerelateerde content voor internal linking
