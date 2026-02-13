@@ -186,12 +186,39 @@ export default defineConfig({
                           .title('Alle categorieën')
                       ),
                     S.divider(),
-                    // Remedies (uitgebreide productinfo op site)
+                    // Bloesemremedies
                     S.listItem()
-                      .title('🌸 Remedies')
+                      .title('🌸 Bloesemremedies')
+                      .child(
+                        S.documentList()
+                          .title('Bloesemremedies')
+                          .filter('_type == "remedie" && (category->slug.current == "bloesemremedies" || category->parent->slug.current == "bloesemremedies")')
+                          .defaultOrdering([{ field: 'title', direction: 'asc' }])
+                      ),
+                    // Celzouten
+                    S.listItem()
+                      .title('🧂 Celzouten')
+                      .child(
+                        S.documentList()
+                          .title('Celzouten')
+                          .filter('_type == "remedie" && (category->slug.current == "celzouten" || category->parent->slug.current == "celzouten")')
+                          .defaultOrdering([{ field: 'title', direction: 'asc' }])
+                      ),
+                    // Essentiële oliën
+                    S.listItem()
+                      .title('🫙 Essentiële oliën')
+                      .child(
+                        S.documentList()
+                          .title('Essentiële oliën')
+                          .filter('_type == "remedie" && (category->slug.current == "essentiele-olien" || category->parent->slug.current == "essentiele-olien")')
+                          .defaultOrdering([{ field: 'title', direction: 'asc' }])
+                      ),
+                    // Alle producten (flat list)
+                    S.listItem()
+                      .title('📋 Alle producten')
                       .child(
                         S.documentTypeList('remedie')
-                          .title('Remedies (met uitgebreide info op de site)')
+                          .title('Alle producten')
                       ),
                     // Shop Producten (link naar externe shop)
                     S.listItem()
