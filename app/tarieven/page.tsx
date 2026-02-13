@@ -187,16 +187,18 @@ export default async function TarievenPage() {
 
       {/* Hoofdtarieven */}
       {tarieven.length > 0 && (
-        <section className="py-16 md:py-24 px-4 bg-white">
+        <section className="py-16 md:py-24 px-4 bg-sage-50">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {tarieven.map((tarief) => (
+              {tarieven.map((tarief, index) => (
                 <div
                   key={tarief.title}
                   className={`relative rounded-3xl p-8 ${
                     tarief.featured
                       ? 'bg-terracotta text-white shadow-xl scale-105 z-10'
-                      : 'bg-white border border-peach-200 shadow-sm'
+                      : index === 0
+                        ? 'bg-white border-2 border-sage-300 shadow-sm'
+                        : 'bg-white border-2 border-peach-300 shadow-sm'
                   }`}
                 >
                   {tarief.featured && (
@@ -279,7 +281,7 @@ export default async function TarievenPage() {
 
       {/* Pakket */}
       {pakketten.length > 0 && (
-        <section className="py-16 md:py-24 px-4 bg-peach-50">
+        <section className="py-16 md:py-24 px-4" style={{ backgroundColor: '#f5d5c8' }}>
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
               <span className="text-terracotta uppercase tracking-widest text-sm font-medium">
@@ -291,7 +293,7 @@ export default async function TarievenPage() {
             {pakketten.map((pakket) => (
               <div
                 key={pakket.title}
-                className="bg-white rounded-3xl p-8 md:p-12 shadow-lg border border-peach-200"
+                className="bg-white rounded-3xl p-8 md:p-12 shadow-lg border-2 border-terracotta/20"
               >
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                   <div>
@@ -329,7 +331,7 @@ export default async function TarievenPage() {
 
       {/* Extra opties */}
       {extraOpties.length > 0 && (
-        <section className="py-16 md:py-24 px-4 bg-gradient-to-br from-cream via-peach-50/50 to-cream">
+        <section className="py-16 md:py-24 px-4 bg-white">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
               <span className="text-terracotta uppercase tracking-widest text-sm font-medium">
@@ -340,7 +342,7 @@ export default async function TarievenPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {extraOpties.map((optie) => (
-                <div key={optie.title} className="bg-white rounded-2xl p-6 border border-peach-200 shadow-sm hover:shadow-md transition-shadow">
+                <div key={optie.title} className="bg-sage-50 rounded-2xl p-6 border border-sage-200 shadow-sm hover:shadow-md transition-shadow">
                   <div className="flex justify-between items-start mb-3">
                     <h3 className="font-serif text-lg text-charcoal">{optie.title}</h3>
                     <span className="text-xl font-bold text-terracotta">{optie.price}</span>
@@ -356,11 +358,11 @@ export default async function TarievenPage() {
 
       {/* Belangrijke info */}
       {infoItems.length > 0 && (
-        <section className="py-16 md:py-24 px-4 bg-sage-50">
+        <section className="py-16 md:py-24 px-4" style={{ backgroundColor: '#e8efe9' }}>
           <div className="max-w-3xl mx-auto">
             <h2 className="font-serif text-2xl text-charcoal text-center mb-8">{infoTitle}</h2>
 
-            <div className="bg-white rounded-2xl p-8 border border-sage-200 space-y-4">
+            <div className="bg-white rounded-2xl p-8 border border-sage-300 space-y-4">
               {infoItems.map((item, index) => (
                 <div key={index} className="flex gap-4">
                   <div className="w-8 h-8 rounded-full bg-sage-100 flex items-center justify-center flex-shrink-0">
