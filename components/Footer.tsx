@@ -71,7 +71,8 @@ const SocialIcons = {
 // Default navigatie als fallback
 const defaultNavigation: FooterLink[] = [
   { label: 'Home', url: '/' },
-  { label: 'Bloesemremedies', url: '/remedies' },
+  { label: 'Bloesemremedies', url: '/producten/bloesemremedies' },
+  { label: 'Celzouten', url: '/producten/celzouten' },
   { label: 'Nieuws', url: '/nieuws' },
   { label: 'Contact', url: '/contact' },
 ]
